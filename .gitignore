@@ -1,0 +1,7 @@
+test.bin
+test.eep
+test.elf
+*.o
+.lib
+.*.d
+libcore.a

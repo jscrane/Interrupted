@@ -1,0 +1,4 @@
+- pin-change interrupts
+- timers
+- adc
+- spi
