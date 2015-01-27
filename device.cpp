@@ -18,12 +18,21 @@ void Devices::begin() {
 	sei();
 }
 
+bool Device::ready() {
+	if (_enabled) {
+		bool t = _triggered;
+		_triggered = false;
+		return t;
+	}
+	return false;
+}
+
 int Devices::select() {
 
 	// so we don't miss an interrupt while checking...
 	cli();
 	for (int i = 0; i < _n; i++)
-		if (_devices[i]->enabled() && _devices[i]->ready()) {
+		if (_devices[i]->ready()) {
 			sei();
 			return _devices[i]->id();
 		}
@@ -35,9 +44,10 @@ int Devices::select() {
 	sleep_disable();
 
 	for (int i = 0; i < _n; i++)
-		if (_devices[i]->enabled() && _devices[i]->ready())
+		if (_devices[i]->ready())
 			return _devices[i]->id();
 
-	// we've been woken up but it's not one of our's
+	// we've been woken up but the device is either not managed by
+	// this device-set or it's not enabled / ready
 	return -1;
 }

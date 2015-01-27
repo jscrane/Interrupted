@@ -1,3 +1,5 @@
+- allow devices to specify maximum sleep mode they can support
+- turning off adc by default at start
 - pin-change interrupts
 - timers
 - adc

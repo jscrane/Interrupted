@@ -1,14 +1,16 @@
 #include "device.h"
 #include "external.h"
+#include "timer.h"
 
+Watchdog timer(5, 1);
 External ext0(2), ext1(3);
 Devices devices;
 
 void setup(void)
 {
 	Serial.begin(115200);
-	Serial.println("hello");
 
+	devices.add(timer);
 	devices.add(ext0);
 	devices.add(ext1);
 	devices.begin();
@@ -19,6 +21,9 @@ void setup(void)
 void loop(void)
 {
 	switch (devices.select()) {
+	case 1:
+		Serial.println("tick");
+		break;
 	case 2:
 		digitalWrite(13, HIGH);
 		break;

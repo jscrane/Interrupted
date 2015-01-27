@@ -7,18 +7,7 @@ public:
 
 	void begin();
 
-	void trigger() {
-		_triggered = true;
-	}
-
-	bool ready() {
-		bool t = _triggered;
-		_triggered = false;
-		return t;
-	}
-
 private:
-	volatile bool _triggered;
 	int _pin;
 };
 #endif
