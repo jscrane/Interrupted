@@ -59,6 +59,9 @@ Comments on this code:
 * A device group ("devices") which manages them.
 * Selecting on the device group sends the CPU to sleep if no device is ready.
 * When a device is ready, it returns its id.
+* Each external interrupt line is connected to ground by a push-buttons; when
+  the one attached to pin #2 is pressed, the LED on pin #13 is lit, when the
+  one on pin #3 is pressed, the LED is switched off again.
 
 Credits
 -------
