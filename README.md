@@ -50,6 +50,16 @@ Example
     	delay(100);
     }
 
+Comments on this code:
+* Three devices: a 
+[watchdog timer](http://evothings.com/watchdog-timers-how-to-reduce-power-usage-in-your-arduino-projects/) 
+  with id 1, interrupting every 5s and two
+  [external interrupts](http://gonium.net/md/2006/12/20/handling-external-interrupts-with-arduino/) 
+  on ports 2 and 3 (and ids 2 and 3).
+* A device group ("devices") which manages them.
+* Selecting on the device group sends the CPU to sleep if no device is ready.
+* When a device is ready, it returns its id.
+
 Credits
 -------
 * Nick Gammon's excellent [interrupt page](http://gammon.com.au/interrupts)
