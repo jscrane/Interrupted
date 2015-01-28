@@ -39,15 +39,10 @@ again:
 
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 	sleep_enable();
+	sleep_bod_disable();
 	sei();
-	sleep_cpu();                   // go to sleep
+	sleep_cpu();
 	sleep_disable();
 
-	for (int i = 0; i < _n; i++)
-		if (_devices[i]->ready())
-			return _devices[i]->id();
-
-	// we've been woken up but the device is either not managed by
-	// this device-set or it's not enabled / ready
 	goto again;
 }
