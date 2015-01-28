@@ -28,7 +28,7 @@ bool Device::ready() {
 }
 
 int Devices::select() {
-
+again:
 	// so we don't miss an interrupt while checking...
 	cli();
 	for (int i = 0; i < _n; i++)
@@ -49,5 +49,5 @@ int Devices::select() {
 
 	// we've been woken up but the device is either not managed by
 	// this device-set or it's not enabled / ready
-	return -1;
+	goto again;
 }
