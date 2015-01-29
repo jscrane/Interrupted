@@ -15,6 +15,7 @@ void setup(void)
 	devices.add(ext1);
 	devices.begin();
 	ext0.enable(false);		// LED initially on
+	timer.enable(false);		// timer off
 
 	pinMode(13, OUTPUT);
 }
@@ -22,17 +23,17 @@ void setup(void)
 void loop(void)
 {
 	switch (devices.select()) {
-	case 1:
-		Serial.println("tick");
-		break;
+	case 1:	// fall through...
 	case 2:
 		digitalWrite(13, HIGH);
-		ext0.enable(false);	// only allow ext1 to interrupt now
+		ext0.enable(false);
+		timer.enable(false);
 		ext1.enable(true);
 		break;
 	case 3:
 		digitalWrite(13, LOW);
-		ext0.enable(true);	// only allow ext0 to interrupt now
+		ext0.enable(true);
+		timer.enable(true);
 		ext1.enable(false);
 		break;
 	default:

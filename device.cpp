@@ -12,15 +12,17 @@ void Devices::begin() {
 		digitalWrite(i, HIGH);
 	}
 
-	for (int i = 0; i < _n; i++)
+	for (int i = 0; i < _n; i++) {
 		_devices[i]->begin();
+		_devices[i]->enable();
+	}
 
 	sei();
 }
 
-bool Device::ready() {
-	if (_enabled && _triggered) {
-		_triggered = false;
+bool Device::is_ready() {
+	if (_enabled && _ready) {
+		_ready = false;
 		return true;
 	}
 	return false;
@@ -31,7 +33,7 @@ again:
 	// so we don't miss an interrupt while checking...
 	cli();
 	for (int i = 0; i < _n; i++)
-		if (_devices[i]->ready()) {
+		if (_devices[i]->is_ready()) {
 			sei();
 			return _devices[i]->id();
 		}

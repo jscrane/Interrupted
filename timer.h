@@ -4,7 +4,7 @@
 // a simple timer with 1s resolution
 class Timer: public Device {
 public:
-	void trigger();
+	void ready();
 	
 protected:
 	Timer(unsigned secs, unsigned id): 
@@ -19,6 +19,7 @@ public:
 	Watchdog(unsigned secs, unsigned id): Timer(secs, id) {}
 
 	void begin();
+	void enable(bool enable = true);
 };
 
 #endif

@@ -9,13 +9,13 @@ static External *e0, *e1;
 ISR(INT0_vect)
 {
 	if (e0)
-		e0->trigger();
+		e0->ready();
 }
 
 ISR(INT1_vect)
 {
 	if (e1)
-		e1->trigger();
+		e1->ready();
 }
 
 void External::begin() {
@@ -41,7 +41,6 @@ void External::begin() {
 	}
 	pinMode(_pin, INPUT);
 	digitalWrite(_pin, HIGH);	// enable pullup
-	enable(true);
 }
 
 void External::enable(bool e) {

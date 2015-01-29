@@ -6,9 +6,9 @@
 #include "device.h"
 #include "timer.h"
 
-void Timer::trigger() {
+void Timer::ready() {
 	if (--_curr == 0) {
-		Device::trigger();
+		Device::ready();
 		_curr = _secs;
 	}
 }
@@ -18,7 +18,7 @@ static Device *wdt;
 ISR(WDT_vect) 
 {
 	if (wdt)
-		wdt->trigger();
+		wdt->ready();
 }
 
 // http://donalmorrissey.blogspot.ie/2010/04/sleeping-arduino-part-5-wake-up-via.html
@@ -27,7 +27,14 @@ void Watchdog::begin() {
 
 	MCUSR &= ~bit(WDRF);
 	WDTCSR |= bit(WDCE) | bit(WDE);			// change prescaler
-	WDTCSR = bit(WDP2) | bit(WDP1) | bit(WDIE);	// 1s, interrupt mode
+	WDTCSR = bit(WDP2) | bit(WDP1);			// 1s
+}
+
+void Watchdog::enable(bool e) {
+	if (e)
+		WDTCSR |= bit(WDIE);
+	else
+		WDTCSR &= ~bit(WDIE);
 }
 
 /* FIXME: need to prevent going into SLEEP_MODE_POWER_DOWN

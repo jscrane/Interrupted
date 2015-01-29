@@ -4,22 +4,19 @@
 class Device {
 public:
 	virtual void begin() =0;
+	virtual void ready() { _ready = true; }
+	virtual void enable(bool enable = true) { _enabled = enable; }
 
-	bool ready();
-
-	virtual void trigger() { _triggered = true; }
-
-	virtual void enable(bool enable) { _enabled = enable; }
-
+	bool is_ready();
 	int id() { return _id; }
 
 protected:
-	Device(int id): _id(id), _enabled(true), _triggered(false) {}
+	Device(int id): _id(id), _enabled(true), _ready(false) {}
 
 private:
 	int _id;
 	bool _enabled;
-	volatile bool _triggered;
+	volatile bool _ready;
 };
 
 #define MAX_DEVICES 10
