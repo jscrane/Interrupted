@@ -66,7 +66,7 @@ Comments on this code:
 * Each external interrupt line is connected to ground by a push-button; when
   the one attached to pin #2 is pressed, the LED on pin #13 is lit, when
   that on pin #3 is pressed, the LED is switched off.
-* When an external interrupt has been processed, it is disabled until it makes sense to re-enabled it; so for example when the LED is switched on, its interrupt is disabled until it has been switched off again. Disabled interrupts don't wake the CPU and aren't "remembered".
+* When an external interrupt has been processed, it is disabled until it makes sense to re-enable it; so for example when the LED is switched on, its interrupt is disabled until it has been switched off again. Disabled interrupts don't wake the CPU and aren't "remembered".
 
 Credits
 -------
