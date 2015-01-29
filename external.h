@@ -7,6 +7,7 @@ public:
 		Device(pin), _pin(pin), _mode(mode)  {}
 
 	void begin();
+	void enable(bool);
 
 private:
 	int _pin, _mode;

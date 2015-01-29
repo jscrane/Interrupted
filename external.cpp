@@ -29,9 +29,7 @@ void External::begin() {
 			EICRA |= bit(ISC01);
 		else if (_mode == RISING)
 			EICRA |= bit(ISC01) | bit(ISC00);
-		EIFR = bit(INTF0);
-		EIMSK |= bit(INT0);
-	} else {
+	} else if (_pin == 3) {
 		e1 = this;
 		EICRA &= ~bit(ISC11) & ~bit(ISC10);
 		if (_mode == CHANGE)
@@ -40,10 +38,25 @@ void External::begin() {
 			EICRA |= bit(ISC11);
 		else if (_mode == RISING)
 			EICRA |= bit(ISC11) | bit(ISC10);
-		EIFR = bit(INTF1);
-		EIMSK |= bit(INT1);
 	}
 	pinMode(_pin, INPUT);
 	digitalWrite(_pin, HIGH);	// enable pullup
+	enable(true);
 }
 
+void External::enable(bool e) {
+	Device::enable(e);
+	if (_pin == 2) {
+		EIFR = bit(INTF0);
+		if (e)
+			EIMSK |= bit(INT0);
+		else
+			EIMSK &= ~bit(INT0);
+	} else if (_pin == 3) {
+		EIFR = bit(INTF1);
+		if (e)
+			EIMSK |= bit(INT1);
+		else
+			EIMSK &= ~bit(INT1);
+	}
+}

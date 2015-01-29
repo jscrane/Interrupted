@@ -9,7 +9,7 @@ public:
 
 	virtual void trigger() { _triggered = true; }
 
-	void enable(bool enable) { _enabled = enable; }
+	virtual void enable(bool enable) { _enabled = enable; }
 
 	int id() { return _id; }
 

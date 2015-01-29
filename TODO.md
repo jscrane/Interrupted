@@ -1,8 +1,7 @@
+- pin-change interrupts
 - allow devices to specify maximum sleep mode they can support
 - Timer1 device
-- pin-change interrupts
 - Serial device (modify existing one)
 - turning off adc by default at start
 - adc
 - spi
-- need to clear external interrupt if it's not enabled

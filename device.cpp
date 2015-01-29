@@ -19,10 +19,9 @@ void Devices::begin() {
 }
 
 bool Device::ready() {
-	if (_enabled) {
-		bool t = _triggered;
+	if (_enabled && _triggered) {
 		_triggered = false;
-		return t;
+		return true;
 	}
 	return false;
 }
