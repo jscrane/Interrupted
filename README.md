@@ -27,7 +27,7 @@ Example
     	devices.begin();
     	 
     	ext0.enable(false);             // LED initially on
-      timer.enable(false);            // timer off
+        timer.enable(false);            // timer off
     
     	pinMode(13, OUTPUT);
     }
