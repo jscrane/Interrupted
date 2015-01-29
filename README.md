@@ -58,10 +58,10 @@ Example
     }
 
 Comments on this code:
-* This sketch manages a configuration with each external interrupt line connected via a pushbutton to GND:
-  - when the button attached to pin #2 is pressed the LED on pin #13 is lit
-  - when that attached to pin #3 is pressed and released, the LED is turned off
-  - if the timer elapses when the LED is off, it is turned on again
+* This sketch manages a configuration with pins #2 and #3 connected to GND via a pushbutton:
+  - when the button on pin #2 is pressed the LED on pin #13 is lit,
+  - when that on pin #3 is pressed and released, the LED is turned off,
+  - if the timer elapses when the LED is off, it is turned on again.
 * Three devices: a 
 [watchdog timer](http://evothings.com/watchdog-timers-how-to-reduce-power-usage-in-your-arduino-projects/) 
   with id 1, interrupting every 5s and two
