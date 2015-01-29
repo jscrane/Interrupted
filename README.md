@@ -75,4 +75,4 @@ Comments on this code:
 
 Credits
 -------
-* Nick Gammon's excellent [interrupt page](http://gammon.com.au/interrupts)
+* Nick Gammon's excellent [interrupt page](http://gammon.com.au/interrupts).

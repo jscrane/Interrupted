@@ -1,4 +1,3 @@
-- pin-change interrupts
 - allow devices to specify maximum sleep mode they can support
 - Timer1 device
 - Serial device (modify existing one)

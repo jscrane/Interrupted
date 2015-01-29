@@ -7,7 +7,7 @@ public:
 	virtual void ready() { _ready = true; }
 	virtual void enable(bool enable = true) { _enabled = enable; }
 
-	bool is_ready();
+	virtual bool is_ready();
 	int id() { return _id; }
 
 protected:
