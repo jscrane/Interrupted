@@ -19,15 +19,29 @@ ISR(INT1_vect)
 }
 
 void External::begin() {
-	// enable external interrupt and trigger on falling edge
+	// enable external interrupt and trigger on specified mode
 	if (_pin == 2) {
 		e0 = this;
-		EIMSK |= (1 << INT0);
-		EICRA |= (1 << ISC01);
+		EICRA &= ~bit(ISC01) & ~bit(ISC00);
+		if (_mode == CHANGE)
+			EICRA |= bit(ISC00);
+		else if (_mode == FALLING)
+			EICRA |= bit(ISC01);
+		else if (_mode == RISING)
+			EICRA |= bit(ISC01) | bit(ISC00);
+		EIFR = bit(INTF0);
+		EIMSK |= bit(INT0);
 	} else {
 		e1 = this;
-		EIMSK |= (1 << INT1);
-		EICRA |= (1 << ISC11);
+		EICRA &= ~bit(ISC11) & ~bit(ISC10);
+		if (_mode == CHANGE)
+			EICRA |= bit(ISC10);
+		else if (_mode == FALLING)
+			EICRA |= bit(ISC11);
+		else if (_mode == RISING)
+			EICRA |= bit(ISC11) | bit(ISC10);
+		EIFR = bit(INTF1);
+		EIMSK |= bit(INT1);
 	}
 	pinMode(_pin, INPUT);
 	digitalWrite(_pin, HIGH);	// enable pullup

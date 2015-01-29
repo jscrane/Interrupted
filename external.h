@@ -3,11 +3,12 @@
 
 class External: public Device {
 public:
-	External(int pin): Device(pin), _pin(pin)  {}
+	External(int pin, int mode = FALLING): 
+		Device(pin), _pin(pin), _mode(mode)  {}
 
 	void begin();
 
 private:
-	int _pin;
+	int _pin, _mode;
 };
 #endif

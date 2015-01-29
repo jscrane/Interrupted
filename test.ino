@@ -3,7 +3,7 @@
 #include "timer.h"
 
 Watchdog timer(5, 1);
-External ext0(2), ext1(3);
+External ext0(2), ext1(3, RISING);
 Devices devices;
 
 void setup(void)

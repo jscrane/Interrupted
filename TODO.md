@@ -5,3 +5,4 @@
 - turning off adc by default at start
 - adc
 - spi
+- need to clear external interrupt if it's not enabled
