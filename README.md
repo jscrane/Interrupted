@@ -3,8 +3,10 @@ Interrupt Driven
 
 A new approach to building low-power apps on Arduino:
 * The main state of the processor is sleeping in a low-power mode.
-* Devices wake the processor using interrupts, it services them before returning to sleep.
-* State-machines are easily implemented: devices may be temporarily disabled when not needed by the current state.
+* Devices wake the processor using interrupts, it services them before 
+  returning to sleep.
+* State-machines are easily implemented: devices may be temporarily disabled 
+  when not needed by the current state.
 
 Example
 -------
@@ -31,6 +33,7 @@ Example
     	devices.begin();
     	 
     	pinMode(13, OUTPUT);
+	digitalWrite(13, HIGH);
     }
     
     void loop(void)
@@ -58,11 +61,11 @@ Example
     }
 
 Comments on this code:
-* It manages a configuration with pins #2 and #3 connected to GND via a pushbutton:
+* It manages a configuration with pins #2 and #3 connected to GND via a 
+pushbutton:
   - when the button on pin #2 is pressed the LED on pin #13 is lit,
   - when that on pin #3 is pressed and released, the LED is turned off,
-  - if the timer elapses when the LED is on, it is turned off again,
-  - the LED comes on when its pin is switched to an OUTPUT.
+  - if the timer elapses when the LED is on, it is turned off again.
 * Four devices: 
   - a [watchdog timer](http://evothings.com/watchdog-timers-how-to-reduce-power-usage-in-your-arduino-projects/) with id 1, interrupting every 5s
   - two [external interrupts](http://gonium.net/md/2006/12/20/handling-external-interrupts-with-arduino/) on ports 2 and 3
@@ -77,4 +80,5 @@ Comments on this code:
 
 Credits
 -------
-* Nick Gammon's excellent [interrupt page](http://gammon.com.au/interrupts).
+* Nick Gammon's excellent [interrupt](http://gammon.com.au/interrupts)
+  and [power-saving](http://www.gammon.com.au/forum/?id=11497) pages.

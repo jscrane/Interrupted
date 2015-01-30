@@ -10,10 +10,11 @@ void Devices::begin() {
 	// turn off ADC and analog comparator
 	ADCSRA &= ~bit(ADEN);
 	ACSR &= ~bit(ACD);
+	power_adc_disable();
 
-	for (int i = 2; i < 14; i++) {
+	for (int i = 2; i <= A5; i++) {
 		pinMode(i, INPUT);
-		digitalWrite(i, HIGH);
+		digitalWrite(i, LOW);
 	}
 
 	for (int i = 0; i < _n; i++) {
