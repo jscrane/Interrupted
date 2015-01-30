@@ -35,9 +35,9 @@ void loop(void)
 	case 13:
 		Serial.print("LED: ");		// LED on pin #13
 		Serial.println(led.is_on());
-		timer.enable(led.is_on());
 		int0.enable(!led.is_on());
 		int1.enable(led.is_on());
+		timer.enable(led.is_on());
 		break;
 	default:
 		Serial.println("???");

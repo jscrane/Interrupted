@@ -7,7 +7,9 @@
 #include "device.h"
 
 void Devices::begin() {
-	ADCSRA = 0;		// turn off ADC by default
+	// turn off ADC and analog comparator
+	ADCSRA &= ~bit(ADEN);
+	ACSR &= ~bit(ACD);
 
 	for (int i = 2; i < 14; i++) {
 		pinMode(i, INPUT);
