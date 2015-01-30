@@ -44,9 +44,9 @@ Example
     		digitalWrite(13, LOW);
     		break;
     	case 13:
-            timer.enable(led.is_on());
             int0.enable(!led.is_on());
             int1.enable(led.is_on());
+            timer.enable(led.is_on());
     		break;
     	default:
     		Serial.println("???");
@@ -61,7 +61,8 @@ Comments on this code:
 * This sketch manages a configuration with pins #2 and #3 connected to GND via a pushbutton:
   - when the button on pin #2 is pressed the LED on pin #13 is lit,
   - when that on pin #3 is pressed and released, the LED is turned off,
-  - if the timer elapses when the LED is on, it is turned off again.
+  - if the timer elapses when the LED is on, it is turned off again,
+  - the LED comes on when its pin is switched to an OUTPUT.
 * Three devices: a 
 [watchdog timer](http://evothings.com/watchdog-timers-how-to-reduce-power-usage-in-your-arduino-projects/) 
   with id 1, interrupting every 5s and two
@@ -70,7 +71,9 @@ Comments on this code:
 * A device group ("devices") which manages them.
 * Selecting on the device group sends the CPU to sleep if no device is ready.
 * When a device is ready, select returns its id.
-* Change of state of the LED pin triggers a state-machine change: if the LED has come on, the timer and external interrupt #1 are enabled, if the LED has been switched off, external interrupt #0 is enabled.
+* Change of state of the LED pin triggers a state-machine change: 
+  - if the LED has come on, the timer and external interrupt #1 are enabled, 
+  - if the LED has been switched off, external interrupt #0 is enabled.
 * Disabled interrupts don't wake the CPU and aren't "remembered".
 
 Credits
