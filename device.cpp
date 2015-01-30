@@ -45,6 +45,10 @@ again:
 
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 	sleep_enable();
+
+	// this exists on later avrlibs but not the one shipped with
+	// arduino. also the later arduino core won't compile under
+	// the latest avr-gcc so we're stuck with arduino10!
 	sleep_bod_disable();
 	sei();
 	sleep_cpu();
