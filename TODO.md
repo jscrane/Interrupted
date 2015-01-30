@@ -1,6 +1,5 @@
 - allow devices to specify maximum sleep mode they can support
 - Timer1 device
 - Serial device (modify existing one)
-- turning off adc by default at start
 - adc
 - spi

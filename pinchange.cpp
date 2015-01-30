@@ -21,7 +21,7 @@ ISR(PCINT2_vect) {
 		d[2]->ready();
 }
 
-void PinChangeGroup::add_pin(PinChangePin *p, int pin) {
+void PinChangeGroup::add_pin(PinChange *p, int pin) {
 	d[_group] = this;
 	int o = pin - port_offset();
 	byte b = bit(o);
@@ -94,11 +94,11 @@ void PinChangeGroup::ready() {
 	}
 }
 
-void PinChangePin::begin() {
+void PinChange::begin() {
 	_group.add_pin(this, id());
 }
 
-void PinChangePin::enable(bool enable) {
+void PinChange::enable(bool enable) {
 	Device::enable(enable);
 	_group.enable_pin(id(), enable);
 }

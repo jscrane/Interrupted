@@ -7,6 +7,8 @@
 #include "device.h"
 
 void Devices::begin() {
+	ADCSRA = 0;		// turn off ADC by default
+
 	for (int i = 2; i < 14; i++) {
 		pinMode(i, INPUT);
 		digitalWrite(i, HIGH);

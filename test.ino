@@ -6,7 +6,7 @@
 Watchdog timer(5, 1);
 External int0(2), int1(3, RISING);
 PinChangeGroup group(D8_13);
-PinChangePin led(group, 13);
+PinChange led(group, 13);
 Devices devices;
 
 void setup(void)
@@ -19,30 +19,25 @@ void setup(void)
 	devices.add(led);
 	devices.begin();
 
-	int0.enable(false);		// LED initially on
-	timer.enable(false);		// timer off
-
 	pinMode(13, OUTPUT);
 }
 
 void loop(void)
 {
 	switch (devices.select()) {
-	case 1:	// fall through...
 	case 2:
-		digitalWrite(13, HIGH);
-		int0.enable(false);
-		timer.enable(false);
-		int1.enable(true);
+		digitalWrite(13, HIGH);		// external interrupt #0
 		break;
+	case 1:
 	case 3:
-		digitalWrite(13, LOW);
-		int0.enable(true);
-		timer.enable(true);
-		int1.enable(false);
+		digitalWrite(13, LOW);		// timer or ext interrupt #1
 		break;
 	case 13:
-		Serial.println("LED!");
+		Serial.print("LED: ");		// LED on pin #13
+		Serial.println(led.is_on());
+		timer.enable(led.is_on());
+		int0.enable(!led.is_on());
+		int1.enable(led.is_on());
 		break;
 	default:
 		Serial.println("???");
