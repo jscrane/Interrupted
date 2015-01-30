@@ -61,8 +61,8 @@ Example
     }
 
 Comments on this code:
-* It manages a configuration with pins #2 and #3 connected to GND via a 
-pushbutton:
+* It manages a configuration with pins #2 and #3 connected to GND via 
+pushbuttons:
   - when the button on pin #2 is pressed the LED on pin #13 is lit,
   - when that on pin #3 is pressed and released, the LED is turned off,
   - if the timer elapses when the LED is on, it is turned off again.
