@@ -2,6 +2,8 @@
 #include "external.h"
 #include "pinchange.h"
 #include "timer.h"
+#include "timer1.h"
+#include "watchdog.h"
 
 Watchdog timer(5, 1);
 External int0(2), int1(3, RISING);
@@ -44,5 +46,4 @@ void loop(void)
 	}
 
 	Serial.println("awake");
-	delay(100);
 }

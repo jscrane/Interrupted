@@ -6,6 +6,7 @@ public:
 	virtual void begin() =0;
 	virtual void ready() { _ready = true; }
 	virtual void enable(bool enable = true) { _enabled = enable; }
+	virtual unsigned sleepmode();
 
 	virtual bool is_ready();
 	int id() { return _id; }
@@ -36,6 +37,7 @@ public:
 private:
 	int _n;
 	Device *_devices[MAX_DEVICES];
+	unsigned _sleep_mode;
 };
 
 #endif

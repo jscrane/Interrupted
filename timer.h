@@ -1,25 +1,24 @@
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
-// a simple timer with 1s resolution
+/**
+ * An abstract timer.
+ */
 class Timer: public Device {
 public:
-	void ready();
+	void ready() {
+		if (--_curr == 0) {
+			Device::ready();
+			_curr = _dt;
+		}
+	}
 	
 protected:
-	Timer(unsigned secs, unsigned id): 
-		Device(id), _secs(secs), _curr(secs) {}
+	Timer(unsigned dt, unsigned id): 
+		Device(id), _dt(dt), _curr(dt) {}
 
 private:
-	unsigned _secs, _curr;
-};
-
-class Watchdog: public Timer {
-public:
-	Watchdog(unsigned secs, unsigned id): Timer(secs, id) {}
-
-	void begin();
-	void enable(bool enable = true);
+	unsigned _dt, _curr;
 };
 
 #endif

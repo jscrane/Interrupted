@@ -10,18 +10,43 @@ void Devices::begin() {
 	// turn off ADC and analog comparator
 	ADCSRA &= ~bit(ADEN);
 	ACSR &= ~bit(ACD);
-	power_adc_disable();
+	power_adc_disable();	// FIXME: power_all_disable()?
 
 	for (int i = 2; i <= A5; i++) {
 		pinMode(i, INPUT);
 		digitalWrite(i, LOW);
 	}
 
+	unsigned m = SLEEP_MODE_PWR_DOWN;
 	for (int i = 0; i < _n; i++) {
 		_devices[i]->begin();
 		_devices[i]->enable();
+		unsigned mode = _devices[i]->sleepmode();
+		switch (mode) {
+		case SLEEP_MODE_IDLE:
+			m = mode;
+			break;
+		case SLEEP_MODE_ADC:
+			if (m != SLEEP_MODE_IDLE)
+				m = mode;	
+			break;
+		case SLEEP_MODE_PWR_SAVE:
+			if (m != SLEEP_MODE_IDLE && m != SLEEP_MODE_ADC)
+				m = mode;
+			break;
+		case SLEEP_MODE_EXT_STANDBY:
+			if (m == SLEEP_MODE_PWR_DOWN || m == SLEEP_MODE_STANDBY)
+				m = mode;
+			break;
+		case SLEEP_MODE_STANDBY:
+			if (m == SLEEP_MODE_PWR_DOWN)
+				m = mode;
+			break;
+		case SLEEP_MODE_PWR_DOWN:
+			break;
+		}
 	}
-
+	_sleep_mode = m;
 	sei();
 }
 
@@ -31,6 +56,10 @@ bool Device::is_ready() {
 		return true;
 	}
 	return false;
+}
+
+unsigned Device::sleepmode() {
+	return SLEEP_MODE_PWR_DOWN;
 }
 
 int Devices::select() {
@@ -43,7 +72,7 @@ again:
 			return _devices[i]->id();
 		}
 
-	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+	set_sleep_mode(_sleep_mode);
 	sleep_enable();
 
 	// this exists on later avrlibs but not the one shipped with
