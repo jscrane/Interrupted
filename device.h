@@ -9,6 +9,7 @@ public:
 	virtual unsigned sleepmode();
 
 	virtual bool is_ready();
+	bool is_enabled() { return _enabled; }
 	int id() { return _id; }
 
 protected:
@@ -37,7 +38,6 @@ public:
 private:
 	int _n;
 	Device *_devices[MAX_DEVICES];
-	unsigned _sleep_mode;
 };
 
 #endif

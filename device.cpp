@@ -17,36 +17,10 @@ void Devices::begin() {
 		digitalWrite(i, LOW);
 	}
 
-	unsigned m = SLEEP_MODE_PWR_DOWN;
 	for (int i = 0; i < _n; i++) {
 		_devices[i]->begin();
 		_devices[i]->enable();
-		unsigned mode = _devices[i]->sleepmode();
-		switch (mode) {
-		case SLEEP_MODE_IDLE:
-			m = mode;
-			break;
-		case SLEEP_MODE_ADC:
-			if (m != SLEEP_MODE_IDLE)
-				m = mode;	
-			break;
-		case SLEEP_MODE_PWR_SAVE:
-			if (m != SLEEP_MODE_IDLE && m != SLEEP_MODE_ADC)
-				m = mode;
-			break;
-		case SLEEP_MODE_EXT_STANDBY:
-			if (m == SLEEP_MODE_PWR_DOWN || m == SLEEP_MODE_STANDBY)
-				m = mode;
-			break;
-		case SLEEP_MODE_STANDBY:
-			if (m == SLEEP_MODE_PWR_DOWN)
-				m = mode;
-			break;
-		case SLEEP_MODE_PWR_DOWN:
-			break;
-		}
 	}
-	_sleep_mode = m;
 	sei();
 }
 
@@ -62,17 +36,50 @@ unsigned Device::sleepmode() {
 	return SLEEP_MODE_PWR_DOWN;
 }
 
+// required because there's no defined ordering of modes...
+static unsigned update_mode(unsigned m, unsigned mode) {
+	switch (mode) {
+	case SLEEP_MODE_IDLE:
+		return mode;
+
+	case SLEEP_MODE_ADC:
+		if (m != SLEEP_MODE_IDLE)
+			return mode;
+		break;
+	case SLEEP_MODE_PWR_SAVE:
+		if (m != SLEEP_MODE_IDLE && m != SLEEP_MODE_ADC)
+			return mode;
+		break;
+	case SLEEP_MODE_EXT_STANDBY:
+		if (m == SLEEP_MODE_PWR_DOWN || m == SLEEP_MODE_STANDBY)
+			return mode;
+		break;
+	case SLEEP_MODE_STANDBY:
+		if (m == SLEEP_MODE_PWR_DOWN)
+			return mode;
+		break;
+	case SLEEP_MODE_PWR_DOWN:
+		break;
+	}
+	return m;
+}
+
 int Devices::select() {
 again:
 	// so we don't miss an interrupt while checking...
 	cli();
-	for (int i = 0; i < _n; i++)
-		if (_devices[i]->is_ready()) {
+	unsigned mode = SLEEP_MODE_PWR_DOWN;
+	for (int i = 0; i < _n; i++) {
+		Device *d = _devices[i];
+		if (d->is_ready()) {
 			sei();
-			return _devices[i]->id();
+			return d->id();
 		}
+		if (d->is_enabled())
+			mode = update_mode(mode, d->sleepmode());
+	}
 
-	set_sleep_mode(_sleep_mode);
+	set_sleep_mode(mode);
 	sleep_enable();
 
 	// this exists on later avrlibs but not the one shipped with
