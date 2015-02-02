@@ -4,6 +4,7 @@
 #include "timer.h"
 #include "timer1.h"
 #include "watchdog.h"
+#include "serial.h"
 #include "serialout.h"
 
 SerialOut output(115200, 99);
