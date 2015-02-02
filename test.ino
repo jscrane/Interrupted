@@ -4,7 +4,9 @@
 #include "timer.h"
 #include "timer1.h"
 #include "watchdog.h"
+#include "serialout.h"
 
+SerialOut output(115200, 99);
 Watchdog timer(5, 1);
 External int0(2), int1(3, RISING);
 PinChangeGroup pins(D8_13);
@@ -13,12 +15,11 @@ Devices devices;
 
 void setup(void)
 {
-	Serial.begin(115200);
-
 	devices.add(timer);
 	devices.add(int0);
 	devices.add(int1);
 	devices.add(led);
+	devices.add(output);
 	devices.begin();
 
 	pinMode(13, OUTPUT);
@@ -40,10 +41,9 @@ void loop(void)
 		int1.enable(led.is_on());
 		timer.enable(led.is_on());
 		break;
-	default:
-		Serial.println("???");
-		break;
+	case 99:
+		return;				// serial transmission complete
 	}
 
-	Serial.println("awake");
+	output.write("awake!\r\n");
 }
