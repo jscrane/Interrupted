@@ -5,8 +5,10 @@
 #include "timer1.h"
 #include "watchdog.h"
 #include "serial.h"
+#include "serialin.h"
 #include "serialout.h"
 
+SerialIn input(115200, 98);
 SerialOut output(115200, 99);
 Watchdog timer(5, 1);
 External int0(2), int1(3, RISING);
@@ -21,29 +23,36 @@ void setup(void)
 	devices.add(int1);
 	devices.add(led);
 	devices.add(output);
+	devices.add(input);
 	devices.begin();
 
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
 }
 
+char ch[2];
+
 void loop(void)
 {
 	switch (devices.select()) {
 	case 2:
-		digitalWrite(13, HIGH);		// external interrupt #0
+		digitalWrite(13, HIGH);	// external interrupt #0
 		break;
 	case 1:
 	case 3:
-		digitalWrite(13, LOW);		// timer or ext interrupt #1
+		digitalWrite(13, LOW);	// timer or ext interrupt #1
 		break;
 	case 13:
 		int0.enable(!led.is_on());
 		int1.enable(led.is_on());
 		timer.enable(led.is_on());
 		break;
+	case 98:			// serial char received
+		ch[0] = input.read();
+		output.write(ch);
+		return;
 	case 99:
-		return;				// serial transmission complete
+		return;			// serial transmission complete
 	}
 
 	output.write("awake!\r\n");

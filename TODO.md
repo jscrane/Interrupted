@@ -1,4 +1,3 @@
-- serial input; see http://www.fourwalledcubicle.com/AVRArticles.php
 - adc
 - spi
 - power_all_disable()

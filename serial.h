@@ -1,5 +1,5 @@
-#ifndef __SERIAL_DEVICE_H__
-#define __SERIAL_DEVICE_H__
+#ifndef __SERIALDEVICE_H__
+#define __SERIALDEVICE_H__
 
 class SerialDevice: public Device {
 public:

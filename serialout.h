@@ -1,5 +1,5 @@
-#ifndef __SERIAL_OUT_H__
-#define __SERIAL_OUT_H__
+#ifndef __SERIALOUT_H__
+#define __SERIALOUT_H__
 
 /**
  * Simple Serial output device

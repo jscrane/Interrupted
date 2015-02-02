@@ -11,7 +11,6 @@ void SerialDevice::begin() {
 	UBRR0H = (prescale >> 8) & 0xff;
 	UBRR0L = prescale & 0xff;
 	UCSR0C = bit(UCSZ00) | bit(UCSZ01);
-	UCSR0B |= bit(TXEN0);
 }
 
 unsigned SerialDevice::sleepmode() {

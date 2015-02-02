@@ -12,6 +12,7 @@ static SerialOut *device;
 void SerialOut::begin() {
 	device = this;
 	SerialDevice::begin();
+	UCSR0B |= bit(TXEN0);
 }
 
 void SerialOut::write(char const *ptr) { 
