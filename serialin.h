@@ -3,8 +3,8 @@
 
 class SerialIn: public SerialDevice {
 public:
-	SerialIn(unsigned long baud, unsigned id): 
-		SerialDevice(baud, id), _head(0), _n(0) {}
+	SerialIn(unsigned id, unsigned long baud = 0): 
+		SerialDevice(id, baud), _head(0), _n(0) {}
 
 	void begin();
 	void enable(bool enable = true);

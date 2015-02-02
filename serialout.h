@@ -6,8 +6,8 @@
  */
 class SerialOut: public SerialDevice {
 public:
-	SerialOut(unsigned long baud, unsigned id): 
-		SerialDevice(baud, id), _tx_ptr(0) {}
+	SerialOut(unsigned id, unsigned long baud = 0): 
+		SerialDevice(id, baud), _tx_ptr(0) {}
 
 	void begin();
 

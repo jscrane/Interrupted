@@ -8,8 +8,8 @@
 #include "serialin.h"
 #include "serialout.h"
 
-SerialIn input(115200, 98);
-SerialOut output(115200, 99);
+SerialIn input(98, 115200);
+SerialOut output(99);
 Watchdog timer(5, 1);
 External int0(2), int1(3, RISING);
 PinChangeGroup pins(D8_13);
@@ -30,10 +30,10 @@ void setup(void)
 	digitalWrite(13, HIGH);
 }
 
-char ch[2];
-
 void loop(void)
 {
+	char c;
+
 	switch (devices.select()) {
 	case 2:
 		digitalWrite(13, HIGH);	// external interrupt #0
@@ -48,8 +48,11 @@ void loop(void)
 		timer.enable(led.is_on());
 		break;
 	case 98:			// serial char received
-		ch[0] = input.read();
-		output.write(ch);
+		c = input.read();
+		if (c == '1')
+			digitalWrite(13, HIGH);
+		else if (c == '0')
+			digitalWrite(13, LOW);
 		return;
 	case 99:
 		return;			// serial transmission complete

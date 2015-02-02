@@ -3,7 +3,7 @@
 
 class SerialDevice: public Device {
 public:
-	SerialDevice(unsigned long baud, unsigned id): 
+	SerialDevice(unsigned id, unsigned long baud): 
 		Device(id), _baud(baud) {}
 
 	void begin();
