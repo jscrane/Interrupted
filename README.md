@@ -16,11 +16,9 @@ Example
     #include "pinchange.h"
     #include "timer.h"
     #include "serial.h"
-    #include "serialin.h"
     #include "serialout.h"
 
-    SerialIn input(98, 115200);
-    SerialOut output(99);
+    SerialOut output(99, 115200);
     Watchdog timer(5, 1);
     External int0(2), int1(3);
     PinChangeGroup pins(D8_13);
@@ -36,7 +34,6 @@ Example
     	devices.add(int1);
     	devices.add(led);
     	devices.add(output);
-    	devices.add(input);
     	devices.begin();
     	 
     	pinMode(13, OUTPUT);
@@ -45,8 +42,6 @@ Example
     
     void loop(void)
     {
-      char c;
-      
       switch (devices.select()) {
       case 2:
           digitalWrite(13, HIGH);
@@ -60,31 +55,24 @@ Example
           int1.enable(led.is_on());
           timer.enable(led.is_on());
           break;
-      case 98:                     // serial char received
-          c = input.read();
-          if (c == '1')
-              digitalWrite(13, HIGH);
-          else if (c == '0')
-              digitalWrite(13, LOW);
-          return;
         case 99:
-          return;                   // serial transmission complete
+          output.enable(false);
+          return;
     	}
-    
-    	output.write("awake!\r\n");
+      output.enable(true);
+      output.write("awake!\r\n");
     }
 
 Comments on this code:
 * It manages a configuration with pins #2 and #3 connected to GND via pushbuttons:
   - when the button on pin #2 is pressed the LED on pin #13 is lit,
   - when that on pin #3 is pressed and released, the LED is turned off,
-  - if a '1' is received on the serial port, the LED is lit, if a '0' is received it is turned off again,
   - if the timer elapses when the LED is on, it is turned off again.
-* Six devices: 
+* Five devices: 
   - a [watchdog timer](http://evothings.com/watchdog-timers-how-to-reduce-power-usage-in-your-arduino-projects/) with id 1, interrupting every 5s
   - two [external interrupts](http://gonium.net/md/2006/12/20/handling-external-interrupts-with-arduino/) on ports 2 and 3
   - a pin-change interrupt watching the LED on pin #13
-  - hardware serial input and output devices running at 115200 baud
+  - hardware serial output device running at 115200 baud
 * A device group ("devices") which manages them.
 * Selecting on the device group sends the CPU to sleep if no device is ready.
 * When a device is ready, select returns its id.
@@ -92,8 +80,8 @@ Comments on this code:
   - if the LED has come on, the timer and external interrupt #1 are enabled, 
   - if the LED has been switched off, external interrupt #0 is enabled.
 * Disabled interrupts don't wake the CPU and aren't "remembered".
-* The serial port acts like any other device, between receptions and transmissions, the processor sleeps (in an IDLE mode, however).
-* The processor enters the deepest sleep allowed by the currently-enabled devices.
+* The serial port acts like any other device except that the processor must sleep in an IDLE mode when it is busy.
+* The processor enters the deepest sleep allowed by the currently-enabled devices, in this case when notification is received that serial output is finished.
 
 Credits
 -------
