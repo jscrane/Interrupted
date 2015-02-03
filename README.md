@@ -78,7 +78,7 @@ Comments on this code:
   - if the LED has come on, the timer and external interrupt #1 are enabled, 
   - if the LED has been switched off, external interrupt #0 is enabled.
 * Disabled interrupts don't wake the CPU and aren't "remembered".
-* The serial port acts like any other device except that the processor must sleep in an IDLE mode when it is busy.
+* The serial port acts like any other device except that the processor must sleep in an IDLE mode when it is in use.
 * The processor enters the deepest sleep allowed by the currently-enabled devices, in this case when notification is received that serial output is finished.
 
 Credits
