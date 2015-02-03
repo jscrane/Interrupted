@@ -55,8 +55,10 @@ void loop(void)
 			digitalWrite(13, LOW);
 		return;
 	case 99:
-		return;			// serial transmission complete
+		output.enable(false);	// serial transmission complete
+		return;
 	}
 
+	output.enable(true);
 	output.write("awake!\r\n");
 }
