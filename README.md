@@ -56,7 +56,7 @@ Example
       case 99:
         output.enable(false);
         return;
-    	}
+      }
       output.enable(true);
       output.write("awake!\r\n");
     }
