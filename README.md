@@ -67,10 +67,10 @@ Comments on this code:
   - when that on pin #3 is pressed and released, the LED is turned off,
   - if the timer elapses when the LED is on, it is turned off again.
 * Five devices: 
-  - a [watchdog timer](http://evothings.com/watchdog-timers-how-to-reduce-power-usage-in-your-arduino-projects/) with id 1, interrupting every 5s
-  - two [external interrupts](http://gonium.net/md/2006/12/20/handling-external-interrupts-with-arduino/) on ports 2 and 3
-  - a pin-change interrupt watching the LED on pin #13
-  - hardware serial output device running at 115200 baud
+  - a [watchdog timer](http://evothings.com/watchdog-timers-how-to-reduce-power-usage-in-your-arduino-projects/) with id 1, interrupting every 5s,
+  - two [external interrupts](http://gonium.net/md/2006/12/20/handling-external-interrupts-with-arduino/) on ports 2 and 3,
+  - a pin-change interrupt watching the LED on pin #13,
+  - hardware serial output device running at 115200 baud.
 * A device group ("devices") which manages them.
 * Selecting on the device group sends the CPU to sleep if no device is ready.
 * When a device is ready, select returns its id.
