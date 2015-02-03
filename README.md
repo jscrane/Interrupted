@@ -27,37 +27,35 @@ Example
     
     void setup(void)
     {
-    	Serial.begin(115200);
-    
-    	devices.add(timer);
-    	devices.add(int0);
-    	devices.add(int1);
-    	devices.add(led);
-    	devices.add(output);
-    	devices.begin();
+      devices.add(timer);
+      devices.add(int0);
+      devices.add(int1);
+      devices.add(led);
+      devices.add(output);
+      devices.begin();
     	 
-    	pinMode(13, OUTPUT);
-    	digitalWrite(13, HIGH);
+      pinMode(13, OUTPUT);
+      digitalWrite(13, HIGH);
     }
     
     void loop(void)
     {
       switch (devices.select()) {
       case 2:
-          digitalWrite(13, HIGH);
-          break;
+        digitalWrite(13, HIGH);
+        break;
       case 1:
       case 3:
-          digitalWrite(13, LOW);
-          break;
+        digitalWrite(13, LOW);
+        break;
       case 13:
-          int0.enable(!led.is_on());
-          int1.enable(led.is_on());
-          timer.enable(led.is_on());
-          break;
-        case 99:
-          output.enable(false);
-          return;
+        int0.enable(!led.is_on());
+        int1.enable(led.is_on());
+        timer.enable(led.is_on());
+        break;
+      case 99:
+        output.enable(false);
+        return;
     	}
       output.enable(true);
       output.write("awake!\r\n");
