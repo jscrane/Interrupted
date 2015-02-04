@@ -6,7 +6,7 @@
  */
 class Timer1: public Timer {
 public:
-	Timer1(unsigned millis, unsigned id): Timer(millis, id) {}
+	Timer1(int id, unsigned millis): Timer(id, millis) {}
 
 	void begin();
 	void enable(bool enable = true);

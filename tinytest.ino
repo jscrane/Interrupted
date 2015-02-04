@@ -5,7 +5,7 @@
 #include "timer1.h"
 #include "watchdog.h"
 
-Watchdog timer(1, 5);
+Timer1 timer(1, 2000);
 External int0(2, LOW);
 PinChangeGroup pins(PB);
 PinChange led(0, pins);
