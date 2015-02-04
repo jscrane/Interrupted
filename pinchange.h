@@ -28,8 +28,12 @@ public:
 	PinChange(PinChangeGroup &group, int pin): 
 		Device(pin), _group(group) {}
 
-	void begin();
-	void enable(bool enable = true);
+	void enable(bool enable = true) {
+		Device::enable(enable);
+		_group.enable_pin(id(), enable);
+	}
+
+	void begin() { _group.add_pin(this, id()); }
 	void set_state(bool on) { _state = on; ready(); }
 	bool is_on() { return _state; }
 

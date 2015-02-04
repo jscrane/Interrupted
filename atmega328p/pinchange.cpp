@@ -93,12 +93,3 @@ void PinChangeGroup::ready() {
 		}
 	}
 }
-
-void PinChange::begin() {
-	_group.add_pin(this, id());
-}
-
-void PinChange::enable(bool enable) {
-	Device::enable(enable);
-	_group.enable_pin(id(), enable);
-}
