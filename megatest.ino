@@ -10,10 +10,10 @@
 
 SerialIn input(98, 115200);
 SerialOut output(99);
-Watchdog timer(5, 1);
+Watchdog timer(1, 5);
 External int0(2), int1(3, RISING);
-PinChangeGroup pins(D8_13);
-PinChange led(pins, 13);
+PinChangeGroup pins(PB);
+PinChange led(13, pins);
 Devices devices;
 
 void setup(void)

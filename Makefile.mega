@@ -1,0 +1,3 @@
+BOARD := uno
+SKETCH := megatest.ino
+include arduino10.mk

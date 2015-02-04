@@ -1,7 +1,7 @@
 #ifndef __PINCHANGE_H__
 #define __PINCHANGE_H__
 
-typedef enum { D8_13, D0_7, A0_5 } pinchange_t;
+typedef enum { PA, PB, PC, PD } pinchange_t;
 
 class PinChange;
 

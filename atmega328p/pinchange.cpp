@@ -5,47 +5,52 @@
 
 static PinChangeGroup *d[3];
 
-// handler for D8-D13
+// handler for PB
 ISR(PCINT0_vect) {
 	if (d[0])
 		d[0]->ready();
 }
 
+// handler for PC
 ISR(PCINT1_vect) {
 	if (d[1])
 		d[1]->ready();
 }
 
+// handler for PD
 ISR(PCINT2_vect) {
 	if (d[2])
 		d[2]->ready();
 }
 
 void PinChangeGroup::add_pin(PinChange *p, int pin) {
-	d[_group] = this;
 	int o = pin - port_offset();
 	byte b = bit(o);
 	_pins[o] = p;
-	if (_group == D0_7)
-		PCMSK2 |= b;
-	else if (_group == D8_13)
+	if (_group == PB) {
 		PCMSK0 |= b;
-	else if (_group == A0_5)
+		d[0] = this;
+	} else if (_group == PC) {
 		PCMSK1 |= b;
+		d[1] = this;
+	} else if (_group == PD) {
+		PCMSK2 |= b;
+		d[2] = this;
+	}
 }
 
 void PinChangeGroup::enable_pin(int pin, boolean en) {
 	byte e = 0, f = 0;
 	switch (_group) {
-	case D8_13:
+	case PB:
 		e = bit(PCIE0);
 		f = bit(PCIF0);
 		break;
-	case A0_5:
+	case PC: 
 		e = bit(PCIE1);
 		f = bit(PCIF1);
 		break;
-	case D0_7:
+	case PD:
 		e = bit(PCIE2);
 		f = bit(PCIF2);
 		break;
@@ -68,11 +73,11 @@ void PinChangeGroup::enable_pin(int pin, boolean en) {
 }
 
 int PinChangeGroup::port_offset() {
-	if (_group == D0_7)
+	if (_group == PD)
 		return 0;
-	if (_group == D8_13)
+	if (_group == PB)
 		return 8;
-	if (_group == A0_5)
+	if (_group == PC)
 		return 14;
 
 	return -1;
