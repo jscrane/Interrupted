@@ -2,11 +2,10 @@ Interrupt Driven
 ================
 
 A new approach to building low-power apps on Arduino:
-* The main state of the processor is sleeping in a low-power mode.
-* Devices wake the processor using interrupts, it services them before 
-  returning to sleep.
+* The processor mostly sleeps in a low-power mode.
+* Devices wake the processor using interrupts, it services them beforereturning to sleep.
 * State-machines are easily implemented: devices may be temporarily disabled 
-  when not needed by the current state.
+  when not needed in the current state.
 
 Example
 -------
@@ -19,10 +18,10 @@ Example
     #include "serialout.h"
 
     SerialOut output(99, 115200);
-    Watchdog timer(5, 1);
-    External int0(2), int1(3);
-    PinChangeGroup pins(D8_13);
-    PinChange led(pins, 13);
+    Watchdog timer(1, 5);
+    External int0(2), int1(3, RISING);
+    PinChangeGroup pins(PB);
+    PinChange led(13, pins);
     Devices devices;
     
     void setup(void)
@@ -86,3 +85,4 @@ Credits
 * Nick Gammon's excellent [interrupt](http://gammon.com.au/interrupts)
   and [power-saving](http://www.gammon.com.au/forum/?id=11497) pages.
 * The [Conic and Regis](http://www-dse.doc.ic.ac.uk/cgi-bin/moin.cgi/Research) projects at [Imperial College London](http://wp.doc.ic.ac.uk/dse/).
+* The [select](http://unixhelp.ed.ac.uk/CGI/man-cgi?select+2) system call.
