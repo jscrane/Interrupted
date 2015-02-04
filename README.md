@@ -3,7 +3,7 @@ Interrupt Driven
 
 A new approach to building low-power apps on Arduino:
 * The processor mostly sleeps in a low-power mode.
-* Devices wake the processor using interrupts, it services them beforereturning to sleep.
+* Devices wake the processor using interrupts, it services them before returning to sleep.
 * State-machines are easily implemented: devices may be temporarily disabled 
   when not needed in the current state.
 
