@@ -6,7 +6,7 @@
  */
 class Watchdog: public Timer {
 public:
-	Watchdog(unsigned secs, unsigned id): Timer(secs, id) {}
+	Watchdog(int id, unsigned secs): Timer(id, secs) {}
 
 	void begin();
 	void enable(bool enable = true);

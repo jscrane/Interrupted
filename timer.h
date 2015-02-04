@@ -14,7 +14,7 @@ public:
 	}
 	
 protected:
-	Timer(unsigned dt, unsigned id): 
+	Timer(int id, unsigned dt): 
 		Device(id), _dt(dt), _curr(dt) {}
 
 private:

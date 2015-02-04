@@ -25,7 +25,7 @@ private:
 
 class PinChange: public Device {
 public:
-	PinChange(PinChangeGroup &group, int pin): 
+	PinChange(int pin, PinChangeGroup &group): 
 		Device(pin), _group(group) {}
 
 	void enable(bool enable = true) {
