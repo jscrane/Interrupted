@@ -1,4 +1,5 @@
 - adc
 - spi
 - power_all_disable()
-- port to attiny84
+- attiny84: timers
+- port to attiny85

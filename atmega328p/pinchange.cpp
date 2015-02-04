@@ -23,25 +23,26 @@ ISR(PCINT2_vect) {
 		d[2]->ready();
 }
 
-void PinChangeGroup::add_pin(PinChange *p, int pin) {
-	int o = pin - port_offset();
-	byte b = bit(o);
-	_pins[o] = p;
-	if (_group == PB) {
+void PinChangeGroup::add_pin(int pin, PinChange *p) {
+	_pins[port_bit(pin)] = p;
+	byte b = digitalPinToBitMask(pin);
+	if (_port == PB) {
 		PCMSK0 |= b;
 		d[0] = this;
-	} else if (_group == PC) {
+	} else if (_port == PC) {
 		PCMSK1 |= b;
 		d[1] = this;
-	} else if (_group == PD) {
+	} else if (_port == PD) {
 		PCMSK2 |= b;
 		d[2] = this;
 	}
 }
 
-void PinChangeGroup::enable_pin(int pin, boolean en) {
+void PinChangeGroup::enable_pin(int pin, boolean enable) {
 	byte e = 0, f = 0;
-	switch (_group) {
+	switch (_port) {
+	case PA:
+		return;		// error
 	case PB:
 		e = bit(PCIE0);
 		f = bit(PCIF0);
@@ -55,9 +56,9 @@ void PinChangeGroup::enable_pin(int pin, boolean en) {
 		f = bit(PCIF2);
 		break;
 	}
-	byte b = bit(pin - port_offset());
+	byte b = digitalPinToBitMask(pin);
 	byte prev = _enabled;
-	if (en) {
+	if (enable) {
 		_enabled |= b;
 		if (!prev) {
 			PCIFR |= f;
@@ -72,22 +73,23 @@ void PinChangeGroup::enable_pin(int pin, boolean en) {
 	}
 }
 
-int PinChangeGroup::port_offset() {
-	if (_group == PD)
-		return 0;
-	if (_group == PB)
-		return 8;
-	if (_group == PC)
-		return 14;
+int PinChangeGroup::port_bit(int pin) {
+	if (_port == PD)
+		return pin;
+	if (_port == PB)
+		return pin - 8;
+	if (_port == PC)
+		return pin - 14;
 
 	return -1;
 }
 
 void PinChangeGroup::ready() {
+	int off = -port_bit(0);
 	for (int i = 0; i < 8; i++) {
 		byte b = bit(i);
 		if (_pins[i] && (_enabled & b)) {
-			int v = digitalRead(port_offset() + i);
+			int v = digitalRead(i + off);
 			if (v != (_state & b)) {
 				if (v)
 					_state |= b;
