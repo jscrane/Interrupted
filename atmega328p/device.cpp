@@ -74,9 +74,7 @@ again:
 	set_sleep_mode(mode);
 	sleep_enable();
 
-	// this exists on later avrlibs but not the one shipped with
-	// arduino. also the later arduino core won't compile under
-	// the latest avr-gcc so we're stuck with arduino10!
+	// arduino 1.5.8 finally updated the avr toolchain
 	sleep_bod_disable();
 	sei();
 	sleep_cpu();
