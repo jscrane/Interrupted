@@ -4,12 +4,20 @@
 class Device {
 public:
 	virtual void begin() =0;
-	virtual void ready() { _ready = true; }
-	virtual void enable(bool enable = true) { _enabled = enable; }
 	virtual unsigned sleepmode();
 
-	virtual bool is_ready();
+	virtual void ready() { _ready = true; }
+	virtual bool is_ready() {
+		if (_enabled && _ready) {
+			_ready = false;
+			return true;
+		}
+		return false;
+	}
+
+	virtual void enable(bool enable = true) { _enabled = enable; }
 	bool is_enabled() { return _enabled; }
+
 	int id() { return _id; }
 
 protected:

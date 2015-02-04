@@ -24,14 +24,6 @@ void Devices::begin() {
 	sei();
 }
 
-bool Device::is_ready() {
-	if (_enabled && _ready) {
-		_ready = false;
-		return true;
-	}
-	return false;
-}
-
 unsigned Device::sleepmode() {
 	return SLEEP_MODE_PWR_DOWN;
 }

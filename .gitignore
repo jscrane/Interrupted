@@ -1,7 +1,9 @@
-test.bin
-test.eep
-test.elf
+*.bin
+*.eep
+*.elf
 *.o
+*/*.o
 .lib
+.deps
 .*.d
 libcore.a
