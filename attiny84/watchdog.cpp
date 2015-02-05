@@ -19,8 +19,8 @@ void Watchdog::begin() {
 	wdt = this;
 
 	MCUSR &= ~bit(WDRF);
-	WDTCSR |= bit(WDCE) | bit(WDE);		// change prescaler
-	WDTCSR = bit(WDP2) | bit(WDP1);		// 1s
+	WDTCSR |= bit(WDCE) | bit(WDE) | bit(WDIF);	// change prescaler
+	WDTCSR = bit(WDP2) | bit(WDP1);			// 1s
 }
 
 void Watchdog::enable(bool e) {

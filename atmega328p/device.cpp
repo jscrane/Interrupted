@@ -1,5 +1,6 @@
 #include <avr/power.h>
 #include <avr/sleep.h>
+#include <avr/wdt.h>
 
 #include <Arduino.h>
 #include <stdarg.h>
@@ -7,6 +8,10 @@
 #include "device.h"
 
 void Devices::begin() {
+	// "...[it] is therefore required to turn off the watchdog 
+	// early during program startup..." (from avr/wdt.h)
+	wdt_disable();
+
 	// turn off ADC and analog comparator
 	ADCSRA &= ~bit(ADEN);
 	ACSR &= ~bit(ACD);

@@ -2,4 +2,7 @@
 - spi
 - power_all_disable()
 - port to attiny85
-- attiny serial
+- attiny serial output and input
+- investigate timer bug on attiny
+- port sketches (frankenmeter, breathe)
+- port to msp430

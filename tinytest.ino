@@ -5,10 +5,12 @@
 #include "timer1.h"
 #include "watchdog.h"
 
-Timer1 timer(1, 2000);
+#define LED	10
+
+Watchdog timer(1, 1);
 External int0(2, LOW);
-PinChangeGroup pins(PB);
-PinChange led(0, pins);
+PinChangeGroup pins(PA);
+PinChange led(LED, pins); 
 Devices devices;
 
 void setup(void)
@@ -18,21 +20,20 @@ void setup(void)
 	devices.add(led);
 	devices.begin();
 
-	timer.enable(false);
-	pinMode(0, OUTPUT);
-	digitalWrite(0, HIGH);
+	pinMode(LED, OUTPUT);
+	digitalWrite(LED, HIGH);
 }
 
 void loop(void)
 {
 	switch (devices.select()) {
 	case 2:				// external interrupt #0
-		digitalWrite(0, HIGH);
+		digitalWrite(LED, HIGH);
 		break;
 	case 1:				// timer
-		digitalWrite(0, LOW);
+		digitalWrite(LED, LOW);
 		break;
-	case 0:
+	case LED:
 		timer.enable(led.is_on());
 		break;
 	}
