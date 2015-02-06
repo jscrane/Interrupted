@@ -1,3 +1,4 @@
+#include <avr/wdt.h>
 #include "device.h"
 #include "external.h"
 #include "pinchange.h"
@@ -10,7 +11,7 @@
 
 SerialIn input(98, 115200);
 SerialOut output(99);
-Watchdog timer(1, 5);
+Watchdog timer(1, 1, WDTO_4S);
 External int0(2), int1(3, RISING);
 PinChangeGroup pins(PB);
 PinChange led(13, pins);

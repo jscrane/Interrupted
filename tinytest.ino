@@ -1,3 +1,4 @@
+#include <avr/wdt.h>
 #include "device.h"
 #include "external.h"
 #include "pinchange.h"

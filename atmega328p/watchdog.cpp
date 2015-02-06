@@ -1,6 +1,5 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
-#include <Arduino.h>
 
 #include "device.h"
 #include "timer.h"
@@ -18,15 +17,49 @@ ISR(WDT_vect)
 void Watchdog::begin() {
 	wdt = this;
 
-	MCUSR &= ~bit(WDRF);
-	WDTCSR |= bit(WDCE) | bit(WDE);		// change prescaler
-	WDTCSR = bit(WDP2) | bit(WDP1);		// 1s
+	unsigned prescale = 0;
+	switch (_scale) {
+	case WDTO_15MS:
+		break;
+	case WDTO_30MS:
+		prescale = _BV(WDP0);
+		break;
+	case WDTO_60MS:
+		prescale = _BV(WDP1);
+		break;
+	case WDTO_120MS:
+		prescale = _BV(WDP1) |  _BV(WDP0);
+		break;
+	case WDTO_250MS:
+		prescale = _BV(WDP2);
+		break;
+	case WDTO_500MS:
+		prescale = _BV(WDP2) |  _BV(WDP0);
+		break;
+	case -1:
+	case WDTO_1S:
+		prescale = _BV(WDP2) | _BV(WDP1);
+		break;
+	case WDTO_2S:
+		prescale = _BV(WDP2) | _BV(WDP1) | _BV(WDP0);
+		break;
+	case WDTO_4S:
+		prescale = _BV(WDP3);
+		break;
+	case WDTO_8S:
+		prescale = _BV(WDP3) | _BV(WDP0);
+		break;
+	}
+
+	MCUSR &= ~_BV(WDRF);
+	WDTCSR |= _BV(WDCE) | _BV(WDE);		// change prescaler
+	WDTCSR = prescale;
 }
 
 void Watchdog::enable(bool e) {
 	if (e)
-		WDTCSR |= bit(WDIE);
+		WDTCSR |= _BV(WDIE);
 	else
-		WDTCSR &= ~bit(WDIE);
+		WDTCSR &= ~_BV(WDIE);
 }
 
