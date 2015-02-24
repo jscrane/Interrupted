@@ -32,18 +32,34 @@ void Analog::enable(bool e) {
 		ADCSRA &= ~(bit(ADSC) | bit(ADIE));
 }
 
-void Analog::begin() {
-	adc = this;
-	power_adc_enable();
+void Analog::_mux() {
 	byte ref = bit(REFS0);
 	if (_ref == internal)
 		ref |= bit(REFS1);
 	else if (_ref == external)
 		ref = 0;
 	ADMUX = ref | ((_pin - A0) & 0x0f);
+	pinMode(_pin, INPUT);
+}
+
+void Analog::pin(int pin) {
+	bool e = is_enabled();
+	if (e)
+		enable(false);
+
+	_pin = pin;
+	_mux();
+
+	if (e)
+		enable(true);
+}
+
+void Analog::begin() {
+	adc = this;
+	power_adc_enable();
+	_mux();
 	ADCSRA |= bit(ADEN);
 	ACSR &= ~bit(ACD);
-	pinMode(_pin, INPUT);
 }
 
 unsigned Analog::sleepmode() {
