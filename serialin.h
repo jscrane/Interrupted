@@ -7,7 +7,6 @@ public:
 		SerialDevice(id, baud), _head(0), _n(0) {}
 
 	void begin();
-	void enable(bool enable = true);
 
 	// returns the next character available for input or -1
 	int read();
@@ -16,6 +15,9 @@ public:
 	bool available() { return _n > 0; }
 
 	void on_input(byte b);
+
+protected:
+	void _enable(bool);
 
 private:
 	volatile byte _rx_buf[16];

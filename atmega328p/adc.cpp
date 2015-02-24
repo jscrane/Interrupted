@@ -22,10 +22,11 @@ ISR(ADC_vect) {
 unsigned Analog::read() {
 	unsigned v = reading;
 	reading = 0xffff;
+	enable(false);
 	return v;
 }
 
-void Analog::enable(bool e) {
+void Analog::_enable(bool e) {
 	if (e)
 		ADCSRA |= bit(ADSC) | bit(ADIE);
 	else
@@ -40,18 +41,6 @@ void Analog::_mux() {
 		ref = 0;
 	ADMUX = ref | ((_pin - A0) & 0x0f);
 	pinMode(_pin, INPUT);
-}
-
-void Analog::pin(int pin) {
-	bool e = is_enabled();
-	if (e)
-		enable(false);
-
-	_pin = pin;
-	_mux();
-
-	if (e)
-		enable(true);
 }
 
 void Analog::begin() {

@@ -51,10 +51,12 @@ void loop(void)
 		itoa(adc.read(), buf, 16);
 		strcat(buf, "\r\n");
 		output.write(buf);
-		return;
+		adc.enable(led.is_on());
+		break;
 
 	case EXT0:
 		digitalWrite(13, HIGH);
+		adc.enable(true);
 		break;
 
 	case TIMER:
@@ -74,13 +76,10 @@ void loop(void)
 			digitalWrite(LED, HIGH);
 		else if (c == '0')
 			digitalWrite(LED, LOW);
-		return;
+		break;
 
 	case SER_OUT:
 		output.enable(false);	// serial transmission complete
-		return;
+		break;
 	}
-
-	output.enable(true);
-	output.write("awake!\r\n");
 }

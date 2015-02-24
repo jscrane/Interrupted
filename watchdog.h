@@ -9,7 +9,9 @@ public:
 	Watchdog(int id, unsigned n, unsigned scale=-1): Timer(id, n), _scale(scale) {}
 
 	void begin();
-	void enable(bool enable = true);
+
+protected:
+	void _enable(bool enable);
 
 private:
 	unsigned _scale;

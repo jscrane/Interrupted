@@ -15,6 +15,9 @@ public:
 	void write(char const *ptr);
 	void do_output();
 
+protected:
+	void _enable(bool) {}
+
 private:
 	volatile char const *_tx_ptr;
 };

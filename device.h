@@ -6,22 +6,28 @@ public:
 	virtual void begin() =0;
 	virtual unsigned sleepmode();
 
-	virtual void ready() { _ready = true; }
-	virtual bool is_ready() {
-		if (_enabled && _ready) {
+	void ready() { 
+		if (_enabled) 
+			_ready = true; 
+	}
+
+	bool is_ready() {
+		if (_ready) {
 			_ready = false;
 			return true;
 		}
 		return false;
 	}
 
-	virtual void enable(bool enable = true) { _enabled = enable; }
+	void enable(bool enabled=true) { _enabled = enabled; _enable(enabled); }
 	bool is_enabled() { return _enabled; }
 
 	int id() { return _id; }
 
 protected:
 	Device(int id): _id(id), _enabled(true), _ready(false) {}
+
+	virtual void _enable(bool) = 0;
 
 private:
 	int _id;

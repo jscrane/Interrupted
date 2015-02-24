@@ -15,12 +15,11 @@ void SerialIn::begin() {
 	UCSR0B |= bit(RXEN0);
 }
 
-void SerialIn::enable(bool e) {
+void SerialIn::_enable(bool e) {
 	if (e)
 		UCSR0B |= bit(RXCIE0);
 	else
 		UCSR0B &= ~bit(RXCIE0);
-	Device::enable(e);
 }
 
 int SerialIn::read() {
