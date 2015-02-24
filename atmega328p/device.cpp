@@ -14,7 +14,7 @@ void Devices::begin() {
 
 	// turn off ADC and analog comparator
 	ADCSRA &= ~bit(ADEN);
-	ACSR &= ~bit(ACD);
+	ACSR |= bit(ACD);
 	power_adc_disable();	// FIXME: power_all_disable()?
 
 	for (int i = 2; i <= A5; i++) {

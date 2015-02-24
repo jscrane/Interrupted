@@ -8,13 +8,22 @@
 #include "serial.h"
 #include "serialin.h"
 #include "serialout.h"
+#include "adc.h"
 
-SerialIn input(98, 115200);
-SerialOut output(99);
-Watchdog timer(1, 1, WDTO_4S);
-External int0(2), int1(3, RISING);
+#define LED	13
+#define SER_IN	98
+#define SER_OUT	99
+#define EXT0	2
+#define EXT1	3
+#define TIMER	1
+
+SerialIn input(SER_IN, 115200);
+SerialOut output(SER_OUT);
+Watchdog timer(TIMER, 1, WDTO_4S);
+External int0(EXT0), int1(EXT1, RISING);
 PinChangeGroup pins(PB);
-PinChange led(13, pins);
+PinChange led(LED, pins);
+Analog adc(A0);
 Devices devices;
 
 void setup(void)
@@ -25,37 +34,49 @@ void setup(void)
 	devices.add(led);
 	devices.add(output);
 	devices.add(input);
+	devices.add(adc);
 	devices.begin();
 
-	pinMode(13, OUTPUT);
-	digitalWrite(13, HIGH);
+	pinMode(LED, OUTPUT);
+	digitalWrite(LED, HIGH);
 }
 
 void loop(void)
 {
-	char c;
+	char c, buf[8];
 
 	switch (devices.select()) {
-	case 2:
-		digitalWrite(13, HIGH);	// external interrupt #0
+	case A0:
+		output.enable(true);
+		itoa(adc.read(), buf, 16);
+		strcat(buf, "\r\n");
+		output.write(buf);
+		return;
+
+	case EXT0:
+		digitalWrite(13, HIGH);
 		break;
-	case 1:
-	case 3:
-		digitalWrite(13, LOW);	// timer or ext interrupt #1
+
+	case TIMER:
+	case EXT1:
+		digitalWrite(13, LOW);
 		break;
-	case 13:
+
+	case LED:
 		int0.enable(!led.is_on());
 		int1.enable(led.is_on());
 		timer.enable(led.is_on());
 		break;
-	case 98:			// serial char received
+
+	case SER_IN:
 		c = input.read();
 		if (c == '1')
-			digitalWrite(13, HIGH);
+			digitalWrite(LED, HIGH);
 		else if (c == '0')
-			digitalWrite(13, LOW);
+			digitalWrite(LED, LOW);
 		return;
-	case 99:
+
+	case SER_OUT:
 		output.enable(false);	// serial transmission complete
 		return;
 	}
