@@ -29,8 +29,7 @@ void External::begin() {
 	digitalWrite(_pin, HIGH);	// enable pullup
 }
 
-void External::enable(bool e) {
-	Device::enable(e);
+void External::_enable(bool e) {
 	if (e)
 		GIMSK |= bit(INT0);
 	else

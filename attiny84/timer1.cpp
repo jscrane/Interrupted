@@ -24,7 +24,7 @@ void Timer1::begin() {
 	OCR1A = F_CPU / 1024000 - 1;	// 1 ms
 }
 
-void Timer1::enable(bool e) {
+void Timer1::_enable(bool e) {
 	if (e)
 		TIMSK1 |= bit(OCIE1A);
 	else

@@ -56,7 +56,7 @@ void Watchdog::begin() {
 	WDTCSR = prescale;
 }
 
-void Watchdog::enable(bool e) {
+void Watchdog::_enable(bool e) {
 	if (e)
 		WDTCSR |= _BV(WDIE);
 	else
