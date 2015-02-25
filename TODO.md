@@ -1,4 +1,5 @@
 - adc on attiny84
+- adc sleep() and wake()
 - spi
 - power_all_disable()
 - port to attiny85

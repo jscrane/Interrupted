@@ -23,7 +23,7 @@ void setup(void)
 	devices.add(timer);
 	devices.add(int0);
 	devices.add(led);
-//	devices.add(adc);
+	devices.add(adc);
 	devices.begin();
 
 	pinMode(LED, OUTPUT);
@@ -33,8 +33,6 @@ void setup(void)
 void loop(void)
 {
 	switch (devices.select()) {
-	case A3:
-		break;
 	case EXT0:
 		digitalWrite(LED, HIGH);
 		break;
@@ -43,6 +41,10 @@ void loop(void)
 		break;
 	case LED:
 		timer.enable(led.is_on());
+		adc.enable(led.is_on());
+		break;
+	case A3:
+		adc.enable(led.is_on());
 		break;
 	}
 }

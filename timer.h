@@ -2,30 +2,27 @@
 #define __TIMER_H__
 
 /**
- * An abstract timer.
+ * An abstract one-shot timer. 
  */
 class Timer: public Device {
 public:
 	void ready() {
-		if (--_remain == 0) {
+		if (--_ticks == 0) {
 			Device::ready();
-			_remain = _dt;
+			enable(false);
 		}
 	}
 
-	void reset(unsigned dt) {
-		cli();
-		_dt = _remain = dt;
-		sei();
-	}
+	void delay(unsigned d) { _delay = d; }
 
 protected:
-	Timer(int id, unsigned dt): 
-		Device(id), _dt(dt), _remain(dt) {}
+	Timer(int id, unsigned delay): 
+		Device(id), _delay(delay), _ticks(delay) {}
 
 private:
-	unsigned _dt;
-	volatile unsigned _remain;
+	unsigned _delay;
+
+	volatile unsigned _ticks;
 };
 
 #endif

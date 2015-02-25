@@ -56,7 +56,6 @@ void loop(void)
 
 	case EXT0:
 		digitalWrite(13, HIGH);
-		adc.enable(true);
 		break;
 
 	case TIMER:
