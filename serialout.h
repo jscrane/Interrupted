@@ -9,7 +9,7 @@ public:
 	SerialOut(unsigned id, unsigned long baud = 0): 
 		SerialDevice(id, baud), _tx_ptr(0) {}
 
-	void begin();
+	bool begin();
 
 	// writes a string
 	void write(char const *ptr);

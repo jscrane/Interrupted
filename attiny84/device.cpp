@@ -8,10 +8,13 @@
 #include "device.h"
 
 void Devices::begin() {
+	// "...[it] is therefore required to turn off the watchdog 
+	// early during program startup..." (from avr/wdt.h)
 	wdt_disable();
+
 	// turn off ADC and analog comparator
 	ADCSRA &= ~bit(ADEN);
-	ACSR &= ~bit(ACD);
+	ACSR |= bit(ACD);
 	power_adc_disable();	// FIXME: power_all_disable()?
 
 	for (int i = 0; i <= 10; i++) {
@@ -68,11 +71,8 @@ again:
 	set_sleep_mode(mode);
 	sleep_enable();
 
-	// this exists on later avrlibs but not the one shipped with
-	// arduino. also the later arduino core won't compile under
-	// the latest avr-gcc so we're stuck with arduino10!
-// FIXME
-//	sleep_bod_disable();
+	// arduino 1.5.8 finally updated the avr toolchain
+	sleep_bod_disable();
 	sei();
 	sleep_cpu();
 	sleep_disable();

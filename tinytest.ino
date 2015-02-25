@@ -5,20 +5,25 @@
 #include "timer.h"
 #include "timer1.h"
 #include "watchdog.h"
+#include "adc.h"
 
 #define LED	10
+#define TIMER	1
+#define EXT0	2
 
-Watchdog timer(1, 1);
-External int0(2, LOW);
+Watchdog timer(TIMER, 1);
+External int0(EXT0, LOW);
 PinChangeGroup pins(PA);
 PinChange led(LED, pins); 
 Devices devices;
+Analog adc(A3);
 
 void setup(void)
 {
 	devices.add(timer);
 	devices.add(int0);
 	devices.add(led);
+//	devices.add(adc);
 	devices.begin();
 
 	pinMode(LED, OUTPUT);
@@ -28,10 +33,12 @@ void setup(void)
 void loop(void)
 {
 	switch (devices.select()) {
-	case 2:				// external interrupt #0
+	case A3:
+		break;
+	case EXT0:
 		digitalWrite(LED, HIGH);
 		break;
-	case 1:				// timer
+	case TIMER:
 		digitalWrite(LED, LOW);
 		break;
 	case LED:

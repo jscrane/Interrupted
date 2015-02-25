@@ -6,7 +6,8 @@ public:
 	External(int pin, int mode = FALLING): 
 		Device(pin), _pin(pin), _mode(mode)  {}
 
-	void begin();
+	// enabled by default
+	bool begin();
 
 protected:
 	void _enable(bool);

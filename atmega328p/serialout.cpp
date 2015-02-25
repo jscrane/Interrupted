@@ -9,10 +9,11 @@
 
 static SerialOut *device;
 
-void SerialOut::begin() {
+bool SerialOut::begin() {
 	device = this;
-	SerialDevice::begin();
+	init();
 	UCSR0B |= bit(TXEN0);
+	return false;
 }
 
 void SerialOut::write(char const *ptr) { 

@@ -14,7 +14,7 @@ ISR(WDT_vect)
 }
 
 // http://donalmorrissey.blogspot.ie/2010/04/sleeping-arduino-part-5-wake-up-via.html
-void Watchdog::begin() {
+bool Watchdog::begin() {
 	wdt = this;
 
 	unsigned prescale = 0;
@@ -54,6 +54,7 @@ void Watchdog::begin() {
 	MCUSR &= ~_BV(WDRF);
 	WDTCSR |= _BV(WDCE) | _BV(WDE);		// change prescaler
 	WDTCSR = prescale;
+	return false;
 }
 
 void Watchdog::_enable(bool e) {

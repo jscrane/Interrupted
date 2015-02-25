@@ -14,7 +14,7 @@ ISR(TIMER1_COMPA_vect) {
 		t1->ready();
 }
 
-void Timer1::begin() {
+bool Timer1::begin() {
 	t1 = this;
 
 	TCCR1A = 0;
@@ -22,6 +22,7 @@ void Timer1::begin() {
 	TCCR1B = bit(WGM12) | bit(CS10) | bit(CS12);
 
 	OCR1A = F_CPU / 1024000 - 1;	// 1 ms
+	return false;
 }
 
 void Timer1::_enable(bool e) {

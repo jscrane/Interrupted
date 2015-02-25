@@ -1,3 +1,4 @@
+- adc on attiny84
 - spi
 - power_all_disable()
 - port to attiny85

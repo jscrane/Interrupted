@@ -18,7 +18,7 @@ ISR(INT1_vect)
 		e1->ready();
 }
 
-void External::begin() {
+bool External::begin() {
 	// enable external interrupt and trigger on specified mode
 	if (_pin == 2) {
 		e0 = this;
@@ -41,6 +41,7 @@ void External::begin() {
 	}
 	pinMode(_pin, INPUT);
 	digitalWrite(_pin, HIGH);	// enable pullup
+	return true;
 }
 
 void External::_enable(bool e) {

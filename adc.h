@@ -5,6 +5,7 @@ typedef enum { vcc, internal, external } analog_ref_t;
 
 /**
  * Analog-to-Digital conversion.
+ * 
  * FIXME: analogReadResolution()
  */
 class Analog: public Device {
@@ -13,7 +14,8 @@ public:
 	Analog(int pin, analog_ref_t ref = vcc): 
 		Device(pin), _pin(pin), _ref(ref) {}
 
-	void begin();
+	// not enabled by default
+	bool begin();
 
 	// changes the analog input
 	void pin(int pin) { _pin = pin; _mux(); }

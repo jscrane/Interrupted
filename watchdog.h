@@ -6,12 +6,14 @@
  */
 class Watchdog: public Timer {
 public:
-	Watchdog(int id, unsigned n, unsigned scale=-1): Timer(id, n), _scale(scale) {}
+	Watchdog(int id, unsigned n, unsigned scale=-1): 
+		Timer(id, n), _scale(scale) {}
 
-	void begin();
+	// not enabled by default
+	bool begin();
 
 protected:
-	void _enable(bool enable);
+	void _enable(bool);
 
 private:
 	unsigned _scale;

@@ -15,7 +15,7 @@ ISR(INT0_vect)
 // note: http://forum.arduino.cc/index.php?topic=130606.msg982123#msg982123
 // "The only external interrupt that will wake it from sleep mode power 
 // down is LOW."
-void External::begin() {
+bool External::begin() {
 	e0 = this;
 	MCUCR &= ~(bit(ISC01) | bit(ISC00));
 	if (_mode == CHANGE)
@@ -27,6 +27,7 @@ void External::begin() {
 
 	pinMode(_pin, INPUT);
 	digitalWrite(_pin, HIGH);	// enable pullup
+	return true;
 }
 
 void External::_enable(bool e) {

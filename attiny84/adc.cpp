@@ -39,7 +39,34 @@ void Analog::_mux() {
 		ref |= bit(REFS1);
 	else if (_ref == external)
 		ref = 0;
-	ADMUX = ref | ((_pin - A0) & 0x0f);
+	byte mux = 0;
+	switch (_pin) {
+	case A0:
+		mux = 0;
+		break;
+	case A1:
+		mux = 1;
+		break;
+	case A2:
+		mux = 2;
+		break;
+	case A3:
+		mux = 3;
+		break;
+	case A4:
+		mux = 4;
+		break;
+	case A5:
+		mux = 5;
+		break;
+	case A6:
+		mux = 6;
+		break;
+	case A7:
+		mux = 7;
+		break;
+	}
+	ADMUX = ref | mux;
 	pinMode(_pin, INPUT);
 }
 

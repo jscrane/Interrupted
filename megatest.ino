@@ -68,6 +68,7 @@ void loop(void)
 		int0.enable(!led.is_on());
 		int1.enable(led.is_on());
 		timer.enable(led.is_on());
+		adc.enable(led.is_on());
 		break;
 
 	case SER_IN:

@@ -6,7 +6,7 @@ public:
 	SerialDevice(unsigned id, unsigned long baud): 
 		Device(id), _baud(baud) {}
 
-	void begin();
+	void init();
 	unsigned sleepmode();
 
 private:

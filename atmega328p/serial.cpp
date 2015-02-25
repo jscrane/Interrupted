@@ -6,7 +6,7 @@
 #include "device.h"
 #include "serial.h"
 
-void SerialDevice::begin() {
+void SerialDevice::init() {
 	if (_baud) {
 		unsigned prescale = ((F_CPU) / 16 + (_baud / 2)) / _baud - 1;
 		UBRR0H = (prescale >> 8) & 0xff;

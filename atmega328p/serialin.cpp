@@ -9,10 +9,11 @@
 
 static SerialIn *device;
 
-void SerialIn::begin() {
+bool SerialIn::begin() {
 	device = this;
-	SerialDevice::begin();
+	init();
 	UCSR0B |= bit(RXEN0);
+	return true;
 }
 
 void SerialIn::_enable(bool e) {

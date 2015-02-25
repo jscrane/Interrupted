@@ -28,14 +28,12 @@ public:
 	PinChange(int pin, PinChangeGroup &group): 
 		Device(pin), _group(group) {}
 
-	void begin() { _group.add_pin(id(), this); }
+	bool begin() { _group.add_pin(id(), this); return true; }
 	void set_state(bool on) { _state = on; ready(); }
 	bool is_on() { return _state; }
 
 protected:
-	void _enable(bool enable) {
-		_group.enable_pin(id(), enable);
-	}
+	void _enable(bool enable) { _group.enable_pin(id(), enable); }
 
 private:
 	PinChangeGroup &_group;

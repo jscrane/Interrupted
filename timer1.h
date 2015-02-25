@@ -8,7 +8,8 @@ class Timer1: public Timer {
 public:
 	Timer1(int id, unsigned millis): Timer(id, millis) {}
 
-	void begin();
+	// not enabled by default
+	bool begin();
 	unsigned sleepmode();
 
 protected:
