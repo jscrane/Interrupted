@@ -1,7 +1,6 @@
 #include "device.h"
 #include "timer.h"
 #include "timer1.h"
-#include "adc.h"
 
 const int LED = 3;
 unsigned dt = 100;
