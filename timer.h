@@ -13,7 +13,7 @@ public:
 		}
 	}
 
-	void delay(unsigned d) { _delay = d; }
+	void delay(unsigned d) { _ticks = _delay = d; }
 
 protected:
 	Timer(int id, unsigned delay): 

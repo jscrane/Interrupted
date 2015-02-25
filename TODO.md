@@ -1,4 +1,3 @@
-- adc on attiny84
 - adc sleep() and wake()
 - spi
 - power_all_disable()

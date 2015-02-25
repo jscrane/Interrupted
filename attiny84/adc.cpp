@@ -28,54 +28,49 @@ unsigned Analog::read() {
 
 void Analog::_enable(bool e) {
 	if (e)
-		ADCSRA |= bit(ADSC) | bit(ADIE);
+		ADCSRA |= _BV(ADSC) | _BV(ADIE);
 	else
-		ADCSRA &= ~(bit(ADSC) | bit(ADIE));
+		ADCSRA &= ~(_BV(ADSC) | _BV(ADIE));
+}
+
+static byte pin_to_mux(byte pin) {
+	switch (pin) {
+	case A0:
+		return 0;
+	case A1:
+		return 1;
+	case A2:
+		return 2;
+	case A3:
+		return 3;
+	case A4:
+		return 4;
+	case A5:
+		return 5;
+	case A6:
+		return 6;
+	case A7:
+		return 7;
+	}
+	return 0;
 }
 
 void Analog::_mux() {
-	byte ref = bit(REFS0);
+	byte ref = _BV(REFS0);
 	if (_ref == internal)
-		ref |= bit(REFS1);
+		ref |= _BV(REFS1);
 	else if (_ref == external)
 		ref = 0;
-	byte mux = 0;
-	switch (_pin) {
-	case A0:
-		mux = 0;
-		break;
-	case A1:
-		mux = 1;
-		break;
-	case A2:
-		mux = 2;
-		break;
-	case A3:
-		mux = 3;
-		break;
-	case A4:
-		mux = 4;
-		break;
-	case A5:
-		mux = 5;
-		break;
-	case A6:
-		mux = 6;
-		break;
-	case A7:
-		mux = 7;
-		break;
-	}
-	ADMUX = ref | mux;
-	pinMode(_pin, INPUT);
+	ADMUX = ref | pin_to_mux(_pin);
 }
 
 bool Analog::begin() {
 	adc = this;
 	power_adc_enable();
+	ACSR &= ~_BV(ACD);
+	ADCSRA = _BV(ADEN);
+	ADCSRB = pin_to_mux(_pin);
 	_mux();
-	ADCSRA |= bit(ADEN);
-	ACSR &= ~bit(ACD);
 	return false;
 }
 

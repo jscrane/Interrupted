@@ -22,10 +22,9 @@ void Devices::begin() {
 		digitalWrite(i, LOW);
 	}
 
-	for (int i = 0; i < _n; i++) {
-		_devices[i]->begin();
-		_devices[i]->enable();
-	}
+	for (int i = 0; i < _n; i++)
+		_devices[i]->enable(_devices[i]->begin());
+
 	sei();
 }
 
