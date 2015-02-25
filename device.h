@@ -7,7 +7,7 @@ public:
 	virtual bool begin() =0;
 	virtual unsigned sleepmode();
 
-	void ready() { 
+	virtual void ready() { 
 		if (_enabled) 
 			_ready = true; 
 	}
