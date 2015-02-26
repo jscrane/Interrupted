@@ -25,6 +25,10 @@ public:
 
 	unsigned sleepmode();
 
+	// call to turn off ADC altogether and back on again
+	void sleep();
+	void wake();
+
 protected:
 	void _enable(bool enabled);
 

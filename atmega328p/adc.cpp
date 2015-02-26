@@ -40,15 +40,24 @@ void Analog::_mux() {
 	else if (_ref == external)
 		ref = 0;
 	ADMUX = ref | ((_pin - A0) & 0x0f);
-	pinMode(_pin, INPUT);
+}
+
+void Analog::sleep() {
+	ADCSRA &= ~bit(ADEN);
+	ACSR |= bit(ACD);
+	power_adc_disable();
+}
+
+void Analog::wake() {
+	power_adc_enable();
+	ADCSRA |= bit(ADEN);
+	ACSR &= ~bit(ACD);
 }
 
 bool Analog::begin() {
 	adc = this;
-	power_adc_enable();
+	wake();
 	_mux();
-	ADCSRA |= bit(ADEN);
-	ACSR &= ~bit(ACD);
 	return false;
 }
 

@@ -19,7 +19,9 @@ void setup(void)
 
 void loop(void)
 {
+	adc.wake();
 	adc.enable(true);
 	devices.select();
 	serial.println(adc.read());
+	adc.sleep();
 }

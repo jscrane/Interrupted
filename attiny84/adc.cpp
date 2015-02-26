@@ -64,12 +64,21 @@ void Analog::_mux() {
 	ADMUX = ref | pin_to_mux(_pin);
 }
 
+void Analog::sleep() {
+	ADCSRA &= ~bit(ADEN);
+	ACSR |= bit(ACD);
+	power_adc_disable();
+}
+
+void Analog::wake() {
+	power_adc_enable();
+	ADCSRA |= bit(ADEN);
+	ACSR &= ~bit(ACD);
+}
+
 bool Analog::begin() {
 	adc = this;
-	power_adc_enable();
-	ACSR &= ~_BV(ACD);
-	ADCSRA = _BV(ADEN);
-	ADCSRB = pin_to_mux(_pin);
+	wake();
 	_mux();
 	return false;
 }
