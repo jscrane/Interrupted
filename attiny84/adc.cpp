@@ -56,11 +56,11 @@ static byte pin_to_mux(byte pin) {
 }
 
 void Analog::_mux() {
-	byte ref = _BV(REFS0);
-	if (_ref == internal)
-		ref |= _BV(REFS1);
-	else if (_ref == external)
-		ref = 0;
+	byte ref = 0;
+	if (_ref == external)
+		ref = _BV(REFS0);
+	else if (_ref == internal)
+		ref = _BV(REFS1);
 	ADMUX = ref | pin_to_mux(_pin);
 }
 

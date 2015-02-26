@@ -17,10 +17,8 @@ void Devices::begin() {
 	ACSR |= bit(ACD);
 	power_adc_disable();	// FIXME: power_all_disable()?
 
-	for (int i = 0; i <= 10; i++) {
-		pinMode(i, INPUT);
+	for (int i = 0; i <= 10; i++)
 		digitalWrite(i, LOW);
-	}
 
 	for (int i = 0; i < _n; i++)
 		_devices[i]->enable(_devices[i]->begin());

@@ -9,6 +9,7 @@ public:
 	void ready() {
 		if (--_ticks == 0) {
 			Device::ready();
+			_ticks = _delay;
 			enable(false);
 		}
 	}
