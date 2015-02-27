@@ -29,12 +29,13 @@ units_t units = cent;
 boolean sleeping = false; 
 
 #define IDLE		10000L
-#define DEBOUNCE	1000L
+#define DIGIT		500L
+#define DEBOUNCE	250L
 
 Analog thermistor(THERMISTOR, vcc);
 PinChangeGroup pins(PB);
 PinChange button(SWITCH, pins);
-Timer1 timer(TIMER, 600);
+Timer1 timer(TIMER, DIGIT);
 Devices devices;
 
 const uint8_t A = _BV(0);
