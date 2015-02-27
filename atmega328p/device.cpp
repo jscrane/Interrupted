@@ -17,6 +17,9 @@ void Devices::begin() {
 	ACSR |= bit(ACD);
 	power_adc_disable();	// FIXME: power_all_disable()?
 
+	// turn off the brown-out detector
+	MCUCR |= _BV(BODS) | _BV(BODSE);
+
 	for (int i = 2; i <= A5; i++)
 		digitalWrite(i, LOW);
 
