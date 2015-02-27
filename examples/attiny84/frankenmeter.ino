@@ -9,12 +9,6 @@
 
 #include <Interrupted.h>
 
-#define THERMISTOR	7
-#define SWITCH		1
-#define DIVIDER_GND 	2
-#define A_PIN 		4
-#define TIMER 		0
-
 // thermistor parameters
 const double r0 = 10000;
 const double beta = 3977.0;
@@ -25,12 +19,16 @@ const double zeroC = 273.15;
 const double tzero = 25 + zeroC;
 
 typedef enum { cent, fahr, abso } units_t;
-units_t units = cent;
-boolean sleeping = false; 
 
 #define IDLE		10000L
 #define DIGIT		500L
 #define DEBOUNCE	250L
+
+#define THERMISTOR	7
+#define SWITCH		1
+#define DIVIDER_GND 	2
+#define A_PIN 		4
+#define TIMER 		0
 
 Analog thermistor(THERMISTOR, vcc);
 PinChangeGroup pins(PB);
@@ -130,6 +128,8 @@ void setup(void)
 
 void loop(void)
 {
+	static units_t units = cent;
+	static bool sleeping = false; 
 	static uint8_t buf[8], *p = buf;
 	static double curr_temp = 0.0;
 	static uint32_t last;
