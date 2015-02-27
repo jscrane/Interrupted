@@ -59,14 +59,15 @@ static const uint8_t centigrade = A | F | E | D;
 static const uint8_t fahrenheit = A | F | E | G;
 static const uint8_t absolute = A | B | C | E | F | G;
 
-void bits(uint8_t bits)
+void display(uint8_t bits)
 {
 	uint8_t b = 1;
 	for (int i = 0; i < 7; i++, b <<= 1)
 		digitalWrite(A_PIN + i, bits & b);
 }
 
-double read_temp() {
+double read_temp() 
+{
 	double rt = rb * (1023.0 / thermistor.read() - 1);
 	double rtk = 1.0 / tzero + log(rt / r0) / beta;	
 	return 1.0 / rtk;
@@ -101,16 +102,17 @@ void format_temp(units_t units, double t, uint8_t *buf) {
 	*buf++ = 0;
 }
 
-uint8_t *reformat(units_t units, double t, uint8_t *buf) {
+uint8_t *reformat(units_t units, double t, uint8_t *buf) 
+{
 	format_temp(units, t, buf);
-	bits(buf[0]);
+	display(buf[0]);
 	return buf+1;
 }
 
 void setup(void)
 {
-	devices.add(thermistor);
 	devices.add(button);
+	devices.add(thermistor);
 	devices.add(timer);
 	devices.begin();
 	
@@ -154,7 +156,7 @@ void loop(void)
 		break;
 	case TIMER:
 		if (*p) {
-			bits(*p++);
+			display(*p++);
 			timer.enable();
 		} else
 			thermistor.enable();
@@ -170,7 +172,7 @@ void loop(void)
 		thermistor.enable(false);
 		thermistor.sleep();
 		pinMode(DIVIDER_GND, INPUT);
-		bits(0);
+		display(0);
 		sleeping = true;
 	}
 }
