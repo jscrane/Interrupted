@@ -73,13 +73,15 @@ double read_temp()
 	return 1.0 / rtk;
 }
 
-void format_temp(units_t units, double t, uint8_t *buf) {
+uint8_t *reformat(units_t units, double t, uint8_t *buf) 
+{
+	uint8_t *p = buf;
 	uint8_t u = centigrade;
 	if (units == fahr)
 		u = fahrenheit;
 	else if (units == abso)
 		u = absolute;
-	*buf++ = u;
+	*p++ = u;
 	if (units != abso) {
 		t -= zeroC;
 		if (units == fahr)
@@ -87,7 +89,7 @@ void format_temp(units_t units, double t, uint8_t *buf) {
 	}
 	if (t < 0) {
 		t = -t;
-		*buf++ = minus;
+		*p++ = minus;
 	}
 	int temp = (int)(t + 0.5);
 	bool first = true;
@@ -95,16 +97,11 @@ void format_temp(units_t units, double t, uint8_t *buf) {
 		int dig = temp / pow;
 		if (!first || dig != 0 || pow == 1) {
 			temp -= dig * pow;
-			*buf++ = digits[dig];
+			*p++ = digits[dig];
 			first = false;
 		}
 	}
-	*buf++ = 0;
-}
-
-uint8_t *reformat(units_t units, double t, uint8_t *buf) 
-{
-	format_temp(units, t, buf);
+	*p++ = 0;
 	display(buf[0]);
 	return buf+1;
 }
@@ -163,8 +160,8 @@ void loop(void)
 		break;
 	case THERMISTOR:
 		curr_temp = read_temp();
-		timer.enable();
 		p = reformat(units, curr_temp, buf);
+		timer.enable();
 		break;
 	}
 	if (now - last > IDLE_MS) {
