@@ -3,10 +3,7 @@
  * (Can program with Arduino as ISP using one of these:
  * http://programmablehardware.blogspot.ie/2011/05/in-system-programming.html )
  */
-#include <stdint.h>
 #include <math.h>
-#include <avr/wdt.h>
-
 #include <Interrupted.h>
 
 // thermistor parameters
@@ -20,9 +17,9 @@ const double tzero = 25 + zeroC;
 
 typedef enum { cent, fahr, abso } units_t;
 
-#define IDLE		10000L
-#define DIGIT		500L
-#define DEBOUNCE	250L
+#define IDLE_MS		10000L
+#define DIGIT_MS	500L
+#define DEBOUNCE_MS	500L
 
 #define THERMISTOR	7
 #define SWITCH		1
@@ -33,7 +30,7 @@ typedef enum { cent, fahr, abso } units_t;
 Analog thermistor(THERMISTOR, vcc);
 PinChangeGroup pins(PB);
 PinChange button(SWITCH, pins);
-Timer1 timer(TIMER, DIGIT);
+Timer1 timer(TIMER, DIGIT_MS);
 Devices devices;
 
 const uint8_t A = _BV(0);
@@ -144,7 +141,7 @@ void loop(void)
 			digitalWrite(DIVIDER_GND, LOW);
 			thermistor.wake();
 			thermistor.enable();
-		} else if (now - last > DEBOUNCE) {
+		} else if (now - last > DEBOUNCE_MS) {
 			last = now;
 			if (units == cent)
 				units = fahr;
@@ -168,7 +165,7 @@ void loop(void)
 		p = reformat(units, curr_temp, buf);
 		break;
 	}
-	if (now - last > IDLE) {
+	if (now - last > IDLE_MS) {
 		timer.enable(false);
 		thermistor.enable(false);
 		thermistor.sleep();
