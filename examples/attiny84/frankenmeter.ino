@@ -37,9 +37,6 @@ PinChange button(SWITCH, pins);
 Timer1 timer(TIMER, 600);
 Devices devices;
 
-uint8_t buf[8], *p = buf;
-double curr_temp = 0.0;
-
 const uint8_t A = _BV(0);
 const uint8_t B = _BV(1);
 const uint8_t C = _BV(2);
@@ -79,7 +76,7 @@ double read_temp() {
 	return 1.0 / rtk;
 }
 
-void format_temp(double t, uint8_t *buf) {
+void format_temp(units_t units, double t, uint8_t *buf) {
 	uint8_t u = centigrade;
 	if (units == fahr)
 		u = fahrenheit;
@@ -96,18 +93,22 @@ void format_temp(double t, uint8_t *buf) {
 		*buf++ = minus;
 	}
 	int temp = (int)(t + 0.5);
+	bool first = true;
 	for (int pow = 100; pow > 0; pow /= 10) {
 		int dig = temp / pow;
-		temp -= dig * pow;
-		*buf++ = digits[dig];
+		if (!first || dig != 0 || pow == 1) {
+			temp -= dig * pow;
+			*buf++ = digits[dig];
+			first = false;
+		}
 	}
 	*buf++ = 0;
 }
 
-void reformat() {
-	format_temp(curr_temp, buf);
-	p = buf;
-	bits(*p++);
+uint8_t *reformat(units_t units, double t, uint8_t *buf) {
+	format_temp(units, t, buf);
+	bits(buf[0]);
+	return buf+1;
 }
 
 void setup(void)
@@ -128,6 +129,8 @@ void setup(void)
 
 void loop(void)
 {
+	static uint8_t buf[8], *p = buf;
+	static double curr_temp = 0.0;
 	static uint32_t last;
 	uint32_t now = millis();
 
@@ -148,7 +151,7 @@ void loop(void)
 				units = abso;
 			else
 				units = cent;
-			reformat();
+			p = reformat(units, curr_temp, buf);
 		}
 		break;
 	case TIMER:
@@ -161,7 +164,7 @@ void loop(void)
 	case THERMISTOR:
 		curr_temp = read_temp();
 		timer.enable();
-		reformat();
+		p = reformat(units, curr_temp, buf);
 		break;
 	}
 	if (now - last > IDLE) {
