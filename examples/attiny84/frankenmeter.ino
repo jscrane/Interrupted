@@ -15,13 +15,11 @@ const double rb = 9990;
 const double zeroC = 273.15;
 const double tzero = 25 + zeroC;
 
-typedef enum { cent, fahr, abso } units_t;
-
 #define IDLE_MS		10000L
 #define DIGIT_MS	500L
 #define DEBOUNCE_MS	500L
 
-#define THERMISTOR	7
+#define THERMISTOR	A7
 #define SWITCH		1
 #define DIVIDER_GND 	2
 #define A_PIN 		4
@@ -55,9 +53,14 @@ static const uint8_t digits[] = {
 };
 
 static const uint8_t minus = G;
-static const uint8_t centigrade = A | F | E | D;
-static const uint8_t fahrenheit = A | F | E | G;
-static const uint8_t absolute = A | B | C | E | F | G;
+#define CENTIGRADE	0
+#define FAHRENHEIT	1
+#define ABSOLUTE	2
+static const uint8_t units[] = {
+	A | F | E | D,
+	A | F | E | G,
+	A | B | C | E | F | G,
+};
 
 void display(uint8_t bits)
 {
@@ -73,18 +76,13 @@ double read_temp()
 	return 1.0 / rtk;
 }
 
-uint8_t *reformat(units_t units, double t, uint8_t *buf) 
+uint8_t *reformat(int u, double t, uint8_t *buf) 
 {
 	uint8_t *p = buf;
-	uint8_t u = centigrade;
-	if (units == fahr)
-		u = fahrenheit;
-	else if (units == abso)
-		u = absolute;
-	*p++ = u;
-	if (units != abso) {
+	*p++ = units[u];
+	if (u != ABSOLUTE) {
 		t -= zeroC;
-		if (units == fahr)
+		if (u == FAHRENHEIT)
 			t = t * 9.0 / 5.0 + 32;
 	}
 	if (t < 0) {
@@ -124,7 +122,7 @@ void setup(void)
 
 void loop(void)
 {
-	static units_t units = cent;
+	static int u = CENTIGRADE;
 	static bool sleeping = false; 
 	static uint8_t buf[8], *p = buf;
 	static double curr_temp = 0.0;
@@ -142,13 +140,9 @@ void loop(void)
 			thermistor.enable();
 		} else if (now - last > DEBOUNCE_MS) {
 			last = now;
-			if (units == cent)
-				units = fahr;
-			else if (units == fahr)
-				units = abso;
-			else
-				units = cent;
-			p = reformat(units, curr_temp, buf);
+			if (++u > ABSOLUTE)
+				u = CENTIGRADE;
+			p = reformat(u, curr_temp, buf);
 		}
 		break;
 	case TIMER:
@@ -160,7 +154,7 @@ void loop(void)
 		break;
 	case THERMISTOR:
 		curr_temp = read_temp();
-		p = reformat(units, curr_temp, buf);
+		p = reformat(u, curr_temp, buf);
 		timer.enable();
 		break;
 	}
