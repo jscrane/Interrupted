@@ -1,5 +1,6 @@
 /*
  * Set IDE to "ATtiny84@1MHz, BOD disabled"
+ * fuses: H:FF, E:DF, L:62
  * (Can program with Arduino as ISP using one of these:
  * http://programmablehardware.blogspot.ie/2011/05/in-system-programming.html )
  */
