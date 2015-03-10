@@ -23,8 +23,19 @@ ISR(PCINT2_vect) {
 		d[2]->ready();
 }
 
+static int port_bit(pinchange_port_t port, int pin) {
+	if (port == PD)
+		return pin;
+	if (port == PB)
+		return pin - 8;
+	if (port == PC)
+		return pin - 14;
+
+	return -1;
+}
+
 void PinChangeGroup::add_pin(int pin, PinChange *p) {
-	_pins[port_bit(pin)] = p;
+	_pins[port_bit(_port, pin)] = p;
 	byte b = digitalPinToBitMask(pin);
 	if (_port == PB) {
 		PCMSK0 |= b;
@@ -73,19 +84,8 @@ void PinChangeGroup::enable_pin(int pin, boolean enable) {
 	}
 }
 
-int PinChangeGroup::port_bit(int pin) {
-	if (_port == PD)
-		return pin;
-	if (_port == PB)
-		return pin - 8;
-	if (_port == PC)
-		return pin - 14;
-
-	return -1;
-}
-
 void PinChangeGroup::ready() {
-	int off = -port_bit(0);
+	int off = -port_bit(_port, 0);
 	for (int i = 0; i < 8; i++) {
 		byte b = bit(i);
 		if (_pins[i] && (_enabled & b)) {

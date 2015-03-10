@@ -17,7 +17,6 @@ public:
 
 private:
 	PinChange *_pins[8];
-	int port_bit(int pin);
 	pinchange_port_t _port;
 	byte _enabled;
 	volatile byte _state;
