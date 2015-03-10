@@ -1,4 +1,4 @@
-- attiny85: adc, timer
+- attiny85: timer
 - spi
 - power_all_disable()
 - attiny serial output and input (SoftwareSerial uses pin-change interrupts)
