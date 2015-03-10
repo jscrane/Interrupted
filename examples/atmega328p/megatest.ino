@@ -1,14 +1,5 @@
 #include <avr/wdt.h>
-#include "device.h"
-#include "external.h"
-#include "pinchange.h"
-#include "timer.h"
-#include "timer1.h"
-#include "watchdog.h"
-#include "serial.h"
-#include "serialin.h"
-#include "serialout.h"
-#include "adc.h"
+#include <Interrupted.h>
 
 #define LED	13
 #define SER_IN	98

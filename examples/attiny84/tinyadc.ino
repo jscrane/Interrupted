@@ -1,7 +1,5 @@
 #include <TinyDebugSerial.h>
-
-#include "device.h"
-#include "adc.h"
+#include <Interrupted.h>
 
 TinyDebugSerial serial;
 Analog adc(A3, vcc);
