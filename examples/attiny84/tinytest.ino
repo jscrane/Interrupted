@@ -1,11 +1,5 @@
 #include <avr/wdt.h>
-#include "device.h"
-#include "external.h"
-#include "pinchange.h"
-#include "timer.h"
-#include "timer1.h"
-#include "watchdog.h"
-#include "adc.h"
+#include <Interrupted.h>
 
 #define LED	3
 #define TIMER	1

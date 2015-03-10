@@ -1,0 +1,10 @@
+See: https://arduinoelettronica.files.wordpress.com/2012/02/attiny85_pinout.png
+
+1: PB5
+2: PB3
+3: PB4
+4: GND
+5: PB0
+6: PB1
+7: PB2, INT0
+8: VCC
