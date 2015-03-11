@@ -4,7 +4,7 @@
 #include "device.h"
 #include "pinchange.h"
 #include "external.h"
-#include "adc.h"
+#include "analog.h"
 #include "timer.h"
 #include "timer1.h"
 #include "watchdog.h"

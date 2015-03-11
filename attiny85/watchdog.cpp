@@ -51,9 +51,11 @@ bool Watchdog::begin() {
 		break;
 	}
 
+	cli();
 	MCUSR &= ~_BV(WDRF);
 	WDTCR |= _BV(WDCE) | _BV(WDE) | _BV(WDIF);	// change prescaler
 	WDTCR = prescale;
+	sei();
 	return false;
 }
 

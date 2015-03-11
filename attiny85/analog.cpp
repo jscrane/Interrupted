@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 #include "device.h"
-#include "adc.h"
+#include "analog.h"
 
 static Device *adc;
 static volatile unsigned reading = 0xffff;
@@ -20,26 +20,42 @@ ISR(ADC_vect) {
 }
 
 unsigned Analog::read() {
+	cli();
 	unsigned v = reading;
 	reading = 0xffff;
 	enable(false);
+	sei();
 	return v;
 }
 
 void Analog::_enable(bool e) {
 	if (e)
-		ADCSRA |= bit(ADSC) | bit(ADIE);
+		ADCSRA |= _BV(ADSC) | _BV(ADIE);
 	else
-		ADCSRA &= ~(bit(ADSC) | bit(ADIE));
+		ADCSRA &= ~(_BV(ADSC) | _BV(ADIE));
+}
+
+static byte pin_to_mux(byte pin) {
+	switch (pin) {
+	case A0:
+		return 0;
+	case A1:
+		return 1;
+	case A2:
+		return 2;
+	case A3:
+		return 3;
+	}
+	return 0;
 }
 
 void Analog::_mux() {
-	byte ref = bit(REFS0);
-	if (_ref == internal)
-		ref |= bit(REFS1);
-	else if (_ref == external)
-		ref = 0;
-	ADMUX = ref | ((_pin - A0) & 0x0f);
+	byte ref = 0;
+	if (_ref == external)
+		ref = _BV(REFS0);
+	else if (_ref == internal)
+		ref = _BV(REFS1);
+	ADMUX = ref | pin_to_mux(_pin);
 }
 
 void Analog::sleep() {

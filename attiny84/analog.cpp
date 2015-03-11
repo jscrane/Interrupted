@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 #include "device.h"
-#include "adc.h"
+#include "analog.h"
 
 static Device *adc;
 static volatile unsigned reading = 0xffff;
@@ -20,9 +20,11 @@ ISR(ADC_vect) {
 }
 
 unsigned Analog::read() {
+	cli();
 	unsigned v = reading;
 	reading = 0xffff;
 	enable(false);
+	sei();
 	return v;
 }
 
@@ -43,6 +45,14 @@ static byte pin_to_mux(byte pin) {
 		return 2;
 	case A3:
 		return 3;
+	case A4:
+		return 4;
+	case A5:
+		return 5;
+	case A6:
+		return 6;
+	case A7:
+		return 7;
 	}
 	return 0;
 }

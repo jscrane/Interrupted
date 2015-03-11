@@ -1,5 +1,5 @@
-#ifndef __ADC_H__
-#define __ADC_H__
+#ifndef __ANALOG_H__
+#define __ANALOG_H__
 
 typedef enum { vcc, internal, external } analog_ref_t;
 

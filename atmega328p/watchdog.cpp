@@ -48,9 +48,11 @@ void Watchdog::_prescale() {
 		prescale = _BV(WDP3) | _BV(WDP0);
 		break;
 	}
+	cli();
 	MCUSR &= ~_BV(WDRF);
 	WDTCSR |= _BV(WDCE) | _BV(WDE);		// change prescaler
 	WDTCSR = prescale;
+	sei();
 }
 
 bool Watchdog::begin() {

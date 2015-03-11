@@ -18,8 +18,10 @@ bool SerialOut::begin() {
 
 void SerialOut::write(char const *ptr) { 
 	if (is_enabled() && !_tx_ptr) {
+		cli();
 		_tx_ptr = ptr;
 		UCSR0B |= bit(UDRIE0);
+		sei();
 	}
 }
 

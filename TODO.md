@@ -1,5 +1,3 @@
-- cli() and sei() around critical sections (e.g., in begin() methods where
-  changing prescaler)
 - spi
 - power_all_disable()
 - attiny serial output and input (SoftwareSerial uses pin-change interrupts)
