@@ -20,6 +20,7 @@ public:
 		return false;
 	}
 
+	void disable() { enable(false); }
 	void enable(bool enabled=true) { _enabled = enabled; _enable(enabled); }
 	bool is_enabled() { return _enabled; }
 

@@ -48,8 +48,9 @@ void loop() {
 		}
 		break;
 	case TIMER:
+		digitalWrite(LED, LOW);
 		pinMode(LED, INPUT);
-		busy.enable(false);
+		busy.disable();
 		sleeping = true;
 		break;
 	default:

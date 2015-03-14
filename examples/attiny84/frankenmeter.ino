@@ -160,8 +160,8 @@ void loop(void)
 		break;
 	}
 	if (now - last > IDLE_MS) {
-		timer.enable(false);
-		thermistor.enable(false);
+		timer.disable();
+		thermistor.disable();
 		thermistor.sleep();
 		pinMode(DIVIDER_GND, INPUT);
 		display(0);

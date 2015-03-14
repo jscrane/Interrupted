@@ -14,8 +14,6 @@ public:
 
 	bool is_ready() { return is_enabled(); }
 
-	unsigned sleepmode();
-
 protected:
 	void _enable(bool) {}
 };

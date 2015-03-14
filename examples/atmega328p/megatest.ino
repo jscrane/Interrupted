@@ -38,7 +38,7 @@ void loop(void)
 
 	switch (devices.select()) {
 	case A0:
-		output.enable(true);
+		output.enable();
 		itoa(adc.read(), buf, 16);
 		strcat(buf, "\r\n");
 		output.write(buf);
@@ -70,7 +70,7 @@ void loop(void)
 		break;
 
 	case SER_OUT:
-		output.enable(false);	// serial transmission complete
+		output.disable();	// serial transmission complete
 		break;
 	}
 }
