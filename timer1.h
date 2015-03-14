@@ -6,7 +6,7 @@
  */
 class Timer1: public Timer {
 public:
-	Timer1(int id, unsigned millis): Timer(id, millis) {}
+	Timer1(int id, uint32_t millis): Timer(id, millis) {}
 
 	// not enabled by default
 	bool begin();

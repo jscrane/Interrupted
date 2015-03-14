@@ -12,7 +12,7 @@ public:
 			_ready = true; 
 	}
 
-	bool is_ready() {
+	virtual bool is_ready() {
 		if (_ready) {
 			_ready = false;
 			return true;

@@ -11,5 +11,6 @@
 #include "serial.h"
 #include "serialin.h"
 #include "serialout.h"
+#include "busy.h"
 
 #endif

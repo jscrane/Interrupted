@@ -14,16 +14,19 @@ public:
 		}
 	}
 
-	void delay(unsigned d) { _ticks = _delay = d; }
+	void delay(unsigned d) { 
+		cli(); 
+		_ticks = _delay = d; 
+		sei();
+	}
 
 protected:
 	Timer(int id, unsigned delay): 
 		Device(id), _delay(delay), _ticks(delay) {}
 
 private:
-	unsigned _delay;
-
-	volatile unsigned _ticks;
+	uint32_t _delay;
+	volatile uint32_t _ticks;
 };
 
 #endif
