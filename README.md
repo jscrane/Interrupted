@@ -12,6 +12,8 @@ sketches. (If you copy the source files for your desired processor into
 the same place as the headers, the Arduino IDE should be able to figure it
 out, you just won't be able to support multiple processor architectures.)
 
+See [blog articles](http://programmablehardware.blogspot.ie/search/label/interrupted)
+
 Example
 -------
 
