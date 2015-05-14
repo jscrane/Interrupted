@@ -49,7 +49,7 @@ void PinChangeGroup::add_pin(int pin, PinChange *p) {
 	}
 }
 
-void PinChangeGroup::enable_pin(int pin, boolean enable) {
+void PinChangeGroup::enable_pin(int pin, bool enable) {
 	byte e = 0, f = 0;
 	switch (_port) {
 	case PA:

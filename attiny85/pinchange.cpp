@@ -18,7 +18,7 @@ void PinChangeGroup::add_pin(int pin, PinChange *p) {
 	PCMSK |= bit(pin);
 }
 
-void PinChangeGroup::enable_pin(int pin, boolean enable) {
+void PinChangeGroup::enable_pin(int pin, bool enable) {
 	byte b = bit(pin);
 	byte prev = _enabled;
 	if (enable) {
