@@ -21,8 +21,7 @@ private:
 
 class PinChange: public Device {
 public:
-	PinChange(int pin, PinChangeGroup &group): 
-		Device(pin), _group(group) {}
+	PinChange(int pin, PinChangeGroup &group): Device(pin), _group(group) {}
 
 	bool begin() { _group.add_pin(id(), this); return true; }
 	void set_state(bool on) { _state = on; ready(); }
