@@ -1,23 +1,20 @@
 #ifndef __PINCHANGE_H__
 #define __PINCHANGE_H__
 
-typedef enum { PA, PB, PC, PD } pinchange_port_t;
-
 class PinChange;
 
 class PinChangeGroup {
 public:
-	PinChangeGroup(pinchange_port_t port): 
-		_port(port), _enabled(0), _state(0) {}
+	PinChangeGroup(int port): _port(port), _enabled(0), _state(0) {}
 
 	void add_pin(int pin, PinChange *p);
-	void enable_pin(int pin, boolean enable);
+	void enable_pin(int pin, bool enable);
 
 	void ready();
 
 private:
 	PinChange *_pins[8];
-	pinchange_port_t _port;
+	byte _port;
 	byte _enabled;
 	volatile byte _state;
 };
