@@ -15,9 +15,9 @@ public:
 	}
 
 	void delay(unsigned d) { 
-		cli(); 
+		noInterrupts(); 
 		_ticks = _delay = d; 
-		sei();
+		interrupts();
 	}
 
 protected:
