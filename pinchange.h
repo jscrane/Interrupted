@@ -5,7 +5,7 @@ class PinChange;
 
 class PinChangeGroup {
 public:
-	PinChangeGroup(int port): _port(port), _enabled(0), _state(0) {}
+	PinChangeGroup(): _port(0), _enabled(0), _state(0) {}
 
 	void add_pin(int pin, PinChange *p);
 	void enable_pin(int pin, bool enable);
@@ -13,6 +13,12 @@ public:
 	void ready();
 
 private:
+	inline int bit_index(int b) {
+		int i = 0;
+		while (b >>= 1)
+			i++;
+		return i;
+	}
 	PinChange *_pins[8];
 	byte _port;
 	byte _enabled;

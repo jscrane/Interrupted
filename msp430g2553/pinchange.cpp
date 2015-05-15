@@ -45,10 +45,10 @@ void PinChangeGroup::ready() {
 
 void PinChangeGroup::add_pin(int pin, PinChange *p) {
 	byte b = digitalPinToBitMask(pin);
-	int i = 0;
-	while (b >>= 1)
-		i++;
+	int i = bit_index(b);
 	_pins[i] = p;
+	if (!_port)
+		_port = digitalPinToPort(pin);
 	if (_port == P1)
 		d[0] = this;
 	else if (_port == P2)
