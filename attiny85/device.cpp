@@ -6,7 +6,7 @@
 
 #include "device.h"
 
-unsigned Device::sleepmode() {
+unsigned Device::_sleepmode() {
 	return SLEEP_MODE_PWR_DOWN;
 }
 
@@ -33,23 +33,25 @@ void Devices::begin() {
 }
 
 // required because there's no defined ordering of modes...
-static unsigned update_mode(unsigned m, unsigned mode) {
-	switch (mode) {
+unsigned Device::negotiate_mode(unsigned sys) {
+	switch (_sleepmode()) {
 	case SLEEP_MODE_IDLE:
-		return mode;
+		return SLEEP_MODE_IDLE;
 
 	case SLEEP_MODE_ADC:
 		if (m != SLEEP_MODE_IDLE)
-			return mode;
+			return SLEEP_MODE_ADC;
 		break;
+
 	case SLEEP_MODE_PWR_SAVE:
 		if (m != SLEEP_MODE_IDLE && m != SLEEP_MODE_ADC)
-			return mode;
+			return SLEEP_MODE_PWR_SAVE;
 		break;
+
 	case SLEEP_MODE_PWR_DOWN:
 		break;
 	}
-	return m;
+	return sys;
 }
 
 int Devices::select() {
@@ -64,7 +66,7 @@ again:
 			return d->id();
 		}
 		if (d->is_enabled())
-			mode = update_mode(mode, d->sleepmode());
+			mode = d->negotiate_mode(mode);
 	}
 
 	set_sleep_mode(mode);

@@ -17,7 +17,7 @@ ISR(PCINT1_vect) {
 		d[1]->ready();
 }
 
-static int port_bit(pinchange_port_t port, int pin) {
+static int port_bit(byte port, int pin) {
 	if (port == PB)
 		return pin;
 	if (port == PA)

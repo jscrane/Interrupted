@@ -23,7 +23,7 @@ ISR(PCINT2_vect) {
 		d[2]->ready();
 }
 
-static int port_bit(pinchange_port_t port, int pin) {
+static int port_bit(byte port, int pin) {
 	if (port == PD)
 		return pin;
 	if (port == PB)
