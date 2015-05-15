@@ -17,36 +17,36 @@ void Devices::begin() {
 	__eint();
 }
 
-unsigned Device::sleepmode() {
-	return LPM0_bits;
+unsigned Device::_sleepmode() {
+	return LPM4_bits;
 }
 
-static unsigned update_mode(unsigned m, unsigned mode) {
-	switch (mode) {
+unsigned Device::negotiate_mode(unsigned sys) {
+	switch (_sleepmode()) {
 	case LPM0_bits:
-		return mode;
+		return LPM0_bits;
 	case LPM1_bits:
-		if (m != LPM0_bits)
-			return mode;
+		if (sys != LPM0_bits)
+			return LPM1_bits;
 		break;
 	case LPM2_bits:
-		if (m != LPM0_bits && m != LPM1_bits)
-			return mode;
+		if (sys != LPM0_bits && sys != LPM1_bits)
+			return LPM2_bits;
 		break;
 	case LPM3_bits:
-		if (m == LPM4_bits)
-			return mode;
+		if (sys == LPM4_bits)
+			return LPM3_bits;
 		break;
 	case LPM4_bits:
 		break;
 	}
-	return m;
+	return sys;
 }
 
 int Devices::select() {
 again:
 	noInterrupts();
-	unsigned mode = LPM0_bits;
+	unsigned mode = LPM4_bits;
 	for (int i = 0; i < _n; i++) {
 		Device *d = _devices[i];
 		if (d->is_ready()) {
@@ -54,7 +54,7 @@ again:
 			return d->id();
 		}
 		if (d->is_enabled())
-			mode = update_mode(mode, d->sleepmode());
+			mode = d->negotiate_mode(mode);
 	}
 	_BIS_SR(mode | GIE);
 	goto again;

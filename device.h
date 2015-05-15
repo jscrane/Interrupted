@@ -5,7 +5,6 @@ class Device {
 public:
 	// devices which are enabled at startup return true here
 	virtual bool begin() =0;
-	virtual unsigned sleepmode();
 
 	virtual void ready() { 
 		if (_enabled) 
@@ -25,11 +24,13 @@ public:
 	bool is_enabled() { return _enabled; }
 
 	int id() { return _id; }
+	unsigned negotiate_mode(unsigned);
 
 protected:
 	Device(int id): _id(id), _ready(false) {}
 
 	virtual void _enable(bool) = 0;
+	virtual unsigned _sleepmode();
 
 private:
 	int _id;
