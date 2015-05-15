@@ -10,8 +10,7 @@ __interrupt void port1(void)
 {
 	if (d[0])
 		d[0]->ready();
-//	digitalWrite(GREEN_LED, !digitalRead(GREEN_LED));
-	__bic_SR_register_on_exit(LPM0_bits | GIE);
+	__bic_SR_register_on_exit(LPM4_bits | GIE);
 }
 
 #pragma vector=PORT2_VECTOR
@@ -19,7 +18,7 @@ __interrupt void port2(void)
 {
 	if (d[1])
 		d[1]->ready();
-	//__bic_SR_register_on_exit(LPM3_bits);
+	__bic_SR_register_on_exit(LPM4_bits | GIE);
 }
 
 void PinChangeGroup::ready() {
