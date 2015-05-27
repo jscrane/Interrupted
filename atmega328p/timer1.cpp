@@ -32,7 +32,7 @@ void Timer1::_enable(bool e) {
 		TIMSK1 &= ~bit(OCIE1A);
 }
 
-unsigned Timer1::sleepmode() {
+unsigned Timer1::_sleepmode() {
 	return SLEEP_MODE_IDLE;
 }
 
