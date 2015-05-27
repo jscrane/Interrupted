@@ -1,6 +1,7 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 
+#include <Arduino.h>
 #include "device.h"
 #include "timer.h"
 #include "watchdog.h"

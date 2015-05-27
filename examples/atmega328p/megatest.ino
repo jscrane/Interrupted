@@ -12,8 +12,8 @@ SerialIn input(SER_IN, 115200);
 SerialOut output(SER_OUT);
 Watchdog timer(TIMER, 1, WDTO_4S);
 External int0(EXT0), int1(EXT1, RISING);
-PinChangeGroup pins(PB);
-PinChange led(LED, pins);
+PinChangeGroup portb;
+PinChange led(LED, portb);
 Analog adc(A0);
 Devices devices;
 

@@ -25,7 +25,7 @@ bool Timer1::begin() {
 #elif F_CPU == 1000000L
 	// CTC mode, divide by 4
 	TCCR1 = _BV(CTC1) | _BV(CS11) | _BV(CS10);
-	OCR1C = F_CPU / 8000 - 1;
+	OCR1C = F_CPU / 4000 - 1;
 #endif
 	return false;
 }
@@ -37,7 +37,7 @@ void Timer1::_enable(bool e) {
 		TIMSK &= ~_BV(OCIE1A);
 }
 
-unsigned Timer1::sleepmode() {
+unsigned Timer1::_sleepmode() {
 	return SLEEP_MODE_IDLE;
 }
 

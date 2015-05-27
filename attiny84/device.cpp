@@ -41,17 +41,14 @@ unsigned Device::negotiate_mode(unsigned sys) {
 	switch (_sleepmode()) {
 	case SLEEP_MODE_IDLE:
 		return SLEEP_MODE_IDLE;
-
 	case SLEEP_MODE_ADC:
-		if (m != SLEEP_MODE_IDLE)
+		if (sys != SLEEP_MODE_IDLE)
 			return SLEEP_MODE_ADC;
 		break;
-
 	case SLEEP_MODE_PWR_SAVE:
-		if (m != SLEEP_MODE_IDLE && m != SLEEP_MODE_ADC)
+		if (sys != SLEEP_MODE_IDLE && sys != SLEEP_MODE_ADC)
 			return SLEEP_MODE_PWR_SAVE;
 		break;
-
 	case SLEEP_MODE_PWR_DOWN:
 		break;
 	}

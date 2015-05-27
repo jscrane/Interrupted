@@ -5,6 +5,12 @@
 
 static PinChangeGroup *d[3];
 
+// ugh (these are invisible in Arduino.h)
+#define PA 1
+#define PB 2
+#define PC 3
+#define PD 4
+
 // handler for PB
 ISR(PCINT0_vect) {
 	if (d[0])

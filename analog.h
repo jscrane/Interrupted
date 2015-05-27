@@ -23,8 +23,6 @@ public:
 	// returns last converted value or 0xffff if not ready
 	unsigned read();
 
-	unsigned sleepmode();
-
 	// call to turn off ADC altogether and back on again
 	void sleep();
 	void wake();
@@ -34,6 +32,7 @@ protected:
 
 private:
 	void _mux();
+	unsigned _sleepmode();
 
 	int _pin;
 	analog_ref_t _ref;

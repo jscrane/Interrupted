@@ -7,8 +7,8 @@
 
 Watchdog timer(TIMER, 1);
 External int0(EXT0, LOW);
-PinChangeGroup pins(PA);
-PinChange led(LED, pins); 
+PinChangeGroup porta;
+PinChange led(LED, porta); 
 Devices devices;
 Analog adc(A3, vcc);
 

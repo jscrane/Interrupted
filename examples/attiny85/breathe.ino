@@ -1,5 +1,15 @@
 #include <Interrupted.h>
 
+/*
+ * An LED on pin 5 (PB0, D0), and
+ * A pushbutton between pin 7 (PB2, D2, INT0) and ground.
+ *
+ * While the Tiny is awake, it implements a software PWM on the LED,
+ * which appears to change in intensity at a constant rate. This rate
+ * is increased by pressing the button. After 5 minutes, the Timer
+ * fires and the Tiny sleeps until the next button press.
+ */
+
 // time before sleep in millis
 #define IDLE_MS 5 * 60000L
 #define DEBOUNCE_MS 1000L
@@ -12,8 +22,6 @@ Devices devices;
 External button(BUTTON, LOW);
 Timer1 timer(TIMER, IDLE_MS);
 Busy busy;
-
-TinyDebugSerial serial;
 
 void setup() {
 	devices.add(button);

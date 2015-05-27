@@ -38,10 +38,7 @@ void PinChangeGroup::ready() {
 		if (_pins[i] && (_enabled & b)) {
 			int v = digitalRead(i);
 			if (v != (_state & b)) {
-				if (v)
-					_state |= b;
-				else
-					_state &= ~b;
+				_state ^= b;
 				_pins[i]->set_state(v != 0);
 			}
 		}

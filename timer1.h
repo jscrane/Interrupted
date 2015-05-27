@@ -10,10 +10,10 @@ public:
 
 	// not enabled by default
 	bool begin();
-	unsigned sleepmode();
 
 protected:
 	void _enable(bool);
+	unsigned _sleepmode();
 };
 
 #endif

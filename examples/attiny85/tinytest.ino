@@ -1,13 +1,20 @@
 #include <Interrupted.h>
 
+/*
+ * An LED on pin 5 (PB0, D0), and
+ * A pushbutton between pin 7 (PB2, D2, INT0) and ground.
+ *
+ * The LED comes on for 1 second after reset or when the
+ * pushbutton is pressed.
+ */
 #define LED	0
 #define TIMER	1
 #define BUTTON	2
 
 Watchdog timer(TIMER, 1);
 External button(BUTTON, LOW);
-PinChangeGroup pins(PB);
-PinChange led(LED, pins); 
+PinChangeGroup portb;
+PinChange led(LED, portb); 
 Devices devices;
 
 void setup(void)

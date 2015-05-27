@@ -38,21 +38,20 @@ unsigned Device::negotiate_mode(unsigned sys) {
 	switch (_sleepmode()) {
 	case SLEEP_MODE_IDLE:
 		return SLEEP_MODE_IDLE;
-
 	case SLEEP_MODE_ADC:
-		if (m != SLEEP_MODE_IDLE)
+		if (sys != SLEEP_MODE_IDLE)
 			return SLEEP_MODE_ADC;
 		break;
 	case SLEEP_MODE_PWR_SAVE:
-		if (m != SLEEP_MODE_IDLE && m != SLEEP_MODE_ADC)
+		if (sys != SLEEP_MODE_IDLE && sys != SLEEP_MODE_ADC)
 			return SLEEP_MODE_PWR_SAVE;
 		break;
 	case SLEEP_MODE_EXT_STANDBY:
-		if (m == SLEEP_MODE_PWR_DOWN || m == SLEEP_MODE_STANDBY)
+		if (sys == SLEEP_MODE_PWR_DOWN || sys == SLEEP_MODE_STANDBY)
 			return SLEEP_MODE_EXT_STANDBY;
 		break;
 	case SLEEP_MODE_STANDBY:
-		if (m == SLEEP_MODE_PWR_DOWN)
+		if (sys == SLEEP_MODE_PWR_DOWN)
 			return SLEEP_MODE_STANDBY;
 		break;
 	case SLEEP_MODE_PWR_DOWN:
