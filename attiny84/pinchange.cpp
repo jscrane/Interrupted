@@ -22,10 +22,10 @@ void PinChangeGroup::add_pin(int pin, PinChange *p) {
 		_port = digitalPinToPort(pin);
 	byte b = digitalPinToBitMask(pin);
 	_pins[bit_index(b)] = p;
-	if (_port == PORT_A_ID) { 
+	if (_port == PORTA) { 
 		PCMSK0 |= b; 
 		d[0] = this;
-	} else if (_port == PORT_B_ID) {
+	} else if (_port == PORTB) {
 		PCMSK1 |= b;
 		d[1] = this;
 	}
@@ -33,9 +33,9 @@ void PinChangeGroup::add_pin(int pin, PinChange *p) {
 
 void PinChangeGroup::enable_pin(int pin, bool enable) {
 	byte e = 0;
-	if (_port == PORT_A_ID)
+	if (_port == PORTA)
 		e = bit(PCIE0);
-	else if (_port == PORT_B_ID)
+	else if (_port == PORTB)
 		e = bit(PCIE1);
 	byte b = digitalPinToBitMask(pin);
 	byte prev = _enabled;

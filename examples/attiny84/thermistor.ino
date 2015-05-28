@@ -40,6 +40,5 @@ void loop(void)
 	thermistor.enable();
 	devices.select();
 	serial.println(celcius(thermistor.read()));
-//	serial.println(celcius(analogRead(A7)));
 	delay(1000);
 }

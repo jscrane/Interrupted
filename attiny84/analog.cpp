@@ -85,6 +85,6 @@ bool Analog::begin() {
 	return false;
 }
 
-unsigned Analog::sleepmode() {
+unsigned Analog::_sleepmode() {
 	return SLEEP_MODE_ADC;
 }
