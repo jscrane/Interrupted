@@ -2,31 +2,18 @@
 #define __TIMER_H__
 
 /**
- * An abstract one-shot timer. 
+ * A millisecond timer.
  */
-class Timer: public Device {
+class Timer: public AbstractTimer {
 public:
-	void ready() {
-		if (--_ticks == 0) {
-			Device::ready();
-			_ticks = _delay;
-			disable();
-		}
-	}
+	Timer(int id, uint32_t millis): AbstractTimer(id, millis) {}
 
-	void delay(uint32_t d) { 
-		noInterrupts(); 
-		_ticks = _delay = d; 
-		interrupts();
-	}
+	// not enabled by default
+	bool begin();
 
 protected:
-	Timer(int id, uint32_t delay): 
-		Device(id), _delay(delay), _ticks(delay) {}
-
-private:
-	uint32_t _delay;
-	volatile uint32_t _ticks;
+	void _enable(bool);
+	unsigned _sleepmode();
 };
 
 #endif

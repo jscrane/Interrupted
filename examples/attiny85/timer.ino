@@ -6,7 +6,7 @@
  * The LED comes on for 1 second before being turned off by the timer.
  */
 const int LED = 0;
-Timer1 timer(1, 1000);
+Timer timer(1, 1000);
 Devices devices;
 
 void setup(void)

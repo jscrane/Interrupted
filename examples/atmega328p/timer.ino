@@ -7,7 +7,7 @@
  */
 #define LED	13
 #define TIMER	1
-Timer1 timer(TIMER, 500);
+Timer timer(TIMER, 500);
 Devices devices;
 
 void setup(void)

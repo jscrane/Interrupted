@@ -4,10 +4,10 @@
 /**
  * A Watchdog timer. Its resolution defaults to 1s. (See avr/wdt.h)
  */
-class Watchdog: public Timer {
+class Watchdog: public AbstractTimer {
 public:
 	Watchdog(int id, unsigned ticks, unsigned scale = -1): 
-		Timer(id, ticks), _scale(scale) {}
+		AbstractTimer(id, ticks), _scale(scale) {}
 
 	// not enabled by default
 	bool begin();

@@ -29,7 +29,7 @@ const double tzero = 25 + zeroC;
 Analog thermistor(THERMISTOR, vcc);
 PinChangeGroup portb;
 PinChange button(SWITCH, portb);
-Timer1 timer(TIMER, DIGIT_MS);
+Timer timer(TIMER, DIGIT_MS);
 Devices devices;
 
 const uint8_t A = _BV(0);

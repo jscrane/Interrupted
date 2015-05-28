@@ -4,8 +4,8 @@
 #include <avr/interrupt.h>
 
 #include "device.h"
+#include "atimer.h"
 #include "timer.h"
-#include "timer1.h"
 
 static Device *t1;
 
@@ -14,7 +14,7 @@ ISR(TIM1_COMPA_vect) {
 		t1->ready();
 }
 
-bool Timer1::begin() {
+bool Timer::begin() {
 	t1 = this;
 
 	TCCR1A = 0;
@@ -25,13 +25,13 @@ bool Timer1::begin() {
 	return false;
 }
 
-void Timer1::_enable(bool e) {
+void Timer::_enable(bool e) {
 	if (e)
 		TIMSK1 |= _BV(OCIE1A);
 	else
 		TIMSK1 &= ~_BV(OCIE1A);
 }
 
-unsigned Timer1::_sleepmode() {
+unsigned Timer::_sleepmode() {
 	return SLEEP_MODE_IDLE;
 }

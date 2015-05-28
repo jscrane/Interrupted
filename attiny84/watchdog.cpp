@@ -3,7 +3,7 @@
 #include <avr/wdt.h>
 
 #include "device.h"
-#include "timer.h"
+#include "atimer.h"
 #include "watchdog.h"
 
 static Device *wdt;
