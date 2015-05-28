@@ -7,9 +7,8 @@ public:
 		Device(id), _baud(baud) {}
 
 	void init();
-	unsigned sleepmode();
-
 private:
+	unsigned _sleepmode();
 	unsigned long _baud;
 };
 

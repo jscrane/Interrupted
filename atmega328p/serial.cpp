@@ -17,6 +17,6 @@ void SerialDevice::init() {
 	}
 }
 
-unsigned SerialDevice::sleepmode() {
+unsigned SerialDevice::_sleepmode() {
 	return SLEEP_MODE_IDLE;
 }
