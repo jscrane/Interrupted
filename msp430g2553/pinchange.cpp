@@ -28,25 +28,33 @@ void PinChangeGroup::ready() {
 		ifg = &P1IFG;
 		ies = &P1IES;
 		v = P1IN;
-	} else {
+	} else if (_port == P2) {
 		ifg = &P2IFG;
 		ies = &P2IES;
 		v = P2IN;
-	}
+	} else
+		return;
 	for (int i = 0; i < 8; i++) {
 		byte b = bit(i);
-		if (_pins[i] && (_enabled & b) && (*ifg & b)) {
-			_pins[i]->set_state((v & b) != 0);
-//			*ies ^= b;	// toggle interrupt edge
+		// deal with the interrupt here whether the device
+		// is enabled or not: ensure the next edge trigger
+		// remains consistent with its current state
+		// (i.e., don't just toggle it as in the examples).
+		if (*ifg & b) {
+			if (_enabled & b)
+				_pins[i]->set_state((v & b) != 0);
+			if (_pins[i]->is_on())
+				*ies |= b;	// next trigger on hi->lo
+			else
+				*ies &= ~b;	// next trigger on lo->hi
+			*ifg &= ~b;
 		}
 	}
-	*ifg = 0;
 }
 
 void PinChangeGroup::add_pin(int pin, PinChange *p) {
 	byte b = digitalPinToBitMask(pin);
-	int i = bit_index(b);
-	_pins[i] = p;
+	_pins[bit_index(b)] = p;
 	if (!_port)
 		_port = digitalPinToPort(pin);
 	if (_port == P1)
@@ -57,20 +65,32 @@ void PinChangeGroup::add_pin(int pin, PinChange *p) {
 
 void PinChangeGroup::enable_pin(int pin, bool enable) {
 	byte b = digitalPinToBitMask(pin);
-	volatile byte *ie, *ifg;
+	byte v = 0;
+	volatile byte *ie, *ifg, *ies;
 	if (_port == P1) {
 		ie = &P1IE;
 		ifg = &P1IFG;
-	} else {
+		ies = &P1IES;
+		v = P1IN;
+	} else if (_port == P2) {
 		ie = &P2IE;
 		ifg = &P2IFG;
-	}
+		ies = &P2IES;
+		v = P2IN;
+	} else
+		return;
 	if (enable) {
 		_enabled |= b;
 		*ie |= b;
-		*ifg &= ~b;
+		bool on = (v & b) != 0;
+		if (on)
+			*ies |= b;
+		else
+			*ies &= ~b;
+		_pins[bit_index(b)]->set_state(on);
 	} else {
 		_enabled &= ~b;
 		*ie &= ~b;
 	}
+	*ifg &= ~b;
 }

@@ -1,20 +1,11 @@
-#include <intrinsics.h>
 #include <Energia.h>
 #include <stdarg.h>
 
 #include "device.h"
 
 void Devices::begin() {
-	WDTCTL = WDTPW + WDTHOLD;	// Stop watchdog timer
-/*
-	for (int i = 2; i < 20; i++)
-		digitalWrite(i, LOW);
-*/
-
 	for (int i = 0; i < _n; i++)
 		_devices[i]->enable(_devices[i]->begin());
-
-	__eint();
 }
 
 unsigned Device::_sleepmode() {
