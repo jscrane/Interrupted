@@ -56,7 +56,7 @@ void PinChangeGroup::ready() {
 		byte b = bit(i);
 		if (_pins[i] && (_enabled & b) && (v & b) != (_state & b)) {
 			_state ^= b;
-			_pins[i]->set_state(v != 0);
+			_pins[i]->set_state((v & b) != 0);
 		}
 	}
 }

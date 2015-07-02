@@ -1,5 +1,6 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
+#include <avr/sleep.h>
 #include <Arduino.h>
 
 #include "device.h"
@@ -65,5 +66,9 @@ void Watchdog::_enable(bool e) {
 		WDTCR |= _BV(WDIE);
 	else
 		WDTCR &= ~_BV(WDIE);
+}
+
+unsigned Watchdog::_sleepmode() {
+	return SLEEP_MODE_PWR_DOWN;
 }
 

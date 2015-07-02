@@ -2,7 +2,7 @@
 #define __WATCHDOG_H__
 
 /**
- * A Watchdog timer. Its resolution defaults to 1s. (See avr/wdt.h)
+ * A Watchdog timer. Its resolution defaults to 1s.
  */
 class Watchdog: public AbstractTimer {
 public:
@@ -18,6 +18,7 @@ public:
 protected:
 	void _enable(bool);
 	void _prescale();
+	unsigned _sleepmode();
 
 private:
 	unsigned _scale;
