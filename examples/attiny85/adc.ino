@@ -2,7 +2,7 @@
 #include <Interrupted.h>
 
 TinyDebugSerial serial;
-Analog adc(A1, vcc);
+Analog adc(A1);
 Devices devices;
 
 void setup(void)

@@ -36,12 +36,7 @@ void Analog::_enable(bool e) {
 }
 
 void Analog::_mux() {
-	byte ref = bit(REFS0);
-	if (_ref == internal)
-		ref |= bit(REFS1);
-	else if (_ref == external)
-		ref = 0;
-	ADMUX = ref | ((_pin - A0) & 0x0f);
+	ADMUX = (_ref << 6) | ((_pin - A0) & 0x0f);
 }
 
 void Analog::sleep() {

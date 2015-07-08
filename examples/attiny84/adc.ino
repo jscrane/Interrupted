@@ -6,7 +6,7 @@
  * The input is read and written to TinyDebugSerial output at 115200 baud.
  */
 TinyDebugSerial serial;
-Analog adc(A3, vcc);
+Analog adc(A3, EXTERNAL);
 Devices devices;
 
 void setup(void)

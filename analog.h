@@ -1,8 +1,6 @@
 #ifndef __ANALOG_H__
 #define __ANALOG_H__
 
-typedef enum { vcc, internal, external } analog_ref_t;
-
 /**
  * Analog-to-Digital conversion.
  * 
@@ -11,7 +9,7 @@ typedef enum { vcc, internal, external } analog_ref_t;
 class Analog: public Device {
 public:
 	// pin is the analog input, e.g., A0-A7
-	Analog(int pin, analog_ref_t ref = vcc): 
+	Analog(int pin, uint8_t ref = DEFAULT):
 		Device(pin), _pin(pin), _ref(ref) {}
 
 	// not enabled by default
@@ -19,6 +17,9 @@ public:
 
 	// changes the analog input
 	void pin(int pin) { _pin = pin; _mux(); }
+
+	// changes the voltage reference
+	void ref(int ref) { _ref = ref; _mux(); }
 
 	// returns last converted value or 0xffff if not ready
 	unsigned read();
@@ -35,7 +36,7 @@ private:
 	unsigned _sleepmode();
 
 	int _pin;
-	analog_ref_t _ref;
+	uint8_t _ref;
 };
 
 #endif
