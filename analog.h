@@ -9,7 +9,7 @@
 class Analog: public Device {
 public:
 	// pin is the analog input, e.g., A0-A7
-	Analog(int pin, uint8_t ref = DEFAULT):
+	Analog(int pin, unsigned ref = DEFAULT):
 		Device(pin), _pin(pin), _ref(ref) {}
 
 	// not enabled by default
@@ -19,7 +19,7 @@ public:
 	void pin(int pin) { _pin = pin; _mux(); }
 
 	// changes the voltage reference
-	void ref(int ref) { _ref = ref; _mux(); }
+	void ref(unsigned ref) { _ref = ref; _mux(); }
 
 	// returns last converted value or 0xffff if not ready
 	unsigned read();
@@ -36,7 +36,7 @@ private:
 	unsigned _sleepmode();
 
 	int _pin;
-	uint8_t _ref;
+	unsigned _ref;
 };
 
 #endif

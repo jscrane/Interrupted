@@ -4,7 +4,6 @@
 #include "analog.h"
 
 static Device *adc;
-static volatile uint16_t reading = 0xffff;
 
 /*
  * See wiring_analog.c, analogRead()
@@ -12,17 +11,14 @@ static volatile uint16_t reading = 0xffff;
 #pragma vector=ADC10_VECTOR 
 __interrupt void adc_isr(void)
 {
-	if (adc) {
-		reading = ADC10MEM;
+	if (adc)
 		adc->ready();
-	}
 	__bic_SR_register_on_exit(LPM0_bits | GIE);
 }
 
 unsigned Analog::read() {
 	noInterrupts();
-	unsigned v = reading;
-	reading = 0xffff;
+	unsigned v = ADC10MEM;
 	disable();
 	interrupts();
 	return v;
@@ -30,25 +26,24 @@ unsigned Analog::read() {
 
 void Analog::_enable(bool e) {
 	if (e)
-		// enable ADC, start conversion, enable interrupts
-		ADC10CTL0 |= ENC | ADC10SC | ADC10IE;
+		// enable ADC and start conversion
+		ADC10CTL0 |= ENC | ADC10SC;
 	else
-		// disable ADC and interrupts
-		ADC10CTL0 &= ~(ENC | ADC10IE);
+		// disable ADC
+		ADC10CTL0 &= ~ENC;
 }
 
-// FIXME: reading from temperature sensor
 void Analog::_mux() {
-	uint8_t channel = digitalPinToADCIn(_pin);
+	// handle temperature sensor on A10
+	uint8_t channel = _pin > 127? _pin - 128: digitalPinToADCIn(_pin);
 
 	// ADC10OSC as ADC10CLK (~5MHz) / 5
 	ADC10CTL1 = ADC10SSEL_0 | ADC10DIV_4 | (channel << 12);
 
-	// set analog reference, sample + hold @ 64 × ADC10CLKs
-	ADC10CTL0 = _ref | ADC10SHT_3;
-
 	// disable input/output buffer on pin
 	ADC10AE0 = (1 << channel);
+
+	wake();
 }
 
 void Analog::sleep() {
@@ -57,12 +52,15 @@ void Analog::sleep() {
 }
 
 void Analog::wake() {
-	ADC10CTL0 |= ADC10ON | REFON;
+	ADC10CTL0 |= ADC10ON | _ref;
 }
 
 bool Analog::begin() {
 	adc = this;
-	wake();
+
+	// sample + hold @ 64 × ADC10CLKs, enable interrupts
+	ADC10CTL0 = ADC10SHT_3 | ADC10IE;
+
 	_mux();
 	return false;
 }
