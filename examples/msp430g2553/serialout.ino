@@ -2,7 +2,7 @@
 
 #define SEROUT	99
 
-SerialOut output(SEROUT, 9600);
+SerialOut output(SEROUT, 2400);
 Devices devices;
 
 void setup(void) {

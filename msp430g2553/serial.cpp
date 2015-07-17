@@ -8,8 +8,9 @@ void SerialDevice::init() {
 	if (_baud) {
 		// see http://longhornengineer.com/code/MSP430/UART/uart.c
 		UCA0CTL1 |= UCSSEL_2;
-		UCA0BR0 = 104;
-		UCA0BR1 = 0;
+		unsigned long divider = F_CPU / _baud / 16;
+		UCA0BR0 = divider;
+		UCA0BR1 = divider >> 8;
 		UCA0MCTL = 0x10 | UCOS16;
 		UCA0CTL1 &= ~UCSWRST;
 	}
