@@ -9,6 +9,7 @@ public:
 	SerialOut(unsigned id, unsigned long baud = 0): 
 		SerialDevice(id, baud), _tx_ptr(0) {}
 
+	// not enabled by default
 	bool begin();
 
 	// writes a string

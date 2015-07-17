@@ -11,7 +11,7 @@ bool SerialIn::begin() {
 	P1SEL |= BIT1;
 	P1SEL2 |= BIT1;
 	init();
-	return true;	// FIXME: should be the same as SerialOut surely?
+	return true;
 }
 
 void SerialIn::_enable(bool e) {

@@ -6,6 +6,7 @@ public:
 	SerialIn(unsigned id, unsigned long baud = 0): 
 		SerialDevice(id, baud), _head(0), _n(0) {}
 
+	// enabled by default
 	bool begin();
 
 	// returns the next character available for input or -1
