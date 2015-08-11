@@ -1,0 +1,134 @@
+#include <Energia.h>
+
+#include "device.h"
+#include "pinchange.h"
+
+static PinChangeGroup *d[4];
+
+#pragma vector=PORT1_VECTOR 
+__interrupt void port1(void)
+{
+	if (d[0])
+		d[0]->ready();
+	__bic_SR_register_on_exit(LPM4_bits | GIE);
+}
+
+#pragma vector=PORT2_VECTOR
+__interrupt void port2(void)
+{
+	if (d[1])
+		d[1]->ready();
+	__bic_SR_register_on_exit(LPM4_bits | GIE);
+}
+
+#pragma vector=PORT3_VECTOR
+__interrupt void port3(void)
+{
+	if (d[2])
+		d[2]->ready();
+	__bic_SR_register_on_exit(LPM4_bits | GIE);
+}
+
+#pragma vector=PORT4_VECTOR
+__interrupt void port4(void)
+{
+	if (d[3])
+		d[3]->ready();
+	__bic_SR_register_on_exit(LPM4_bits | GIE);
+}
+
+void PinChangeGroup::ready() {
+	volatile byte *ifg, *ies;
+	byte v = 0;
+	if (_port == P1) {
+		ifg = &P1IFG;
+		ies = &P1IES;
+		v = P1IN;
+	} else if (_port == P2) {
+		ifg = &P2IFG;
+		ies = &P2IES;
+		v = P2IN;
+	} else if (_port == P3) {
+		ifg = &P3IFG;
+		ies = &P3IES;
+		v = P3IN;
+	} else if (_port == P4) {
+		ifg = &P4IFG;
+		ies = &P4IES;
+		v = P4IN;
+	} else
+		return;
+	for (int i = 0; i < 8; i++) {
+		byte b = bit(i);
+		// deal with the interrupt here whether the device
+		// is enabled or not: ensure the next edge trigger
+		// remains consistent with its current state
+		// (i.e., don't just toggle it as in the examples).
+		if (*ifg & b) {
+			if (_enabled & b)
+				_pins[i]->set_state((v & b) != 0);
+			if (_pins[i]->is_on())
+				*ies |= b;	// next trigger on hi->lo
+			else
+				*ies &= ~b;	// next trigger on lo->hi
+			*ifg &= ~b;
+		}
+	}
+}
+
+void PinChangeGroup::add_pin(int pin, PinChange *p) {
+	byte b = digitalPinToBitMask(pin);
+	_pins[bit_index(b)] = p;
+	if (!_port)
+		_port = digitalPinToPort(pin);
+	if (_port == P1)
+		d[0] = this;
+	else if (_port == P2)
+		d[1] = this;
+	else if (_port == P3)
+		d[2] = this;
+	else if (_port == P4)
+		d[3] = this;
+}
+
+void PinChangeGroup::enable_pin(int pin, bool enable) {
+	byte b = digitalPinToBitMask(pin);
+	byte v = 0;
+	volatile byte *ie, *ifg, *ies;
+	if (_port == P1) {
+		ie = &P1IE;
+		ifg = &P1IFG;
+		ies = &P1IES;
+		v = P1IN;
+	} else if (_port == P2) {
+		ie = &P2IE;
+		ifg = &P2IFG;
+		ies = &P2IES;
+		v = P2IN;
+	} else if (_port == P3) {
+		ie = &P3IE;
+		ifg = &P3IFG;
+		ies = &P3IES;
+		v = P3IN;
+	} else if (_port == P4) {
+		ie = &P4IE;
+		ifg = &P4IFG;
+		ies = &P4IES;
+		v = P4IN;
+	} else
+		return;
+	if (enable) {
+		_enabled |= b;
+		*ie |= b;
+		bool on = (v & b) != 0;
+		if (on)
+			*ies |= b;
+		else
+			*ies &= ~b;
+		_pins[bit_index(b)]->set_state(on);
+	} else {
+		_enabled &= ~b;
+		*ie &= ~b;
+	}
+	*ifg &= ~b;
+}
