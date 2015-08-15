@@ -3,4 +3,4 @@
 - attiny serial output and input (SoftwareSerial uses pin-change interrupts)
   check out: https://github.com/frank26080115/Arduino-UsiSerial-Library/
 - port sketches: twilight
-- fraunchpad: serial, analog, wdt, timer
+- fraunchpad: analog, wdt, timer
