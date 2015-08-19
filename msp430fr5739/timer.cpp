@@ -4,14 +4,10 @@
 #include "atimer.h"
 #include "timer.h"
 
-/*
- * Unfortunately uses the same timer infrastructure as the Watchdog.
- * However they shouldn't both be necessary simultaneously surely?
- */
 static Device *d;
 
-#pragma vector=TIMER0_A0_VECTOR 
-__interrupt void timer_a0(void)
+#pragma vector=TIMER0_B0_VECTOR 
+__interrupt void timer_b0(void)
 {
         if (d)
                 d->ready();
@@ -25,11 +21,11 @@ bool Timer::begin() {
 
 void Timer::_enable(bool e) {
 	if (e) {
-		TA0CCTL0 |= CCIE;
-		TA0CCR0 = F_CPU / 1000;
-		TA0CTL |= TASSEL_2 | MC_1 | TACLR;
+		TB0CCR0 = F_CPU / 1000;
+		TB0CTL |= TBSSEL__SMCLK | MC__UP | TBCLR;
+		TB0CCTL0 |= CCIE;
 	} else
-		TA0CCTL0 &= ~CCIE;
+		TB0CCTL0 &= ~CCIE;
 }
 
 unsigned Timer::_sleepmode() {

@@ -26,11 +26,9 @@ bool Watchdog::begin() {
 
 void Watchdog::_enable(bool e) {
 	if (e) {
-		// Timer0_A3 capture/compare 0
+		// Timer0_A3
 		TA0CCR0 = 12000;
-		// Timer A clock source select 1: ACLK
-		// mode control 1: count up to CCR0; counter clear
-		TA0CTL |= TASSEL_1 | MC_1 | TACLR;
+		TA0CTL |= TASSEL__ACLK | MC__UP | TACLR;
 		switch (_scale) {
 		case 2:
 			TA0CTL |= ID_1;	// divide by 2

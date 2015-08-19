@@ -6,7 +6,7 @@
  */
 #define TIMER	1
 
-Timer timer(TIMER, 1500);
+Timer timer(TIMER, 2500);
 PinChangeGroup p3, p4;
 PinChange led(LED5, p3); 
 PinChange push2(PUSH2, p4);
