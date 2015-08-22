@@ -27,7 +27,7 @@ void Clock::_enable(bool e) {
 }
 
 unsigned Clock::_sleepmode() {
-	return LPM0_bits;	// FIXME: ???
+	return LPM4_bits;
 }
 
 void Clock::set(uint8_t h, uint8_t m, uint8_t s) {
@@ -48,5 +48,5 @@ __interrupt void rtc_isr(void)
 			c->update(RTCHOUR, RTCMIN, RTCSEC);
 		break;
 	}
-        __bic_SR_register_on_exit(LPM0_bits | GIE);
+        __bic_SR_register_on_exit(LPM4_bits | GIE);
 }

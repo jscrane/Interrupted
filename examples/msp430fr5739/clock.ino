@@ -14,14 +14,17 @@ void setup(void)
 
 void loop(void)
 {
+	static bool colon = false;
 	devices.select();
 	uint8_t h = clock.hour(), m = clock.mins(), s = clock.secs();
-	if (h < 10) Serial.print("0");
+	if (h < 10) Serial.print('0');
 	Serial.print(h);
-	Serial.print(":");
-	if (m < 10) Serial.print("0");
+	Serial.print(colon? ':': ' ');
+	if (m < 10) Serial.print('0');
 	Serial.print(m);
-	Serial.print(":");
-	if (s < 10) Serial.print("0");
-	Serial.println(s);
+	Serial.print(colon? ':': ' ');
+	if (s < 10) Serial.print('0');
+	Serial.print(s);
+	Serial.print('\r');
+	colon = !colon;
 }
