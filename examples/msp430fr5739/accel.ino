@@ -14,28 +14,27 @@ int last = 0;
 
 void setup(void)
 {
-	devices.add(adc);
-	devices.begin();
-
 	pinMode(ACC_ENABLE, OUTPUT);
 	digitalWrite(ACC_ENABLE, HIGH);
 	for (int i = 0; i < 8; i++) {
 		pinMode(leds[i], OUTPUT);
 		digitalWrite(leds[i], LOW);
 	}
+
+	devices.add(adc);
+	devices.begin();
+	adc.wake();
 }
 
 void loop(void)
 {
-	adc.wake();
 	adc.enable();
 	devices.select();
 	int v = adc.read();
 	int curr = (v - MIN)*8 / (MAX - MIN);
-	if (v >= MIN && v <= MAX && last != curr) {
+	if (curr >= 0 && curr < 8 && last != curr) {
 		digitalWrite(leds[last], LOW);
 		digitalWrite(leds[curr], HIGH);
 		last = curr;
 	}
-	adc.sleep();
 }

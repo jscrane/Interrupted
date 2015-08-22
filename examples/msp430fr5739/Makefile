@@ -1,6 +1,7 @@
 PROCESSOR_FAMILY := msp430
 BOARD := lpmsp430fr5739
-SKETCH := accel.ino
+SKETCH := clock.ino
+#SKETCH := accel.ino
 #SKETCH := useless.ino
 #SKETCH := watchdog.ino
 #SKETCH := temp.ino
