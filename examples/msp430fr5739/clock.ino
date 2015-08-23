@@ -1,6 +1,10 @@
 #include <Interrupted.h>
 #include <clock.h>
 
+/*
+ * PUSH1 for time-adjust mode, PUSH2 to advance hh/mm, PUSH1 to restart.
+ * The RTC requires a 32.768kHz crystal.
+ */
 #define RTC	1
 Clock clock(RTC);
 PinChangeGroup p4;
