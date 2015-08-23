@@ -1,30 +1,63 @@
 #include <Interrupted.h>
 #include <clock.h>
 
-Clock clock(1);
+#define RTC	1
+Clock clock(RTC);
+PinChangeGroup p4;
+PinChange push1(PUSH1, p4);
+PinChange push2(PUSH2, p4);
 Devices devices;
 
 void setup(void)
 {
 	Serial.begin(9600);
-	clock.set(0, 0, 0);
+	pinMode(PUSH1, INPUT_PULLUP);
+	pinMode(PUSH2, INPUT_PULLUP);
+	clock.set(12, 30, 00);
+
+	devices.add(push1);
+	devices.add(push2);
 	devices.add(clock);
 	devices.begin();
 }
 
 void loop(void)
 {
-	static bool colon = false;
-	devices.select();
+	static bool colon = false, hour_mode = false;
 	uint8_t h = clock.hour(), m = clock.mins(), s = clock.secs();
-	if (h < 10) Serial.print('0');
-	Serial.print(h);
-	Serial.print(colon? ':': ' ');
-	if (m < 10) Serial.print('0');
-	Serial.print(m);
-	Serial.print(colon? ':': ' ');
-	if (s < 10) Serial.print('0');
-	Serial.print(s);
-	Serial.print('\r');
-	colon = !colon;
+
+	switch (devices.select()) {
+	case RTC:
+		colon = !colon;
+		break;
+	case PUSH1:
+		if (!push1.is_on())
+			if (clock.is_enabled()) {
+				clock.disable();
+				push2.enable();
+				hour_mode = true;
+			} else if (hour_mode)
+				hour_mode = false;
+			else {
+				push2.disable();
+				clock.set(h, m, s);
+				clock.enable();
+			}
+		else
+			return;
+		break;
+	case PUSH2:
+		if (!push2.is_on()) {
+			if (hour_mode)
+				h++;
+			else
+				m++;
+			clock.update(h % 24, m % 60, 0);
+		} else
+			return;
+		break;
+	}
+	char buf[16], c = colon? ':': ' ';
+	sprintf(buf, "%02d%c%02d%c%02d\r", h, c, m, c, s);
+	Serial.print(buf);
 }

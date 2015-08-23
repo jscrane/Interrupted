@@ -15,15 +15,16 @@ bool Clock::begin() {
 		SFRIFG1 &= ~OFIFG;
 	} while (SFRIFG1 & OFIFG);
 
-	RTCCTL01 |= RTCHOLD | RTCRDYIE;
 	return true;
 }
 
 void Clock::_enable(bool e) {
+	RTCCTL01 |= RTCHOLD;
 	if (e)
-		RTCCTL01 &= ~RTCHOLD;
+		RTCCTL01 |= RTCRDYIE;
 	else
-		RTCCTL01 |= RTCHOLD;
+		RTCCTL01 &= ~RTCRDYIE;
+	RTCCTL01 &= ~RTCHOLD;
 }
 
 unsigned Clock::_sleepmode() {
