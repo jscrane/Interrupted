@@ -1,8 +1,8 @@
 #include <Interrupted.h>
 
-PinChangeGroup p1;
-PinChange led(RED_LED, p1);
-PinChange push2(PUSH2, p1);
+Port p1;
+Pin led(RED_LED, p1);
+Pin push2(PUSH2, p1);
 Devices devices;
 
 void setup()

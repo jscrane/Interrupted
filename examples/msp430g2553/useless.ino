@@ -7,9 +7,9 @@
 #define TIMER	1
 
 Timer timer(TIMER, 1500);
-PinChangeGroup p1;
-PinChange led(RED_LED, p1); 
-PinChange push2(PUSH2, p1);
+Port p1;
+Pin led(RED_LED, p1); 
+Pin push2(PUSH2, p1);
 Devices devices;
 
 void setup(void)

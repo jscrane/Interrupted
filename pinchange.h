@@ -1,13 +1,13 @@
 #ifndef __PINCHANGE_H__
 #define __PINCHANGE_H__
 
-class PinChange;
+class Pin;
 
-class PinChangeGroup {
+class Port {
 public:
-	PinChangeGroup(): _port(0), _enabled(0), _state(0) {}
+	Port(): _port(0), _enabled(0), _state(0) {}
 
-	void add_pin(int pin, PinChange *p);
+	void add_pin(int pin, Pin *p);
 	void enable_pin(int pin, bool enable);
 
 	void ready();
@@ -19,27 +19,27 @@ private:
 			i++;
 		return i;
 	}
-	PinChange *_pins[8];
+	Pin *_pins[8];
 	byte _port;
 	byte _enabled;
 	volatile byte _state;
 };
 
-class PinChange: public Device {
+class Pin: public Device {
 public:
-	PinChange(int pin, PinChangeGroup &group): Device(pin), _group(group) {}
+	Pin(int pin, Port &port): Device(pin), _port(port) {}
 
-	bool begin() { _group.add_pin(id(), this); return true; }
+	bool begin() { _port.add_pin(id(), this); return true; }
 	void set_state(bool on) {
 		if (_state != on) { _state = on; ready(); }
 	}
 	bool is_on() { return _state; }
 
 protected:
-	void _enable(bool enable) { _group.enable_pin(id(), enable); }
+	void _enable(bool enable) { _port.enable_pin(id(), enable); }
 
 private:
-	PinChangeGroup &_group;
+	Port &_port;
 	bool _state;
 };
 

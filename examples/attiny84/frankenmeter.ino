@@ -26,9 +26,9 @@ const double tzero = 25 + zeroC;
 #define A_PIN 		4
 #define TIMER 		0
 
-Analog thermistor(THERMISTOR, vcc);
-PinChangeGroup portb;
-PinChange button(SWITCH, portb);
+Analog thermistor(THERMISTOR);
+Port portb;
+Pin button(SWITCH, portb);
 Timer timer(TIMER, DIGIT_MS);
 Devices devices;
 

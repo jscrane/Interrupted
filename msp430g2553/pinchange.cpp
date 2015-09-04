@@ -3,7 +3,7 @@
 #include "device.h"
 #include "pinchange.h"
 
-static PinChangeGroup *d[2];
+static Port *d[2];
 
 #pragma vector=PORT1_VECTOR 
 __interrupt void port1(void)
@@ -21,7 +21,7 @@ __interrupt void port2(void)
 	__bic_SR_register_on_exit(LPM4_bits | GIE);
 }
 
-void PinChangeGroup::ready() {
+void Port::ready() {
 	volatile byte *ifg, *ies;
 	byte v = 0;
 	if (_port == P1) {
@@ -52,7 +52,7 @@ void PinChangeGroup::ready() {
 	}
 }
 
-void PinChangeGroup::add_pin(int pin, PinChange *p) {
+void Port::add_pin(int pin, Pin *p) {
 	byte b = digitalPinToBitMask(pin);
 	_pins[bit_index(b)] = p;
 	if (!_port)
@@ -63,7 +63,7 @@ void PinChangeGroup::add_pin(int pin, PinChange *p) {
 		d[1] = this;
 }
 
-void PinChangeGroup::enable_pin(int pin, bool enable) {
+void Port::enable_pin(int pin, bool enable) {
 	byte b = digitalPinToBitMask(pin);
 	byte v = 0;
 	volatile byte *ie, *ifg, *ies;

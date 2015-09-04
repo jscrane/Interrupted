@@ -3,7 +3,7 @@
 #include "device.h"
 #include "pinchange.h"
 
-static PinChangeGroup *d[2];
+static Port *d[2];
 
 // handler for PA
 ISR(PCINT0_vect) {
@@ -17,7 +17,7 @@ ISR(PCINT1_vect) {
 		d[1]->ready();
 }
 
-void PinChangeGroup::add_pin(int pin, PinChange *p) {
+void Port::add_pin(int pin, Pin *p) {
 	if (!_port)
 		_port = digitalPinToPort(pin);
 	byte b = digitalPinToBitMask(pin);
@@ -31,7 +31,7 @@ void PinChangeGroup::add_pin(int pin, PinChange *p) {
 	}
 }
 
-void PinChangeGroup::enable_pin(int pin, bool enable) {
+void Port::enable_pin(int pin, bool enable) {
 	byte e = 0;
 	if (_port == PORTA)
 		e = bit(PCIE0);
@@ -50,7 +50,7 @@ void PinChangeGroup::enable_pin(int pin, bool enable) {
 	}
 }
 
-void PinChangeGroup::ready() {
+void Port::ready() {
 	uint8_t v = (*portInputRegister(_port));
 	for (int i = 0; i < 8; i++) {
 		byte b = bit(i);

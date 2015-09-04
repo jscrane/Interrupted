@@ -14,8 +14,8 @@
 #define BUTTON	8
 #define ADC	A3
 
-PinChangeGroup porta;
-PinChange led(LED, porta); 
+Port porta;
+Pin led(LED, porta); 
 Watchdog timer(TIMER, 1);
 External button(BUTTON, LOW);
 Devices devices;

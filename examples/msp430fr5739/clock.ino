@@ -7,9 +7,9 @@
  */
 #define RTC	1
 Clock clock(RTC);
-PinChangeGroup p4;
-PinChange push1(PUSH1, p4);
-PinChange push2(PUSH2, p4);
+Port p4;
+Pin push1(PUSH1, p4);
+Pin push2(PUSH2, p4);
 Devices devices;
 
 void setup(void)

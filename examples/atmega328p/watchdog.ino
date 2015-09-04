@@ -14,8 +14,8 @@
 
 Watchdog timer(TIMER, 1);
 External button(BUTTON, LOW);
-PinChangeGroup portb;
-PinChange led(LED, portb); 
+Port portb;
+Pin led(LED, portb); 
 Devices devices;
 
 void setup(void)

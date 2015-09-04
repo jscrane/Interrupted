@@ -3,7 +3,7 @@
 #include "device.h"
 #include "pinchange.h"
 
-static PinChangeGroup *d[3];
+static Port *d[3];
 
 // ugh (these are invisible in Arduino.h)
 #define PA 1
@@ -29,7 +29,7 @@ ISR(PCINT2_vect) {
 		d[2]->ready();
 }
 
-void PinChangeGroup::add_pin(int pin, PinChange *p) {
+void Port::add_pin(int pin, Pin *p) {
 	if (!_port)
 		_port = digitalPinToPort(pin);
 	byte b = digitalPinToBitMask(pin);
@@ -46,7 +46,7 @@ void PinChangeGroup::add_pin(int pin, PinChange *p) {
 	}
 }
 
-void PinChangeGroup::enable_pin(int pin, bool enable) {
+void Port::enable_pin(int pin, bool enable) {
 	byte e = 0, f = 0;
 	switch (_port) {
 	case PA:
@@ -81,7 +81,7 @@ void PinChangeGroup::enable_pin(int pin, bool enable) {
 	}
 }
 
-void PinChangeGroup::ready() {
+void Port::ready() {
 	byte v = (*portInputRegister(_port));
 	for (int i = 0; i < 8; i++) {
 		byte b = bit(i);

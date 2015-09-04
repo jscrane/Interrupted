@@ -1,13 +1,13 @@
 #include <Interrupted.h>
 
-PinChangeGroup p3, p4;
-PinChange led5(LED5, p3);
-PinChange led6(LED6, p3);
-PinChange led7(LED7, p3);
-PinChange led8(LED8, p3);
+Port p3, p4;
+Pin led5(LED5, p3);
+Pin led6(LED6, p3);
+Pin led7(LED7, p3);
+Pin led8(LED8, p3);
 
-PinChange *leds[] = { &led5, &led6, &led7, &led8 };
-PinChange push2(PUSH2, p4);
+Pin *leds[] = { &led5, &led6, &led7, &led8 };
+Pin push2(PUSH2, p4);
 Devices devices;
 
 void setup()
