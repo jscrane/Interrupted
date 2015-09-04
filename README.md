@@ -29,8 +29,8 @@ Example
     SerialOut output(SER_OUT, 115200);
     Watchdog timer(TIMER, 5);
     External int0(EXT0), int1(EXT1, RISING);
-    PinChangeGroup pins(PB);
-    PinChange led(LED, pins);
+    Port port(PB);
+    Pin led(LED, port);
     Devices devices;
     
     void setup(void)
