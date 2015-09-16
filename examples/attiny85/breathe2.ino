@@ -24,6 +24,7 @@ void setup() {
 	OCR0A = 0;
 
 	msec.enable();
+	watchdog.enable();
 }
 
 void loop() {
