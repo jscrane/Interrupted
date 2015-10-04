@@ -34,8 +34,8 @@ void Devices::begin() {
 }
 
 // required because there's no defined ordering of modes...
-unsigned Device::negotiate_mode(unsigned sys) {
-	switch (_sleepmode()) {
+unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
+	switch (dev) {
 	case SLEEP_MODE_IDLE:
 		return SLEEP_MODE_IDLE;
 	case SLEEP_MODE_ADC:
@@ -52,8 +52,18 @@ unsigned Device::negotiate_mode(unsigned sys) {
 	return sys;
 }
 
+void Devices::sleep(unsigned mode) {
+	set_sleep_mode(mode);
+	sleep_enable();
+
+	// arduino 1.5.8 finally updated the avr toolchain
+	sleep_bod_disable();
+	sei();
+	sleep_cpu();
+	sleep_disable();
+}
+
 int Devices::select() {
-again:
 	// so we don't miss an interrupt while checking...
 	cli();
 	unsigned mode = SLEEP_MODE_PWR_DOWN;
@@ -66,15 +76,6 @@ again:
 		if (d->is_enabled())
 			mode = d->negotiate_mode(mode);
 	}
-
-	set_sleep_mode(mode);
-	sleep_enable();
-
-	// arduino 1.5.8 finally updated the avr toolchain
-	sleep_bod_disable();
-	sei();
-	sleep_cpu();
-	sleep_disable();
-
-	goto again;
+	idle(mode);
+	return -1;
 }

@@ -12,8 +12,8 @@ unsigned Device::_sleepmode() {
 	return LPM4_bits;
 }
 
-unsigned Device::negotiate_mode(unsigned sys) {
-	switch (_sleepmode()) {
+unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
+	switch (dev) {
 	case LPM0_bits:
 		return LPM0_bits;
 	case LPM1_bits:
@@ -34,8 +34,11 @@ unsigned Device::negotiate_mode(unsigned sys) {
 	return sys;
 }
 
+void Devices::sleep(unsigned mode) {
+	_BIS_SR(mode);
+}
+
 int Devices::select() {
-again:
 	noInterrupts();
 	unsigned mode = LPM4_bits;
 	for (int i = 0; i < _n; i++) {
@@ -47,6 +50,6 @@ again:
 		if (d->is_enabled())
 			mode = d->negotiate_mode(mode);
 	}
-	_BIS_SR(mode | GIE);
-	goto again;
+	idle(mode | GIE);
+	return -1;
 }
