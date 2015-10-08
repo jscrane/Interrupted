@@ -1,7 +1,9 @@
 #ifndef __DEVICE_H__
 #define __DEVICE_H__
 
+#ifndef MAX_DEVICES
 #define MAX_DEVICES 10
+#endif
 
 class Device;
 
