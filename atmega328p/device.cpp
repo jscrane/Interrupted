@@ -84,7 +84,6 @@ int Devices::select() {
 		if (d->is_enabled())
 			mode = d->negotiate_mode(mode);
 	}
-
 	idle(mode);
 	return -1;
 }
