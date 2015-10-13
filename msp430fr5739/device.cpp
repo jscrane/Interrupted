@@ -35,7 +35,7 @@ unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
 }
 
 void Devices::sleep(unsigned mode) {
-	_BIS_SR(mode);
+	_BIS_SR(mode | GIE);
 }
 
 int Devices::select() {
@@ -50,6 +50,6 @@ int Devices::select() {
 		if (d->is_enabled())
 			mode = d->negotiate_mode(mode);
 	}
-	idle(mode | GIE);
+	idle(mode);
 	return -1;
 }
