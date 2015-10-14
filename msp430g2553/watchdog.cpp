@@ -25,7 +25,9 @@ bool Watchdog::begin() {
 }
 
 void Watchdog::_enable(bool e) {
-	if (e) {
+	if (!e) 
+		TACCTL0 &= ~CCIE;
+	else if (!(TACCTL0 & CCIE)) {
 		TACCTL0 |= CCIE;
 		TACCR0 = 12000;
 		TACTL |= TASSEL_1 | MC_1 | TACLR;
@@ -40,8 +42,7 @@ void Watchdog::_enable(bool e) {
 			TACTL |= ID_3;
 			break;
 		}
-	} else
-		TACCTL0 &= ~CCIE;
+	}
 }
 
 void Watchdog::_prescale() {

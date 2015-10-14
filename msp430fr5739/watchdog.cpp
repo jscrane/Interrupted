@@ -25,7 +25,9 @@ bool Watchdog::begin() {
 }
 
 void Watchdog::_enable(bool e) {
-	if (e) {
+	if (!e)
+		TA0CCTL0 &= ~CCIE;
+	else if (!(TA0CCTL0 & CCIE)) {
 		// Timer0_A3
 		TA0CCR0 = 12000;
 		TA0CTL |= TASSEL__ACLK | MC__UP | TACLR;
@@ -42,8 +44,7 @@ void Watchdog::_enable(bool e) {
 		}
 		// enable interrupts
 		TA0CCTL0 = CCIE;
-	} else
-		TA0CCTL0 &= ~CCIE;	// disable interrupts
+	}
 }
 
 void Watchdog::_prescale() {
