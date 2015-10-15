@@ -3,10 +3,12 @@
 /*
  * The LED comes on for 2.5 seconds after reset or when the
  * pushbutton is pressed.
+ *
+ * This version uses the Delay timer.
  */
 #define TIMER	1
 
-Timer timer(TIMER, 2500);
+Delay timer(TIMER, 2500);
 Port p3, p4;
 Pin led(LED5, p3); 
 Pin push2(PUSH2, p4);
@@ -19,8 +21,8 @@ void setup(void)
 	devices.add(push2);
 	devices.begin();
 
-	pinMode(LED5, OUTPUT);
 	pinMode(PUSH2, INPUT_PULLUP);
+	pinMode(LED5, OUTPUT);
 }
 
 void loop(void)
@@ -32,7 +34,7 @@ void loop(void)
 		break;
 	case TIMER:
 		digitalWrite(LED5, LOW);
-		break;
+		return;
 	case LED5:
 		timer.enable(led.is_on());
 		break;
