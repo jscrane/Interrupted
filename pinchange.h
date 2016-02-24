@@ -42,7 +42,7 @@ protected:
 
 private:
 	Port &_port;
-	bool _state;
+	volatile bool _state;
 };
 
 #endif
