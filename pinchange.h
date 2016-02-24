@@ -27,13 +27,15 @@ private:
 
 class Pin: public Device {
 public:
-	Pin(int pin, Port &port): Device(pin), _port(port) {}
+	Pin(int pin, Port &port, byte s = LOW): Device(pin), _port(port), _state(s == HIGH) {}
 
 	bool begin() { _port.add_pin(id(), this); return true; }
-	void set_state(bool on) {
-		if (_state != on) { _state = on; ready(); }
+	void set_state(bool s) {
+		if (_state != s) { _state = s; ready(); }
 	}
 	bool is_on() { return _state; }
+	bool is_high() { return is_on(); }
+	bool is_low() { return !is_on(); }
 
 protected:
 	void _enable(bool enable) { _port.enable_pin(id(), enable); }

@@ -67,7 +67,7 @@ void Port::ready() {
 		if (*ifg & b) {
 			if (_enabled & b)
 				_pins[i]->set_state((v & b) != 0);
-			if (_pins[i]->is_on())
+			if (_pins[i]->is_high())
 				*ies |= b;	// next trigger on hi->lo
 			else
 				*ies &= ~b;	// next trigger on lo->hi
