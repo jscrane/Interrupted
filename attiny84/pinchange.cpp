@@ -45,9 +45,8 @@ void Port::ready() {
 	uint8_t v = (*portInputRegister(_port));
 	for (int i = 0; i < 8; i++) {
 		byte b = bit(i);
-		if (_pins[i] && (_enabled & b) && (v & b) != (_state & b)) {
-			_state ^= b;
-			_pins[i]->set_state((v & b) != 0);
-		}
+		bool hi = (v & b);
+		if (_pins[i] && (_enabled & b) && hi != pins[i]->is_high())
+			_pins[i]->set_state(hi);
 	}
 }

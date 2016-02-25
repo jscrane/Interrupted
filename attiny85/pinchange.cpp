@@ -36,11 +36,9 @@ void Port::ready() {
 	for (int i = 0; i < 8; i++) {
 		byte b = bit(i);
 		if (_pins[i] && (_enabled & b)) {
-			int v = digitalRead(i);
-			if (v != (_state & b)) {
-				_state ^= b;
-				_pins[i]->set_state(v != 0);
-			}
+			bool hi = digitalRead(i) == HIGH;
+			if (hi != _pins[i]->is_high())
+				_pins[i]->set_state(hi);
 		}
 	}
 }

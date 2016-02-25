@@ -5,7 +5,7 @@ class Pin;
 
 class Port {
 public:
-	Port(): _port(0), _enabled(0), _state(0) {}
+	Port(): _port(0), _enabled(0) {}
 
 	void add_pin(int pin, Pin *p);
 	void enable_pin(int pin, bool enable);
@@ -20,9 +20,7 @@ private:
 		return i;
 	}
 	Pin *_pins[8];
-	byte _port;
-	byte _enabled;
-	volatile byte _state;
+	byte _port, _enabled;
 };
 
 class Pin: public Device {
