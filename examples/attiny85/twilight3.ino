@@ -1,23 +1,33 @@
+#include <EEPROM.h>
 #include <Interrupted.h>
 
+#define SAMPLES		30	// number of samples to smooth for dark level
+#define THRESHOLD	80	// default dark level
+#define ON_TIME		120	// how long to stay on for with no movement
+#define HOLD_TIME	2000	// how long to hold button to store dark level
+
 #define LDR	A1
-#define PIR	1
 #define LED	0
+#define PIR	1
 #define TIMER	2
+#define FADER	3
+#define BUTTON	4
+
+#define FADE_ON		0
+#define FADE_OFF	255
 
 Analog ldr(LDR);
 Port portb;
+Pin button(BUTTON, portb, HIGH);
 Pin pir(PIR, portb);
-Pin led(LED, portb);
 Watchdog timer(TIMER, 1);
+Delay fader(FADER, 20);
 Devices devices;
 
-#define SAMPLES		30
-#define DARK		100
-#define LIGHT		150
-#define ONTIME		60
-
-int smoothed = 0, ontime = 0;
+unsigned threshold = THRESHOLD, smoothed = threshold, ontime = 0;
+byte v = FADE_OFF;
+bool on = false;
+long downtime;
 
 unsigned sample(int curr) {
 	static int samples[SAMPLES], pos = 0;
@@ -30,48 +40,84 @@ unsigned sample(int curr) {
 	return (unsigned)(total / ns);
 }
 
-#define SLOW 250
-#define FAST 125
-
-void blink(int d) {
-	int n = 500 / d;
-  	for (int i = 0; i < n; i++) {
-		digitalWrite(LED, HIGH);
-		delay(d);
-		digitalWrite(LED, LOW);
-		delay(d);
-	}
-}
-
 void setup() {
+	pinMode(PIR, INPUT);
+	pinMode(BUTTON, INPUT_PULLUP);
+	pinMode(LED, OUTPUT);
+
 	devices.add(pir);
+	devices.add(button);
 	devices.add(ldr);
 	devices.add(timer);
-	devices.add(led);
+	devices.add(fader);
 	devices.begin();
 
-	pinMode(PIR, INPUT);
-	pinMode(LED, OUTPUT);
-	blink(FAST);
+	uint8_t t = EEPROM[0];
+	unsigned d = 1000;
+	if (t != 0xff) {
+		d = 200;
+		threshold = 4*t;
+	}
+
+	// enable PWM on PB0 (OCR0A)
+	TCCR0A = _BV(COM0A1) | _BV(COM0A0) | _BV(WGM01) | _BV(WGM00);
+	TCCR0B = _BV(CS01);
+
+	// flash at startup
+	OCR0A = FADE_ON;
+	delay(d);
+	OCR0A = FADE_OFF;
+
 	timer.enable();
+}
+
+static bool fading() {
+	return (on && v != FADE_ON) || (!on && v != FADE_OFF);
 }
 
 void loop() {
 	switch (devices.select()) {
-	case TIMER:
-		ldr.enable();
-		break;
 	case LDR:
 		smoothed = sample(ldr.read());
 		timer.enable();
-		if (pir.is_on() && smoothed < DARK) {
-			digitalWrite(LED, HIGH);
-			ontime = ONTIME;
-		} else if ((!pir.is_on() || smoothed > LIGHT) && ontime > 0)
+		break;
+	case TIMER:
+		ldr.enable();	// sample ldr every second
+		if (ontime > 0)
 			ontime--;
-		else if (ontime == 0) {
-			blink(SLOW);
-			digitalWrite(LED, LOW);
+		else if (on) {
+			fader.enable();	// fade out
+			on = false;
+		}
+		break;
+	case PIR:
+		if (pir.is_high() && smoothed < threshold) {
+			if (!on) {	// fade in
+				fader.enable();
+				on = true;
+			}
+			ontime = ON_TIME;
+		}
+		break;
+	case FADER:
+		OCR0A = on? --v: ++v;
+		fader.enable(fading());
+		break;
+	case BUTTON:
+		// flip LED state
+		on = !on;
+		OCR0A = on? FADE_ON: FADE_OFF;
+		if (button.is_low()) {
+			timer.disable();
+			ldr.disable();
+			fader.disable();
+			downtime = millis();
+		} else {
+			timer.enable();
+			fader.enable(fading());
+			threshold = smoothed + 1;
+			if (millis() - downtime > HOLD_TIME)
+				EEPROM[0] = threshold / 4;
 		}
 		break;
 	}
