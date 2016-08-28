@@ -45,11 +45,11 @@ unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
 		if (sys != SLEEP_MODE_IDLE)
 			return SLEEP_MODE_ADC;
 		break;
-	case SLEEP_MODE_PWR_SAVE:
-		if (sys != SLEEP_MODE_IDLE && sys != SLEEP_MODE_ADC)
-			return SLEEP_MODE_PWR_SAVE;
-		break;
 	case SLEEP_MODE_PWR_DOWN:
+		if (sys != SLEEP_MODE_IDLE && sys != SLEEP_MODE_ADC)
+			return SLEEP_MODE_PWR_DOWN;
+		break;
+	case SLEEP_MODE_STANDBY:
 		break;
 	}
 	return sys;
