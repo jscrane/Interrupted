@@ -7,7 +7,7 @@
  */
 #define LED	13
 #define TIMER	1
-Timer timer(TIMER, 500);
+Delay timer(TIMER, 500);
 Devices devices;
 
 void setup(void)
@@ -17,11 +17,13 @@ void setup(void)
 
 	pinMode(LED, OUTPUT);
 	digitalWrite(LED, HIGH);
+	timer.enable();
 }
 
 void loop(void)
 {
-	timer.enable();
-	if (devices.select() == TIMER)
+	if (devices.select() == TIMER) {
 		digitalWrite(LED, !digitalRead(LED));
+		timer.enable();
+	}
 }
