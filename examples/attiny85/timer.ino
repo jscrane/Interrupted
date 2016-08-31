@@ -6,7 +6,8 @@
  * The LED comes on for 1 second before being turned off by the timer.
  */
 const int LED = 0;
-Timer timer(1, 1000);
+const int TIMER = 1;
+Timer timer(TIMER, 1000);
 Devices devices;
 
 void setup(void)
@@ -15,11 +16,13 @@ void setup(void)
 	devices.begin();
 	pinMode(LED, OUTPUT);
 	digitalWrite(LED, HIGH);
+	timer.enable();
 }
 
 void loop(void)
 {
-	timer.enable();
-	devices.select();
-	digitalWrite(LED, !digitalRead(LED));
+	if (devices.select() == TIMER) {
+		digitalWrite(LED, !digitalRead(LED));
+		timer.enable();
+	}
 }
