@@ -1,7 +1,6 @@
 #include <Energia.h>
 
 #include "device.h"
-#include "atimer.h"
 #include "timer.h"
 
 /*

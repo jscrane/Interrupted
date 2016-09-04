@@ -4,7 +4,6 @@
 #include <avr/interrupt.h>
 
 #include "device.h"
-#include "atimer.h"
 #include "timer.h"
 
 static Device *t1;
