@@ -39,7 +39,6 @@ bool External::begin() {
 		else if (_mode == RISING)
 			EICRA |= bit(ISC11) | bit(ISC10);
 	}
-	digitalWrite(_pin, HIGH);	// enable pullup
 	return true;
 }
 
