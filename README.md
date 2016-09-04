@@ -18,6 +18,7 @@ See [blog articles](http://programmablehardware.blogspot.ie/search/label/interru
 Example
 -------
 
+    #include <avr/wdt.h>
     #include <Interrupted.h>
 
     #define LED     13
@@ -27,7 +28,7 @@ Example
     #define TIMER   1
 
     SerialOut output(SER_OUT, 115200);
-    Watchdog timer(TIMER, 5);
+    Watchdog timer(TIMER, WDTO_4S);
     External int0(EXT0), int1(EXT1, RISING);
     Port port(PB);
     Pin led(LED, port);
