@@ -4,24 +4,27 @@
 /**
  * A Watchdog timer. Its resolution defaults to 1s.
  */
-class Watchdog: public AbstractTimer {
+class Watchdog: public Device {
 public:
-	Watchdog(int id, unsigned ticks, unsigned scale = -1): 
-		AbstractTimer(id, ticks), _scale(scale) {}
+	Watchdog(int id, int scale = -1): Device(id), _scale(scale) {}
+
+	void ready() {
+		Device::ready();
+		disable();
+	}
 
 	// not enabled by default
 	bool begin();
 
-	// change the prescaler
-	void scale(unsigned scale) { _scale = scale; _prescale(); }
+	// change the prescaler, takes effect on next enable()
+	void scale(unsigned scale) { _scale = scale; }
 
 protected:
 	void _enable(bool);
-	void _prescale();
 	unsigned _sleepmode();
 
 private:
-	unsigned _scale;
+	int _scale;
 };
 
 #endif

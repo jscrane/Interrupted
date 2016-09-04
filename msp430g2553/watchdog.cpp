@@ -45,10 +45,6 @@ void Watchdog::_enable(bool e) {
 	}
 }
 
-void Watchdog::_prescale() {
-	disable();
-}
-
 unsigned Watchdog::_sleepmode() {
 	return LPM3_bits;
 }
