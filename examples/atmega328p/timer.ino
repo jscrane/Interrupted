@@ -23,5 +23,8 @@ void loop(void)
 {
 	timer.enable();
 	devices.select();
-	digitalWrite(LED, !digitalRead(LED));
+	if (timer.is_ready())
+	{
+		digitalWrite(LED, !digitalRead(LED));
+	}
 }
