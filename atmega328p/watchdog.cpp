@@ -9,7 +9,7 @@
 
 static Device *wdt;
 
-ISR(WDT_vect) 
+ISR(WDT_vect)
 {
 	if (wdt)
 		wdt->ready();
@@ -53,7 +53,7 @@ void Watchdog::_prescale() {
 	cli();
 	MCUSR &= ~_BV(WDRF);
 	WDTCSR |= _BV(WDCE) | _BV(WDE);		// change prescaler
-	WDTCSR = prescale;
+	WDTCSR = prescale;  // WDE bit is zero here as well
 	sei();
 }
 
@@ -64,10 +64,10 @@ bool Watchdog::begin() {
 }
 
 void Watchdog::_enable(bool e) {
-	if (e)
-		WDTCSR |= _BV(WDIE);
-	else
-		WDTCSR &= ~_BV(WDIE);
+	wdt_reset();		// Ensure that the timer will start from 0 again
+
+	// [en|dis]able watchdog interrupts
+	bitWrite(WDTCSR, WDIE, e);
 }
 
 unsigned Watchdog::_sleepmode() {
