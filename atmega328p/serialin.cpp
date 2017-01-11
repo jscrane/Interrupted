@@ -11,16 +11,12 @@ static SerialIn *device;
 
 bool SerialIn::begin() {
 	device = this;
-	init();
-	UCSR0B |= bit(RXEN0);
 	return true;
 }
 
 void SerialIn::_enable(bool e) {
-	if (e)
-		UCSR0B |= bit(RXCIE0);
-	else
-		UCSR0B &= ~bit(RXCIE0);
+	bitWrite(UCSR0B, RXEN0, e);
+	bitWrite(UCSR0B, RXCIE0, e);
 }
 
 ISR(USART_RX_vect)
