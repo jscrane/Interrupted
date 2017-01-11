@@ -3,22 +3,25 @@
 #include <avr/wdt.h>
 
 #include <Arduino.h>
-#include <stdarg.h>
 
 #include "device.h"
 
-#define BODS 7		// BOD Sleep bit in MCUCR 
+#define BODS 7		// BOD Sleep bit in MCUCR
 #define BODSE 2		// BOD Sleep enable bit in MCUCR
 
+#ifndef SLEEP_MODE_STANDBY
+#define SLEEP_MODE_STANDBY SLEEP_MODE_PWR_SAVE
+#endif
+
 void Devices::begin() {
-	// "...[it] is therefore required to turn off the watchdog 
+	// "...[it] is therefore required to turn off the watchdog
 	// early during program startup..." (from avr/wdt.h)
 	wdt_disable();
 
 	// turn off ADC and analog comparator
 	ADCSRA = 0;
 	ACSR |= bit(ACD);
-	power_adc_disable();	// FIXME: power_all_disable()?
+	power_all_disable();
 
 	// turn off the brown-out detector
 	MCUCR |= _BV(BODS) | _BV(BODSE);
@@ -27,7 +30,13 @@ void Devices::begin() {
 		digitalWrite(i, LOW);
 
 	for (int i = 0; i < _n; i++)
-		_devices[i]->enable(_devices[i]->begin());
+	{
+		if (_devices[i]->begin())
+		{
+			_devices[i]->wake();
+			_devices[i]->enable(true);
+		}
+	}
 
 	sei();
 }
@@ -45,9 +54,9 @@ unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
 		if (sys != SLEEP_MODE_IDLE)
 			return SLEEP_MODE_ADC;
 		break;
-	case SLEEP_MODE_PWR_SAVE:
+	case SLEEP_MODE_STANDBY:
 		if (sys != SLEEP_MODE_IDLE && sys != SLEEP_MODE_ADC)
-			return SLEEP_MODE_PWR_SAVE;
+			return SLEEP_MODE_STANDBY;
 		break;
 	case SLEEP_MODE_PWR_DOWN:
 		break;

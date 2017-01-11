@@ -28,7 +28,7 @@ protected:
 	}
 
 	static void sleep(unsigned mode);
-private:
+
 	int _n;
 	Device *_devices[MAX_DEVICES];
 };
@@ -38,9 +38,9 @@ public:
 	// devices which are enabled at startup return true here
 	virtual bool begin() =0;
 
-	virtual void ready() { 
-		if (_enabled) 
-			_ready = true; 
+	virtual void ready() {
+		if (_enabled)
+			_ready = true;
 	}
 
 	virtual bool is_ready() {
@@ -54,6 +54,11 @@ public:
 	void disable() { enable(false); }
 	void enable(bool enabled=true) { _enabled = enabled; _enable(enabled); }
 	bool is_enabled() { return _enabled; }
+
+	// calls to turn off device altogether and back on again
+	virtual void power_module(bool turn_on) { if (turn_on) wake(); else sleep(); };
+	virtual void sleep() {};
+	virtual void wake() {};
 
 	int id() { return _id; }
 
@@ -69,7 +74,7 @@ protected:
 
 private:
 	int _id;
-	bool _enabled;
+	volatile bool _enabled;
 	volatile bool _ready;
 };
 
