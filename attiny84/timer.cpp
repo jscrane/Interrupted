@@ -4,7 +4,6 @@
 #include <avr/interrupt.h>
 
 #include "device.h"
-#include "atimer.h"
 #include "timer.h"
 
 // Timer 1 is used so as to avoid conflict with the timer 0, used by the delay() function in the Arduino library
@@ -58,11 +57,6 @@ void Timer::_enable(bool e) {
 	bitWrite(TIMSK1, OCIE1A, e);
 	SREG = saved_SREG;		// restore the interrupt flag
 }
-
-// Pass through
-// void Timer::ready() {
-// 	AbstractTimer::ready();
-// }
 
 unsigned Timer::_sleepmode() {
 	return SLEEP_MODE_IDLE;

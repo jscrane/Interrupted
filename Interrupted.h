@@ -5,7 +5,6 @@
 #include "pinchange.h"
 #include "external.h"
 #include "analog.h"
-#include "atimer.h"
 #include "timer.h"
 #include "watchdog.h"
 #include "serial.h"

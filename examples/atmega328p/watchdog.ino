@@ -1,9 +1,8 @@
 #include <Interrupted.h>
 
 /*
- * An LED on pin 19 (PB5, D13), and
+ * An LED on pin 19 (PB5, D13),
  * A pushbutton between pin 4 (PD2, D2, INT0) and ground.
- * A pullup resistor between INT0 and Vcc.
  *
  * The LED comes on for 1 second after reset or when the
  * pushbutton is pressed.
@@ -12,7 +11,7 @@
 #define TIMER	1
 #define BUTTON	2
 
-Watchdog timer(TIMER, 1);
+Watchdog timer(TIMER);
 External button(BUTTON, LOW);
 Port portb;
 Pin led(LED, portb); 
@@ -27,6 +26,7 @@ void setup(void)
 
 	pinMode(LED, OUTPUT);
 	digitalWrite(LED, HIGH);
+	digitalWrite(BUTTON, INPUT_PULLUP);
 }
 
 void loop(void)

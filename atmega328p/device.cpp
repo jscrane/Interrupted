@@ -76,7 +76,6 @@ void Devices::sleep(unsigned mode) {
 	set_sleep_mode(mode);
 	sleep_enable();
 
-	// arduino 1.5.8 finally updated the avr toolchain
 	sleep_bod_disable();
 	sei();
 	sleep_cpu();

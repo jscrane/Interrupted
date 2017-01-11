@@ -22,21 +22,12 @@ void Port::add_pin(int pin, Pin *p) {
 		_port = digitalPinToPort(pin);
 	byte b = digitalPinToBitMask(pin);
 	_pins[bit_index(b)] = p;
-	if (_port == PORTA) { 
-		PCMSK0 |= b; 
-		d[0] = this;
-	} else if (_port == PORTB) {
-		PCMSK1 |= b;
-		d[1] = this;
-	}
+	*(digitalPinToPCMSK(pin)) |= b;
+	d[_port - 1] = this;
 }
 
 void Port::enable_pin(int pin, bool enable) {
-	byte e = 0;
-	if (_port == PORTA)
-		e = bit(PCIE0);
-	else if (_port == PORTB)
-		e = bit(PCIE1);
+	byte e = bit(digitalPinToPCICRbit(pin));
 	byte b = digitalPinToBitMask(pin);
 	byte prev = _enabled;
 	if (enable) {
@@ -54,9 +45,7 @@ void Port::ready() {
 	uint8_t v = (*portInputRegister(_port));
 	for (int i = 0; i < 8; i++) {
 		byte b = bit(i);
-		if (_pins[i] && (_enabled & b) && (v & b) != (_state & b)) {
-			_state ^= b;
-			_pins[i]->set_state((v & b) != 0);
-		}
+		if (_pins[i] && (_enabled & b))
+			_pins[i]->set_state(v & b);
 	}
 }

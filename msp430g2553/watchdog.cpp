@@ -1,7 +1,6 @@
 #include <Energia.h>
 
 #include "device.h"
-#include "atimer.h"
 #include "watchdog.h"
 
 /*
@@ -43,10 +42,6 @@ void Watchdog::_enable(bool e) {
 			break;
 		}
 	}
-}
-
-void Watchdog::_prescale() {
-	disable();
 }
 
 unsigned Watchdog::_sleepmode() {

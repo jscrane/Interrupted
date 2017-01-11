@@ -17,21 +17,20 @@ ISR(INT0_vect)
 // down is LOW."
 bool External::begin() {
 	e0 = this;
-	MCUCR &= ~(bit(ISC01) | bit(ISC00));
+	MCUCR &= ~(_BV(ISC01) | _BV(ISC00));
 	if (_mode == CHANGE)
-		MCUCR |= bit(ISC00);
+		MCUCR |= _BV(ISC00);
 	else if (_mode == FALLING)
-		MCUCR |= bit(ISC01);
+		MCUCR |= _BV(ISC01);
 	else if (_mode == RISING)
-		MCUCR |= bit(ISC01) | bit(ISC00);
+		MCUCR |= _BV(ISC01) | _BV(ISC00);
 
-	digitalWrite(_pin, HIGH);	// enable pullup
 	return true;
 }
 
 void External::_enable(bool e) {
 	if (e)
-		GIMSK |= bit(INT0);
+		GIMSK |= _BV(INT0);
 	else
-		GIMSK &= ~bit(INT0);
+		GIMSK &= ~_BV(INT0);
 }

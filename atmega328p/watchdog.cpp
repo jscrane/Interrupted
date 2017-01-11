@@ -1,10 +1,9 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 #include <avr/sleep.h>
-
 #include <Arduino.h>
+
 #include "device.h"
-#include "atimer.h"
 #include "watchdog.h"
 
 static Device *wdt;
@@ -15,59 +14,22 @@ ISR(WDT_vect)
 		wdt->ready();
 }
 
-// http://donalmorrissey.blogspot.ie/2010/04/sleeping-arduino-part-5-wake-up-via.html
-void Watchdog::_prescale() {
-	unsigned prescale = 0;
-	switch (_scale) {
-	case WDTO_15MS:
-		break;
-	case WDTO_30MS:
-		prescale = _BV(WDP0);
-		break;
-	case WDTO_60MS:
-		prescale = _BV(WDP1);
-		break;
-	case WDTO_120MS:
-		prescale = _BV(WDP1) |  _BV(WDP0);
-		break;
-	case WDTO_250MS:
-		prescale = _BV(WDP2);
-		break;
-	case WDTO_500MS:
-		prescale = _BV(WDP2) |  _BV(WDP0);
-		break;
-	case -1:
-	case WDTO_1S:
-		prescale = _BV(WDP2) | _BV(WDP1);
-		break;
-	case WDTO_2S:
-		prescale = _BV(WDP2) | _BV(WDP1) | _BV(WDP0);
-		break;
-	case WDTO_4S:
-		prescale = _BV(WDP3);
-		break;
-	case WDTO_8S:
-		prescale = _BV(WDP3) | _BV(WDP0);
-		break;
-	}
-	cli();
-	MCUSR &= ~_BV(WDRF);
-	WDTCSR |= _BV(WDCE) | _BV(WDE);		// change prescaler
-	WDTCSR = prescale;  // WDE bit is zero here as well
-	sei();
-}
-
 bool Watchdog::begin() {
 	wdt = this;
-	_prescale();
+	if (_scale == -1)
+		_scale = WDTO_1S;
+	MCUSR &= ~_BV(WDRF);
 	return false;
 }
 
 void Watchdog::_enable(bool e) {
 	wdt_reset();		// Ensure that the timer will start from 0 again
 
-	// [en|dis]able watchdog interrupts
-	bitWrite(WDTCSR, WDIE, e);
+	cli();
+	byte b = e? _BV(WDIE) | _scale: 0;
+	WDTCSR = _BV(WDCE) | _BV(WDE);
+	WDTCSR = b;
+	sei();
 }
 
 unsigned Watchdog::_sleepmode() {

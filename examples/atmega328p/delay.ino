@@ -1,19 +1,20 @@
 #include <Interrupted.h>
 
 /*
- * An LED on pin 5 (PB0, D0).
+ * An LED on pin 19 (PB5, D13).
  *
- * The LED comes on for 1 second before being turned off by the timer.
+ * The LED flashes with a duty-cycle of 500ms.
  */
-const int LED = 0;
-const int TIMER = 1;
-Timer timer(TIMER, 1000);
+#define LED	13
+#define TIMER	1
+Delay timer(TIMER, 500);
 Devices devices;
 
 void setup(void)
 {
 	devices.add(timer);
 	devices.begin();
+
 	pinMode(LED, OUTPUT);
 	digitalWrite(LED, HIGH);
 	timer.enable();

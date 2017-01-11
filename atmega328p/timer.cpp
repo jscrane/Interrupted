@@ -5,7 +5,6 @@
 #include <Arduino.h>
 
 #include "device.h"
-#include "atimer.h"
 #include "timer.h"
 
 // Timer 1 is used so as to avoid conflict with the timer 0, used by the delay() function in the Arduino library

@@ -85,9 +85,7 @@ void Port::ready() {
 	byte v = (*portInputRegister(_port));
 	for (int i = 0; i < 8; i++) {
 		byte b = bit(i);
-		if (_pins[i] && (_enabled & b) && (v & b) != (_state & b)) {
-			_state ^= b;
-			_pins[i]->set_state((v & b) != 0);
-		}
+		if (_pins[i] && (_enabled & b))
+			_pins[i]->set_state(v & b);
 	}
 }

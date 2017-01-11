@@ -52,7 +52,14 @@ public:
 	}
 
 	void disable() { enable(false); }
-	void enable(bool enabled=true) { _enabled = enabled; _enable(enabled); }
+
+	void enable(bool enabled=true) { 
+		if (_enabled != enabled) {
+			_enabled = enabled; 
+			_enable(enabled); 
+		}
+	}
+
 	bool is_enabled() { return _enabled; }
 
 	// calls to turn off device altogether and back on again

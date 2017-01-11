@@ -11,7 +11,7 @@
 #define TIMER	1
 #define BUTTON	2
 
-Watchdog timer(TIMER, 1);
+Watchdog timer(TIMER);
 External button(BUTTON, LOW);
 Port portb;
 Pin led(LED, portb); 
@@ -24,8 +24,10 @@ void setup(void)
 	devices.add(button);
 	devices.begin();
 
+	pinMode(BUTTON, INPUT_PULLUP);
 	pinMode(LED, OUTPUT);
 	digitalWrite(LED, HIGH);
+
 }
 
 void loop(void)

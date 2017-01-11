@@ -22,9 +22,6 @@ void setup(void)
 void loop(void)
 {
 	timer.enable();
-	devices.select();
-	if (timer.is_ready())
-	{
+	if (devices.select() == TIMER)
 		digitalWrite(LED, !digitalRead(LED));
-	}
 }

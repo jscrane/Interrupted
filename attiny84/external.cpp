@@ -25,7 +25,6 @@ bool External::begin() {
 	else if (_mode == RISING)
 		MCUCR |= bit(ISC01) | bit(ISC00);
 
-	digitalWrite(_pin, HIGH);	// enable pullup
 	return true;
 }
 

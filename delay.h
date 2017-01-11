@@ -12,22 +12,24 @@ public:
 	bool begin() { return false; }
 
 	bool is_ready() {
-		if (!is_enabled() || millis() < _wake)
-			return false;
-		disable();
-		return true;
+		if (is_enabled() && millis() >= _wake) {
+			disable();
+			return true;
+		}
+		return false;
 	}
+	uint32_t _wake;
 
 protected:
 	void _enable(bool e) {
-		if (e)
+		if (e && _wake < millis())
 			_wake = millis() + _delay;
 	}
 	
 	unsigned _sleepmode();
 
 private:
-	uint32_t _delay, _wake;
+	const uint32_t _delay;
 };
 
 #endif

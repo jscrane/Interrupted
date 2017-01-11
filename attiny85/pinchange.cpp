@@ -33,14 +33,7 @@ void Port::enable_pin(int pin, bool enable) {
 }
 
 void Port::ready() {
-	for (int i = 0; i < 8; i++) {
-		byte b = bit(i);
-		if (_pins[i] && (_enabled & b)) {
-			int v = digitalRead(i);
-			if (v != (_state & b)) {
-				_state ^= b;
-				_pins[i]->set_state(v != 0);
-			}
-		}
-	}
+	for (int i = 0; i < 8; i++)
+		if (_pins[i] && (_enabled & bit(i)))
+			_pins[i]->set_state(digitalRead(i));
 }
