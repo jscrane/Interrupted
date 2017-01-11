@@ -1,6 +1,9 @@
 #ifndef __PINCHANGE_H__
 #define __PINCHANGE_H__
 
+#include <avr/io.h>
+#include "device.h"
+
 class Pin;
 
 class Port {
@@ -20,9 +23,9 @@ private:
 		return i;
 	}
 	Pin *_pins[8];
-	byte _port;
-	byte _enabled;
-	volatile byte _state;
+	uint8_t _port;
+	uint8_t _enabled;
+	volatile uint8_t _state;
 };
 
 class Pin: public Device {
