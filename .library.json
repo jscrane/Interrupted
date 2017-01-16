@@ -15,7 +15,7 @@
     "repository":
     {
             "type" : "git",
-            "url": "file:///Users/icaven/Documents/Machining/Watchwinder/software/lib/Interrupted"
+            "url": "https://github.com/jscrane/Interrupted.git"
     },
     "frameworks": ["arduino"],
     "platforms": ["atmelavr"]
