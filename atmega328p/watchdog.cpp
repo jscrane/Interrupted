@@ -1,14 +1,13 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 #include <avr/sleep.h>
-#include <Arduino.h>
 
 #include "device.h"
 #include "watchdog.h"
 
 static Device *wdt;
 
-ISR(WDT_vect) 
+ISR(WDT_vect)
 {
 	if (wdt)
 		wdt->ready();
@@ -24,7 +23,7 @@ bool Watchdog::begin() {
 
 void Watchdog::_enable(bool e) {
 	cli();
-	byte b = e? _BV(WDIE) | _scale: 0;
+	uint8_t b = e? _BV(WDIE) | _scale: 0;
 	WDTCSR = _BV(WDCE) | _BV(WDE);
 	WDTCSR = b;
 	sei();

@@ -11,7 +11,7 @@ static volatile unsigned reading = 0xffff;
 
 ISR(ADC_vect) {
 	if (adc) {
-		byte low, high;
+		uint8_t low, high;
 		low = ADCL;
 		high = ADCH;
 		reading = (high << 8) | low;

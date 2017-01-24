@@ -1,8 +1,9 @@
 #include <avr/power.h>
 #include <avr/sleep.h>
 #include <avr/wdt.h>
-
+#include <avr/interrupt.h>
 #include <Arduino.h>
+
 #include <stdarg.h>
 
 #include "device.h"

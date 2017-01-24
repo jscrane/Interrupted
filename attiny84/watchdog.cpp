@@ -8,7 +8,7 @@
 
 static Device *wdt;
 
-ISR(WDT_vect) 
+ISR(WDT_vect)
 {
 	if (wdt)
 		wdt->ready();
@@ -16,7 +16,7 @@ ISR(WDT_vect)
 
 bool Watchdog::begin() {
 	wdt = this;
-	if (_scale == -1) 
+	if (_scale == -1)
 		_scale = WDTO_1S;
 	MCUSR &= ~_BV(WDRF);
 	return false;
@@ -24,7 +24,7 @@ bool Watchdog::begin() {
 
 void Watchdog::_enable(bool e) {
 	cli();
-	byte b = e? _BV(WDIE) | _scale: 0;
+	uint8_t b = e? _BV(WDIE) | _scale: 0;
 	WDTCSR = _BV(WDCE) | _BV(WDE);
 	WDTCSR = b;
 	sei();
