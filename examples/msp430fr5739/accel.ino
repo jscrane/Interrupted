@@ -29,12 +29,13 @@ void setup(void)
 void loop(void)
 {
 	adc.enable();
-	devices.select();
-	int v = adc.read();
-	int curr = (v - MIN)*8 / (MAX - MIN);
-	if (curr >= 0 && curr < 8 && last != curr) {
-		digitalWrite(leds[last], LOW);
-		digitalWrite(leds[curr], HIGH);
-		last = curr;
+	if (devices.select() == A6) {
+		int v = adc.read();
+		int curr = (v - MIN)*8 / (MAX - MIN);
+		if (curr >= 0 && curr < 8 && last != curr) {
+			digitalWrite(leds[last], LOW);
+			digitalWrite(leds[curr], HIGH);
+			last = curr;
+		}
 	}
 }

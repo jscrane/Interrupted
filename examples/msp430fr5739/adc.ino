@@ -20,7 +20,7 @@ void loop(void)
 	//Serial.println(analogRead(A4));
 	adc.wake();
 	adc.enable();
-	devices.select();
-	Serial.println(adc.read());
+	if (devices.select() == A3)
+		Serial.println(adc.read());
 	adc.sleep();
 }

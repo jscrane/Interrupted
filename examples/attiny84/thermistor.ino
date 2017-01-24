@@ -38,7 +38,7 @@ void setup(void)
 void loop(void)
 {
 	thermistor.enable();
-	devices.select();
-	serial.println(celcius(thermistor.read()));
+	if (devices.select() == A7)
+		serial.println(celcius(thermistor.read()));
 	delay(1000);
 }

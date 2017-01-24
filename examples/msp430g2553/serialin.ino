@@ -13,6 +13,6 @@ void setup(void) {
 }
 
 void loop(void) {
-	devices.select();
-	digitalWrite(RED_LED, input.read() == '1'? HIGH: LOW);
+	if (devices.select() == SERIN)
+		digitalWrite(RED_LED, input.read() == '1'? HIGH: LOW);
 }
