@@ -20,12 +20,12 @@ private:
 		return i;
 	}
 	Pin *_pins[8];
-	byte _port, _enabled;
+	uint8_t _port, _enabled;
 };
 
 class Pin: public Device {
 public:
-	Pin(int pin, Port &port, byte s = LOW): Device(pin), _port(port), _state(s == HIGH) {}
+	Pin(int pin, Port &port, uint8_t s = LOW): Device(pin), _port(port), _state(s == HIGH) {}
 
 	bool begin() { _port.add_pin(id(), this); return true; }
 	void set_state(bool s) {

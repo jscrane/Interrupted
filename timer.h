@@ -6,21 +6,22 @@
  */
 class Timer: public Device {
 public:
-	Timer(int id, uint32_t millis): 
+	Timer(int id, uint32_t millis):
 		Device(id), _delay(millis), _ticks(millis) {}
 
 	void ready() {
-		if (--_ticks == 0) {
+		if (_ticks <= 1) {
 			Device::ready();
 			_ticks = _delay;
 			disable();
-		}
+		} else
+			_ticks--;
 	}
 
-	void delay(uint32_t d) { 
-		noInterrupts(); 
-		_ticks = _delay = d; 
-		interrupts();
+	void delay(uint32_t d) {
+		cli();
+		_ticks = _delay = d;
+		sei();
 	}
 
 	// not enabled by default
