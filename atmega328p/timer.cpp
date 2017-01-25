@@ -1,7 +1,6 @@
 #include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
-#include <Arduino.h>
 
 #include "device.h"
 #include "timer.h"
@@ -18,17 +17,21 @@ bool Timer::begin() {
 
 	TCCR1A = 0;
 	// CTC mode, 1024 prescaler
-	TCCR1B = bit(WGM12) | bit(CS10) | bit(CS12);
+	TCCR1B = _BV(WGM12) | _BV(CS10) | _BV(CS12);
 
 	OCR1A = F_CPU / 1024000 - 1;	// 1 ms
 	return false;
 }
 
 void Timer::_enable(bool e) {
+	uint8_t sreg = SREG;
+	cli();
+	TCNT1 = 0;
+	SREG = sreg;
 	if (e)
-		TIMSK1 |= bit(OCIE1A);
+		TIMSK1 |= _BV(OCIE1A);
 	else
-		TIMSK1 &= ~bit(OCIE1A);
+		TIMSK1 &= ~_BV(OCIE1A);
 }
 
 unsigned Timer::_sleepmode() {

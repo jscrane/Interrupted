@@ -9,7 +9,7 @@
 #include "device.h"
 
 void Devices::begin() {
-	// "...[it] is therefore required to turn off the watchdog 
+	// "...[it] is therefore required to turn off the watchdog
 	// early during program startup..." (from avr/wdt.h)
 	wdt_disable();
 

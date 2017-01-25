@@ -38,9 +38,9 @@ public:
 	// devices which are enabled at startup return true here
 	virtual bool begin() =0;
 
-	virtual void ready() { 
-		if (_enabled) 
-			_ready = true; 
+	virtual void ready() {
+		if (_enabled)
+			_ready = true;
 	}
 
 	virtual bool is_ready() {
@@ -76,7 +76,7 @@ protected:
 
 private:
 	int _id;
-	bool _enabled;
+	volatile bool _enabled;
 	volatile bool _ready;
 };
 

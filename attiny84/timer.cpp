@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
@@ -25,6 +24,10 @@ bool Timer::begin() {
 }
 
 void Timer::_enable(bool e) {
+	uint8_t sreg = SREG;
+	cli();
+	TCNT1 = 0;
+	SREG = sreg;
 	if (e)
 		TIMSK1 |= _BV(OCIE1A);
 	else

@@ -16,6 +16,8 @@ public:
 	void write(char const *ptr);
 	void do_output();
 
+	bool is_transmitting() { return _tx_ptr != 0; }
+
 protected:
 	void _enable(bool) {}
 
