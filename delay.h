@@ -9,7 +9,7 @@ public:
 	Delay(int id, uint32_t delay): Device(id), _delay(delay) {}
 
 	// not enabled by default
-	bool begin() { return false; }
+	bool begin();
 
 	bool is_ready() {
 		if (is_enabled() && millis() >= _wake) {

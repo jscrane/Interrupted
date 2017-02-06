@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <avr/sleep.h>
+#include <avr/power.h>
 #include <avr/interrupt.h>
 
 #include "device.h"
@@ -14,6 +15,7 @@ ISR(TIMER1_COMPA_vect) {
 
 bool Timer::begin() {
 	t1 = this;
+	power_timer1_enable();
 
 	TCCR1A = 0;
 	// CTC mode, 1024 prescaler
@@ -27,11 +29,11 @@ void Timer::_enable(bool e) {
 	uint8_t sreg = SREG;
 	cli();
 	TCNT1 = 0;
-	SREG = sreg;
 	if (e)
 		TIMSK1 |= _BV(OCIE1A);
 	else
 		TIMSK1 &= ~_BV(OCIE1A);
+	SREG = sreg;
 }
 
 unsigned Timer::_sleepmode() {
