@@ -23,16 +23,16 @@ unsigned Analog::read() {
 	cli();
 	unsigned v = reading;
 	reading = 0xffff;
-	enable(false);
+	disable();
 	SREG = sreg;
 	return v;
 }
 
 void Analog::_enable(bool e) {
 	if (e)
-		ADCSRA |= bit(ADSC) | bit(ADIE);
+		ADCSRA |= _BV(ADSC) | _BV(ADIE);
 	else
-		ADCSRA &= ~(bit(ADSC) | bit(ADIE));
+		ADCSRA &= ~(_BV(ADSC) | _BV(ADIE));
 }
 
 void Analog::_init() {
@@ -44,8 +44,8 @@ bool Analog::begin() {
 	unsigned sreg = SREG;
 	cli();
 	power_adc_enable();
-	ADCSRA |= bit(ADEN);
-	ACSR &= ~bit(ACD);
+	ADCSRA |= _BV(ADEN);
+	ACSR &= ~_BV(ACD);
 	_init();
 	SREG = sreg;
 	return false;

@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <avr/sleep.h>
+#include <avr/power.h>
 #include <avr/interrupt.h>
 
 #include "device.h"
@@ -15,6 +16,7 @@ ISR(TIM1_COMPA_vect) {
 // FIXME: other clock frequencies?
 bool Timer::begin() {
 	t1 = this;
+	power_timer1_enable();
 
 #if F_CPU == 8000000L
 	// CTC mode, divide by 32
@@ -29,10 +31,14 @@ bool Timer::begin() {
 }
 
 void Timer::_enable(bool e) {
+	uint8_t sreg = SREG;
+	cli();
+	TCNT1 = 0;
 	if (e)
 		TIMSK |= _BV(OCIE1A);
 	else
 		TIMSK &= ~_BV(OCIE1A);
+	SREG = sreg;
 }
 
 unsigned Timer::_sleepmode() {

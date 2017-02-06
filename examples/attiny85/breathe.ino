@@ -20,7 +20,7 @@
 
 Devices devices;
 External button(BUTTON, LOW);
-Timer timer(TIMER, IDLE_MS);
+Delay timer(TIMER, IDLE_MS);
 Busy busy;
 
 void setup() {

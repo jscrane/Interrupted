@@ -4,8 +4,6 @@
 #include <avr/interrupt.h>
 #include <Arduino.h>
 
-#include <stdarg.h>
-
 #include "device.h"
 
 void Devices::begin() {

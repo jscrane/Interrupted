@@ -11,20 +11,20 @@ static volatile unsigned reading = 0xffff;
 
 ISR(ADC_vect) {
 	if (adc) {
-		byte low, high;
-		low = ADCL;
-		high = ADCH;
+		uint8_t low = ADCL;
+		uint8_t high = ADCH;
 		reading = (high << 8) | low;
 		adc->ready();
 	}
 }
 
 unsigned Analog::read() {
+	unsigned sreg = SREG;
 	cli();
 	unsigned v = reading;
 	reading = 0xffff;
-	enable(false);
-	sei();
+	disable();
+	SREG = sreg;
 	return v;
 }
 
@@ -35,26 +35,19 @@ void Analog::_enable(bool e) {
 		ADCSRA &= ~(_BV(ADSC) | _BV(ADIE));
 }
 
-void Analog::_mux() {
+void Analog::_init() {
 	ADMUX = (_ref << 6) | analogPinToChannel(_pin);
-}
-
-void Analog::sleep() {
-	ADCSRA &= ~bit(ADEN);
-	ACSR |= bit(ACD);
-	power_adc_disable();
-}
-
-void Analog::wake() {
-	power_adc_enable();
-	ADCSRA |= bit(ADEN);
-	ACSR &= ~bit(ACD);
 }
 
 bool Analog::begin() {
 	adc = this;
-	wake();
-	_mux();
+	unsigned sreg = SREG;
+	cli();
+	power_adc_enable();
+	ADCSRA |= _BV(ADEN);
+	ACSR &= ~_BV(ACD);
+	_init();
+	SREG = sreg;
 	return false;
 }
 
