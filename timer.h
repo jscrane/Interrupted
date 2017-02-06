@@ -19,9 +19,9 @@ public:
 	}
 
 	void delay(uint32_t d) {
-		cli();
+		noInterrupts();
 		_ticks = _delay = d;
-		sei();
+		interrupts();
 	}
 
 	// not enabled by default

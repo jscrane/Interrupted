@@ -1,7 +1,17 @@
+AVR
+---
 - spi
 - attiny serial output and input (SoftwareSerial uses pin-change interrupts)
   check out: https://github.com/frank26080115/Arduino-UsiSerial-Library/
-- ordering of sleep modes on avrs
+- updates for attiny84
+
+MSP430
+------
+- fix serial output (serialout.ino)
+- fix clock.ino
+- serialin.ino
+- document watchdog class
+- updates for msp430g2553
 
 Changes to [cherry-pick](https://coderwall.com/p/sgpksw/git-cherry-pick-from-another-repository):
 - ~~Fix examples [24f4da3](../../pull/1/commits/24f4da3da3708afffd84b18a1d0eae57e9efe090), [22a0c5e](../../pull/1/commits/22a0c5e7e95045155747080efe3635d3282b1631), [a00cdc6](../../pull/1/commits/a00cdc6fc1ee24cae271a7311230b0f440f8d6db)~~

@@ -13,14 +13,13 @@ void setup(void)
 
 	Serial.begin(9600);
 	pinMode(A3, INPUT_PULLUP);
+	adc.enable();
 }
 
 void loop(void)
 {
-	//Serial.println(analogRead(A4));
-	adc.wake();
-	adc.enable();
-	if (devices.select() == A3)
+	if (devices.select() == A3) {
 		Serial.println(adc.read());
-	adc.sleep();
+		adc.enable();
+	}
 }

@@ -20,10 +20,8 @@ void setup(void)
 		pinMode(leds[i], OUTPUT);
 		digitalWrite(leds[i], LOW);
 	}
-
 	devices.add(adc);
 	devices.begin();
-	adc.wake();
 }
 
 void loop(void)

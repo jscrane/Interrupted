@@ -23,6 +23,7 @@ void setup(void)
 
 	pinMode(PUSH2, INPUT_PULLUP);
 	pinMode(LED5, OUTPUT);
+	digitalWrite(LED5, HIGH);
 }
 
 void loop(void)

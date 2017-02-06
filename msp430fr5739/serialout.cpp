@@ -9,18 +9,19 @@ static SerialOut *device;
 bool SerialOut::begin() {
 	device = this;
 
-	P2SEL0 &= ~BIT0;
-	P2SEL1 |= BIT0;
+	P1SEL0 |= BIT2;
+	P1SEL1 |= BIT2;
 	init();
 
 	return false;
 }
 
-void SerialOut::write(char const *ptr) {
-	if (is_enabled() && !_tx_ptr) {
+bool SerialOut::write(char const *ptr) {
+	if (!_tx_ptr) {
 		noInterrupts();
 		_tx_ptr = ptr;
 		UCA0IE |= UCTXIE;
+		enable();
 		interrupts();
 	}
 }
