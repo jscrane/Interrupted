@@ -24,7 +24,11 @@ bool Watchdog::begin() {
 void Watchdog::_enable(bool e) {
 	unsigned sreg = SREG;
 	cli();
-	uint8_t b = e? _BV(WDIE) | _scale: 0;
+	uint8_t b = 0;
+	if (e) {
+		wdt_reset();
+		b = _BV(WDIE) | _scale;
+	}
 	WDTCSR = _BV(WDCE) | _BV(WDE);
 	WDTCSR = b;
 	SREG = sreg;

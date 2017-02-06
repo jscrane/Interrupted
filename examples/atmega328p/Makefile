@@ -1,6 +1,6 @@
 BOARD := uno
-#SKETCH := serialout.ino
-SKETCH := serialin.ino
+SKETCH := serialout.ino
+#SKETCH := serialin.ino
 #SKETCH := adc.ino
 #SKETCH := timer.ino
 #SKETCH := watchdog.ino
