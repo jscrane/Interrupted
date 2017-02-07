@@ -7,9 +7,7 @@ AVR
 
 MSP430
 ------
-- fix serial output (serialout.ino)
 - fix clock.ino
-- serialin.ino
 - document watchdog class
 - updates for msp430g2553
 
@@ -21,3 +19,4 @@ Changes to [cherry-pick](https://coderwall.com/p/sgpksw/git-cherry-pick-from-ano
 - Sleep and wake functions [9e34dda](../../pull/1/commits/9e34ddab7566d718a68a2f7b30f1cbf3192ddc96), [f53e65](../../pull/1/commits/bf53e651a071eaeaada8dfcc20f4c5533d0a0473), [27a7f34](../../pull/1/commits/27a7f3430aff0aec37fd08fb0d87d0e1e8d0a27b), [42b7317](../../pull/1/commits/42b731722ea856d91c36a9fae940b68708cdcd32). ~~(Note that some of these commits contain bug-fixes which should be merged separately.)~~
   - timer millisecond divisor
   - check differences between atmega328 timer and attiny84/5
+  - platformio
