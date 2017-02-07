@@ -24,7 +24,7 @@ extern void on_a0_rx(void);
 extern void on_a0_tx(void);
 
 #pragma vector=USCI_A0_VECTOR
-__interrupt void serial_rx_isr(void)
+__interrupt void serial_isr(void)
 {
 	if (UCA0IFG & UCRXIFG)
 		on_a0_rx();
