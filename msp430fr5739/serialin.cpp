@@ -8,9 +8,6 @@ static SerialIn *device;
 
 bool SerialIn::begin() {
 	device = this;
-
-	P2SEL0 &= ~BIT1;
-	P2SEL1 |= BIT1;
 	init();
 	return true;
 }

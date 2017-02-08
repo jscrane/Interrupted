@@ -6,6 +6,9 @@
 void SerialDevice::init() {
 	// the first device to specify a baud-rate gets to initialise
 	if (_baud) {
+		P2SEL0 &= ~(BIT0 | BIT1);
+		P2SEL1 |= BIT0 | BIT1;
+
 		// see http://longhornengineer.com/code/MSP430/UART/uart.c
 		UCA0CTL1 |= UCSSEL_2;
 		unsigned long divider = F_CPU / _baud / 16;

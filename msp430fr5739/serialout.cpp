@@ -8,11 +8,7 @@ static SerialOut *device;
 
 bool SerialOut::begin() {
 	device = this;
-
-	P2SEL1 |= BIT0;
-	P2SEL0 &= ~BIT0;
 	init();
-
 	return false;
 }
 
