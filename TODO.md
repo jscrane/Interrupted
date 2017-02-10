@@ -7,7 +7,6 @@ AVR
 
 MSP430
 ------
-- fix clock.ino
 - document watchdog class
 
 Changes to [cherry-pick](https://coderwall.com/p/sgpksw/git-cherry-pick-from-another-repository):

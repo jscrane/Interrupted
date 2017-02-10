@@ -4,16 +4,18 @@
 
 static Clock *c;
 
+// see https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/118916
 bool Clock::begin() {
 	c = this;
 
-	PJSEL0 |= BIT4;
-	PJSEL1 &= ~BIT4;
+	PJSEL0 |= BIT4 | BIT5;			// XT1
+	CSCTL0_H = 0xa5;			// unlock register
 	CSCTL4 &= ~XT1OFF;
 	do {
-		CSCTL5 &= ~XT1OFFG;
+		CSCTL5 &= ~XT1OFFG;		// clear XT1 fault flag
 		SFRIFG1 &= ~OFIFG;
 	} while (SFRIFG1 & OFIFG);
+	CSCTL0_H = 0x01;			// lock register
 
 	return true;
 }
