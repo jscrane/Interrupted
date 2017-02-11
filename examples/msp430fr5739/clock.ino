@@ -31,7 +31,8 @@ void setup(void)
 void loop(void)
 {
 	static bool colon = false, hour_mode = false;
-	uint8_t h = clock.hour(), m = clock.mins(), s = clock.secs();
+	static char buf[16];
+	uint8_t h = clock.hour(), m = clock.mins();
 
 	switch (devices.select()) {
 	case RTC:
@@ -48,7 +49,7 @@ void loop(void)
 			hour_mode = false;
 		else {
 			push2.disable();
-			clock.set(h, m, s);
+			clock.set(h, m, 0);
 			clock.enable();
 		}
 		break;
@@ -65,7 +66,7 @@ void loop(void)
 	default:
 		return;
 	}
-	char buf[16], c = colon? ':': ' ';
-	sprintf(buf, "%02d%c%02d%c%02d\r", h, c, m, c, s);
+	char c = colon? ':': ' ';
+	sprintf(buf, "%02d%c%02d\r", h, c, m);
 	output.write(buf);
 }
