@@ -1,7 +1,8 @@
 {
 	"name": "Interrupted",
-	"version": "1.0.0",
+	"keywords": "power, interrupt",
 	"description": "Low-power, low-latency device framework for Arduino",
+	"version": "1.0.0",
 	"authors": [
 		{
 			"name": "Stephen Crane",
