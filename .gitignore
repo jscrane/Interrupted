@@ -8,3 +8,7 @@
 .*.d
 libcore.a
 .*.swp
+.pioenvs
+.clang_complete
+.gcc-flags.json
+.piolibdeps

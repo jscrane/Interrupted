@@ -1,0 +1,23 @@
+{
+	"name": "Interrupted",
+	"version": "1.0.0",
+	"description": "Low-power, low-latency device framework for Arduino",
+	"authors": [
+		{
+			"name": "Stephen Crane",
+			"email": "jscrane@gmail.com",
+			"url": "https://www.linkedin.com/in/jscrane",
+			"maintainer": true
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jscrane/Interrupted.git"
+	},
+	"frameworks": [
+		"arduino" 
+	],
+	"platforms": [
+		"atmelavr"
+	]
+}
