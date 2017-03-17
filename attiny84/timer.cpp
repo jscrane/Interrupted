@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
@@ -50,12 +49,15 @@ bool Timer::begin() {
 
 // Timer must be awake before calling this function
 void Timer::_enable(bool e) {
-	uint8_t saved_SREG = SREG;	// Save the interrupt flag
-	cli();					// disable interrupts while resetting the timer/counter
-	TCNT1 = 0;				// Reset the timer/counter
-	bitWrite(TCCR1B, CS10, e);		// Start or stop the clock
-	bitWrite(TIMSK1, OCIE1A, e);
-	SREG = saved_SREG;		// restore the interrupt flag
+	uint8_t sreg = SREG;
+	cli();
+	TCNT1 = 0;
+  bitWrite(TCCR1B, CS10, e);		// Start or stop the clock
+	if (e)
+		TIMSK1 |= _BV(OCIE1A);
+	else
+		TIMSK1 &= ~_BV(OCIE1A);
+  SREG = sreg;
 }
 
 unsigned Timer::_sleepmode() {

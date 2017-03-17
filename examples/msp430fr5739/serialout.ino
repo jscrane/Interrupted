@@ -8,10 +8,10 @@ Devices devices;
 void setup(void) {
 	devices.add(output);
 	devices.begin();
-	output.enable();
+	output.write("hello\r\n");
 }
 
 void loop(void) {
-	output.write("hello world\r\n");
-	devices.select();
+	if (devices.select() == SEROUT)
+		output.write("hello world\r\n");
 }

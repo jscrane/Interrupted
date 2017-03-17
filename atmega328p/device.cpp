@@ -1,9 +1,8 @@
 #include <avr/power.h>
 #include <avr/sleep.h>
 #include <avr/wdt.h>
-
+#include <avr/interrupt.h>
 #include <Arduino.h>
-#include <stdarg.h>
 
 #include "device.h"
 
@@ -19,6 +18,7 @@ void Devices::begin() {
 	// turn off ADC and analog comparator
 	ADCSRA &= ~bit(ADEN);
 	ACSR |= bit(ACD);
+
 
 	// power down all modules until they are needed
 	power_all_disable();
@@ -45,26 +45,32 @@ unsigned Device::_sleepmode() {
 	return SLEEP_MODE_PWR_DOWN;
 }
 
-// required because there's no defined ordering of modes...
+// SLEEP_MODE_IDLE		0	(delay, serial, timer)
+// SLEEP_MODE_ADC		2	(analog)
+// SLEEP_MODE_PWR_DOWN		4	(external, pinchange, watchdog)
+// SLEEP_MODE_PWR_SAVE		6
+// SLEEP_MODE_STANDBY		12
+// SLEEP_MODE_EXT_STANDBY	14
+
 unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
 	switch (dev) {
 	case SLEEP_MODE_IDLE:
-		return SLEEP_MODE_IDLE;
+		return dev;
 	case SLEEP_MODE_ADC:
 		if (sys != SLEEP_MODE_IDLE)
-			return SLEEP_MODE_ADC;
+			return dev;
 		break;
 	case SLEEP_MODE_PWR_SAVE:
 		if (sys != SLEEP_MODE_IDLE && sys != SLEEP_MODE_ADC)
-			return SLEEP_MODE_PWR_SAVE;
+			return dev;
 		break;
 	case SLEEP_MODE_EXT_STANDBY:
 		if (sys == SLEEP_MODE_PWR_DOWN || sys == SLEEP_MODE_STANDBY)
-			return SLEEP_MODE_EXT_STANDBY;
+			return dev;
 		break;
 	case SLEEP_MODE_STANDBY:
 		if (sys == SLEEP_MODE_PWR_DOWN)
-			return SLEEP_MODE_STANDBY;
+			return dev;
 		break;
 	case SLEEP_MODE_PWR_DOWN:
 		break;

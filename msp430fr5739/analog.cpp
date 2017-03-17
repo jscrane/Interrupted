@@ -40,19 +40,7 @@ void Analog::_enable(bool e) {
 #define REFV_MASK 0x70
 #define REF_MASK 0x31
 
-void Analog::sleep() {
-	// turn off ADC and reference voltage
-	ADC10CTL0 &= ~ADC10ON;
-	REFCTL0 &= ~REFON;
-}
-
-void Analog::wake() {
-	while (REFCTL0 & REFGENBUSY);
-	REFCTL0 |= _ref & REF_MASK;
-	ADC10CTL0 |= ADC10ON | ADC10SHT_4;
-}
-
-void Analog::_mux() {
+void Analog::_init() {
 	// handle temperature sensor on A10
 	uint8_t channel = _pin > 127? _pin - 128: digitalPinToADCIn(_pin);
 
@@ -65,7 +53,9 @@ void Analog::_mux() {
 	// set channel and reference
 	ADC10MCTL0 = channel | (_ref & REFV_MASK);
 
-	wake();
+	while (REFCTL0 & REFGENBUSY);
+	REFCTL0 |= _ref & REF_MASK;
+	ADC10CTL0 |= ADC10ON | ADC10SHT_4;
 }
 
 bool Analog::begin() {
@@ -77,7 +67,7 @@ bool Analog::begin() {
 	// enable interrupts
     	ADC10IE |= ADC10IE0;
 
-	_mux();
+	_init();
 	return false;
 }
 

@@ -6,7 +6,9 @@ A new approach to building low-power, interrupt-driven, apps on Arduino:
 * Devices wake the processor using interrupts, it services them before returning to sleep.
 * State-machines are easily implemented: devices may be temporarily disabled 
   when not needed in the current state.
-* Note that this library is not entirely compatible with the Arduino IDE, it 
+  
+Notes:
+* This library is not entirely compatible with the Arduino IDE, it 
 requires [uC-Makefile](https://github.com/jscrane/uC-Makefile) to build 
 sketches. (If you copy the source files for your desired processor into 
 the same place as the headers, the Arduino IDE should be able to figure it
@@ -101,3 +103,4 @@ Credits
 * The [Conic and Regis](http://www-dse.doc.ic.ac.uk/cgi-bin/moin.cgi/Research) 
 projects at [Imperial College London](http://wp.doc.ic.ac.uk/dse/).
 * The [select](http://unixhelp.ed.ac.uk/CGI/man-cgi?select+2) system call.
+* [icaven](https://github.com/icaven) for bugfixes and improvements.

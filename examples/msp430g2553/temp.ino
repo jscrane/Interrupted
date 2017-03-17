@@ -18,8 +18,9 @@ void setup(void)
 void loop(void)
 {
 	adc.enable();
-	devices.select();
-	unsigned a = adc.read();
-	int c = ((45115L * a) - 18169625L) >> 16;
-	Serial.println(c);
+	if (devices.select() == TEMPSENSOR) {
+		unsigned a = adc.read();
+		int c = ((45115L * a) - 18169625L) >> 16;
+		Serial.println(c);
+	}
 }

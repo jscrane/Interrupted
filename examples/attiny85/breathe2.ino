@@ -2,14 +2,16 @@
  * Simple breathing LED using hardware PWM and a millisecond timer
  */
 #include <Interrupted.h>
+#include <avr/wdt.h>
+#include <avr/power.h>
 
 #define TIMEOUT	300
 #define LED	0
 #define	MILLIS	1
-#define OFF	2
+#define SECONDS	2
 
 Timer msec(MILLIS, 10);
-Watchdog watchdog(OFF, TIMEOUT);
+Watchdog watchdog(SECONDS);
 Devices devices;
 
 void setup() {
@@ -19,6 +21,7 @@ void setup() {
 	devices.begin();
 
 	// hardware PWM on PB0
+	power_timer0_enable();
 	TCCR0A = _BV(COM0A1) | _BV(COM0A0) | _BV(WGM01) | _BV(WGM00);
 	TCCR0B = _BV(CS01);
 	OCR0A = 0;
@@ -29,6 +32,7 @@ void setup() {
 
 void loop() {
 	static byte freq = 20, inc = 1;
+	static unsigned secs = 0;
 
 	switch (devices.select()) {
 	case MILLIS:
@@ -38,9 +42,12 @@ void loop() {
 		OCR0A = freq;
 		msec.enable();
 		break;
-	case OFF:
-		pinMode(LED, INPUT);
-		msec.disable();
+	case SECONDS:
+		if (++secs > TIMEOUT) {
+			pinMode(LED, INPUT);
+			msec.disable();
+		} else
+			watchdog.enable();
 		break;
 	}
 }

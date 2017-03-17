@@ -45,25 +45,9 @@ unsigned Device::_sleepmode() {
 	return SLEEP_MODE_PWR_DOWN;
 }
 
-// required because there's no defined ordering of modes...
 unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
-	switch (dev) {
-	case SLEEP_MODE_IDLE:
-		return SLEEP_MODE_IDLE;
-	case SLEEP_MODE_ADC:
-		if (sys != SLEEP_MODE_IDLE)
-			return SLEEP_MODE_ADC;
-		break;
-	case SLEEP_MODE_PWR_DOWN:
-		if (sys != SLEEP_MODE_IDLE && sys != SLEEP_MODE_ADC)
-			return SLEEP_MODE_PWR_DOWN;
-		break;
-	case SLEEP_MODE_STANDBY:
-		if (sys != SLEEP_MODE_IDLE && sys != SLEEP_MODE_ADC)
-			return SLEEP_MODE_STANDBY;
-		break;
-	}
-	return sys;
+	return dev < sys? dev: sys;
+
 }
 
 void Devices::sleep(unsigned mode) {

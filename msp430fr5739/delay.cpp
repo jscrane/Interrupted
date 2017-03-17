@@ -6,3 +6,7 @@
 unsigned Delay::_sleepmode() {
 	return LPM1_bits;
 }
+
+bool Delay::begin() {
+	return false;
+}

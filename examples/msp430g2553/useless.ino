@@ -19,8 +19,9 @@ void setup(void)
 	devices.add(push2);
 	devices.begin();
 
-	pinMode(RED_LED, OUTPUT);
 	pinMode(PUSH2, INPUT_PULLUP);
+	pinMode(RED_LED, OUTPUT);
+	digitalWrite(RED_LED, HIGH);
 }
 
 void loop(void)

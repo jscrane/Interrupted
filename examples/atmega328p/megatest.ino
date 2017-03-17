@@ -38,7 +38,6 @@ void loop(void)
 
 	switch (devices.select()) {
 	case A0:
-		output.enable();
 		itoa(adc.read(), buf, 16);
 		strcat(buf, "\r\n");
 		output.write(buf);

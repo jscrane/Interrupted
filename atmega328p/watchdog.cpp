@@ -1,7 +1,6 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 #include <avr/sleep.h>
-#include <Arduino.h>
 
 #include "device.h"
 #include "watchdog.h"
@@ -23,13 +22,16 @@ bool Watchdog::begin() {
 }
 
 void Watchdog::_enable(bool e) {
-	wdt_reset();		// Ensure that the timer will start from 0 again
-
+	unsigned sreg = SREG;
 	cli();
-	byte b = e? _BV(WDIE) | _scale: 0;
+	uint8_t b = 0;
+	if (e) {
+		wdt_reset();  // Ensure that the timer will start from 0 again
+		b = _BV(WDIE) | _scale;
+	}
 	WDTCSR = _BV(WDCE) | _BV(WDE);
 	WDTCSR = b;
-	sei();
+	SREG = sreg;
 }
 
 unsigned Watchdog::_sleepmode() {

@@ -6,15 +6,18 @@
  */
 class Timer: public Device {
 public:
+
 	Timer(int id, uint32_t millis, uint32_t ms_divisor=1L):
 		Device(id), _delay(millis), _ticks(millis), _ms_divisor(ms_divisor) {}
 
+
 	void ready() {
-		if (--_ticks == 0) {
+		if (_ticks <= 1) {
 			Device::ready();
 			_ticks = _delay;
 			disable();
-		}
+		} else
+			_ticks--;
 	}
 
 	void delay(uint32_t d) {

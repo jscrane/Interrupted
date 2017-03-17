@@ -16,9 +16,7 @@ void setup(void)
 
 void loop(void)
 {
-	adc.wake();
 	adc.enable();
-	devices.select();
-	Serial.println(adc.read());
-	adc.sleep();
+	if (devices.select() == A4)
+		Serial.println(adc.read());
 }

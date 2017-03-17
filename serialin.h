@@ -14,7 +14,7 @@ public:
 		noInterrupts();
 		if (_n == 0)
 			return -1;
-		byte b = _rx_buf[_head++];
+		uint8_t b = _rx_buf[_head++];
 		_n--;
 		if (_head == sizeof(_rx_buf))
 			_head = 0;
@@ -25,9 +25,9 @@ public:
 	// whether data is available to read
 	bool available() { return _n > 0; }
 
-	void on_input(byte b) {
+	void on_input(uint8_t b) {
 		if (_n < sizeof(_rx_buf)) {
-			byte tail = (_head + _n) % sizeof(_rx_buf);
+			uint8_t tail = (_head + _n) % sizeof(_rx_buf);
 			_rx_buf[tail] = b;
 			_n++;
 			ready();
@@ -38,8 +38,8 @@ protected:
 	void _enable(bool);
 
 private:
-	volatile byte _rx_buf[16];
-	volatile byte _head, _n;
+	volatile uint8_t _rx_buf[16];
+	volatile uint8_t _head, _n;
 };
 
 #endif

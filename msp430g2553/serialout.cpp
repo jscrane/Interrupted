@@ -16,13 +16,16 @@ bool SerialOut::begin() {
 	return false;
 }
 
-void SerialOut::write(char const *ptr) {
-	if (is_enabled() && !_tx_ptr) {
+bool SerialOut::write(char const *ptr) {
+	if (!_tx_ptr) {
 		noInterrupts();
 		_tx_ptr = ptr;
 		UC0IE |= UCA0TXIE;
+		enable();
 		interrupts();
+		return true;
 	}
+	return false;
 }
 
 void SerialOut::do_output() {

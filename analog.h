@@ -19,10 +19,10 @@ public:
 	bool begin();
 
 	// changes the analog input
-	void pin(int pin) { _pin = pin; _mux(); }
+	void pin(int pin) { _pin = pin; _init(); }
 
 	// changes the voltage reference
-	void ref(unsigned ref) { _ref = ref; _mux(); }
+	void ref(unsigned ref) { _ref = ref; _init(); }
 
 	// returns last converted value or 0xffff if not ready
 	unsigned read();
@@ -38,7 +38,7 @@ protected:
 	void _enable(bool enabled);
 
 private:
-	void _mux();
+	void _init();
 	unsigned _sleepmode();
 
 	int _pin;

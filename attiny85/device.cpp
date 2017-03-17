@@ -6,31 +6,31 @@
 
 #include "device.h"
 
-unsigned Device::_sleepmode() {
-	return SLEEP_MODE_PWR_DOWN;
-}
-
 void Devices::begin() {
 	// "...[it] is therefore required to turn off the watchdog
 	// early during program startup..." (from avr/wdt.h)
 	cli();
 	wdt_disable();
-	
+
 	// turn off ADC and analog comparator
 	ADCSRA = 0;
 	ACSR |= bit(ACD);
-	power_adc_disable();    // FIXME: power_all_disable()?
-	
+	power_all_disable();
+
 	// turn off the brown-out detector
 	MCUCR |= _BV(BODS) | _BV(BODSE);
-	
+
 	for (int i = 0; i <= 10; i++)
 	        digitalWrite(i, LOW);
-	
+
 	for (int i = 0; i < _n; i++)
-	        _devices[i]->enable(_devices[i]->begin());
-	
+		_devices[i]->enable(_devices[i]->begin());
+
 	sei();
+}
+
+unsigned Device::_sleepmode() {
+	return SLEEP_MODE_PWR_DOWN;
 }
 
 unsigned Devices::compare_modes(unsigned sys, unsigned dev) {

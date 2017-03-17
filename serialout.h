@@ -15,8 +15,9 @@ public:
 	bool begin();
 
 	// writes a string
-	void write(char const *ptr);
-	virtual void do_output();
+
+	bool write(char const *ptr);
+	void do_output();
 
 	// Return true when there are still bytes to output
 	bool transmitting() {return _tx_ptr != 0; }
@@ -25,6 +26,7 @@ public:
 	virtual char next();
 	virtual void advance_to_next_character();
 	virtual void finished();
+
 
 protected:
 	void _enable(bool e);

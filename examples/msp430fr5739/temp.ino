@@ -48,7 +48,9 @@ static int32_t table[21][2] = {
 void loop(void)
 {
 	adc.enable();
-	devices.select();
+	if (devices.select() != A1)
+		return;
+
 	int64_t t = adc.read();
 	t = (vRef * t) / 1024;
 	t = (rDiv * t) / (vRef - t) / 1000;

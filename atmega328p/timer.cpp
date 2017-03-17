@@ -1,8 +1,8 @@
 #include <avr/io.h>
 #include <avr/power.h>
 #include <avr/sleep.h>
+#include <avr/power.h>
 #include <avr/interrupt.h>
-#include <Arduino.h>
 
 #include "device.h"
 #include "timer.h"
@@ -38,24 +38,28 @@ void Timer::wake()
 
 bool Timer::begin() {
 	t1 = this;
-	wake();
+
+	power_timer1_enable();
 
 	TCCR1A = 0;
 	// CTC mode, 1024 prescaler
-	TCCR1B = bit(WGM12) | bit(CS10) | bit(CS12);
+	TCCR1B = _BV(WGM12) | _BV(CS10) | _BV(CS12);
 
-	OCR1A = (uint16_t) (F_CPU / (1024000L * (uint32_t) _ms_divisor)) - 1; // approximately 1 ms divided by the divisor
+	OCR1A = (uint16_t) (F_CPU / 1024000L) - 1; // approximately 1 ms divided by the divisor
 	sleep();
 	return false;
 }
 
 void Timer::_enable(bool e) {
-	uint8_t saved_SREG = SREG;	// Save the interrupt flag
-	cli();					// disable interrupts while resetting the timer/counter
-	TCNT1 = 0;				// Reset the timer/counter
-	SREG = saved_SREG;		// restore the interrupt flag
+	uint8_t sreg = SREG;
+	cli();
+	TCNT1 = 0;
+	if (e)
+		TIMSK1 |= _BV(OCIE1A);
+	else
+		TIMSK1 &= ~_BV(OCIE1A);
+	SREG = sreg;
 
-	bitWrite(TIMSK1, OCIE1A, e);
 }
 
 unsigned Timer::_sleepmode() {

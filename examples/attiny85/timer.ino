@@ -3,11 +3,11 @@
 /*
  * An LED on pin 5 (PB0, D0).
  *
- * The LED comes on for 1 second before being turned off by the timer.
+ * The LED comes on for 0.5s before being turned off by the timer.
  */
 const int LED = 0;
 const int TIMER = 1;
-Timer timer(TIMER, 1000);
+Timer timer(TIMER, 500);
 Devices devices;
 
 void setup(void)

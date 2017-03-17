@@ -25,7 +25,7 @@ bool Watchdog::begin() {
 void Watchdog::_enable(bool e) {
 	wdt_reset();		// Ensure that the timer will start from 0 again
 	cli();
-	byte b = e? _BV(WDIE) | _scale: 0;
+	uint8_t b = e? _BV(WDIE) | _scale: 0;
 	WDTCSR = _BV(WDCE) | _BV(WDE);
 	WDTCSR = b;
 	sei();
