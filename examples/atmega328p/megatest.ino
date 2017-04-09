@@ -10,7 +10,7 @@
 
 SerialIn input(SER_IN, 115200);
 SerialOut output(SER_OUT);
-Watchdog timer(TIMER, 1, WDTO_4S);
+Watchdog timer(TIMER, WDTO_4S);
 External int0(EXT0), int1(EXT1, RISING);
 Port portb;
 Pin led(LED, portb);

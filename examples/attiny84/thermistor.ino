@@ -3,7 +3,7 @@
 #include <Interrupted.h>
 
 TinyDebugSerial serial;
-Analog thermistor(A7, vcc);
+Analog thermistor(A7, EXTERNAL);
 Devices devices;
 
 // thermistor parameters

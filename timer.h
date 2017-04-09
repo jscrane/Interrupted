@@ -19,9 +19,9 @@ public:
 	}
 
 	void delay(uint32_t d) {
-		noInterrupts();
+		_no_ints();
 		_ticks = _delay = d;
-		interrupts();
+		_ints();
 	}
 
 	// not enabled by default

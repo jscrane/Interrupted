@@ -137,7 +137,6 @@ void loop(void)
 			last = now;
 			pinMode(DIVIDER_GND, OUTPUT);
 			digitalWrite(DIVIDER_GND, LOW);
-			thermistor.wake();
 			thermistor.enable();
 		} else if (now - last > DEBOUNCE_MS) {
 			last = now;
@@ -162,7 +161,6 @@ void loop(void)
 	if (now - last > IDLE_MS) {
 		timer.disable();
 		thermistor.disable();
-		thermistor.sleep();
 		pinMode(DIVIDER_GND, INPUT);
 		display(0);
 		sleeping = true;

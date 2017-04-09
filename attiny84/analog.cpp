@@ -23,7 +23,7 @@ unsigned Analog::read() {
 	cli();
 	unsigned v = reading;
 	reading = 0xffff;
-	enable(false);
+	disable();
 	sei();
 	return v;
 }
@@ -35,26 +35,19 @@ void Analog::_enable(bool e) {
 		ADCSRA &= ~(_BV(ADSC) | _BV(ADIE));
 }
 
-void Analog::_mux() {
+void Analog::_init() {
 	ADMUX = (_ref << 6) | _pin;
-}
-
-void Analog::sleep() {
-	ADCSRA &= ~bit(ADEN);
-	ACSR |= bit(ACD);
-	power_adc_disable();
-}
-
-void Analog::wake() {
-	power_adc_enable();
-	ADCSRA |= bit(ADEN);
-	ACSR &= ~bit(ACD);
 }
 
 bool Analog::begin() {
 	adc = this;
-	wake();
-	_mux();
+	unsigned sreg = SREG;
+	cli();
+	power_adc_enable();
+	ADCSRA |= bit(ADEN);
+	ACSR &= ~bit(ACD);
+	_init();
+	SREG = sreg;
 	return false;
 }
 
