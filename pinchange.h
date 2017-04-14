@@ -1,6 +1,9 @@
 #ifndef __PINCHANGE_H__
 #define __PINCHANGE_H__
 
+#include <avr/io.h>
+#include "device.h"
+
 class Pin;
 
 class Port {

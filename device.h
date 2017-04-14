@@ -28,7 +28,7 @@ protected:
 	}
 
 	static void sleep(unsigned mode);
-private:
+
 	int _n;
 	Device *_devices[MAX_DEVICES];
 };
@@ -61,6 +61,11 @@ public:
 	}
 
 	bool is_enabled() { return _enabled; }
+
+	// calls to turn off device altogether and back on again
+	virtual void power_module(bool turn_on) { if (turn_on) wake(); else sleep(); };
+	virtual void sleep() {};
+	virtual void wake() {};
 
 	int id() { return _id; }
 

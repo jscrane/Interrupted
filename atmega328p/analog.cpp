@@ -6,7 +6,7 @@
 #include "device.h"
 #include "analog.h"
 
-static Device *adc;
+static Analog *adc;
 static volatile unsigned reading = 0xffff;
 
 ISR(ADC_vect) {
@@ -14,7 +14,14 @@ ISR(ADC_vect) {
 		uint8_t low = ADCL;
 		uint8_t high = ADCH;
 		reading = (high << 8) | low;
-		adc->ready();
+		if (adc->_next_reading_valid)
+			adc->ready();
+		else
+		{
+			// Can't use this conversion so start a new conversion
+			ADCSRA |= bit(ADSC) | bit(ADIE);
+			adc->_next_reading_valid = true;
+		}
 	}
 }
 
@@ -39,13 +46,24 @@ void Analog::_init() {
 	ADMUX = (_ref << 6) | ((_pin - A0) & 0x0f);
 }
 
+void Analog::sleep() {
+	ADCSRA &= ~_BV(ADEN);
+	ACSR |= _BV(ACD);
+	power_adc_disable();
+}
+
+void Analog::wake() {
+	power_adc_enable();
+	_next_reading_valid = false;  // Ignore first reading after power on
+	ADCSRA |= _BV(ADEN);
+	ACSR &= ~_BV(ACD);
+}
+
 bool Analog::begin() {
 	adc = this;
 	unsigned sreg = SREG;
 	cli();
-	power_adc_enable();
-	ADCSRA |= _BV(ADEN);
-	ACSR &= ~_BV(ACD);
+	wake();
 	_init();
 	SREG = sreg;
 	return false;

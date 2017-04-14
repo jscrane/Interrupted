@@ -10,7 +10,8 @@ static SerialIn *device;
 
 bool SerialIn::begin() {
 	device = this;
-	init();
+	wake();
+  sleep();
 	return true;
 }
 

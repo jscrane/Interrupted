@@ -6,6 +6,10 @@
 
 #include "device.h"
 
+// Ensure that these are defined properly (there appears to be a bug in avr/power.h for ATMega328[P])
+#define power_all_enable()      (PRR &= (uint8_t)~((1<<PRADC)|(1<<PRTIM0)|(1<<PRTIM1)|(1<<PRTIM2)|(1<<PRSPI)|(1<<PRTWI)|(1<<PRUSART0)))
+#define power_all_disable()     (PRR |= (uint8_t)((1<<PRADC)|(1<<PRTIM0)|(1<<PRTIM1)|(1<<PRTIM2)|(1<<PRSPI)|(1<<PRTWI)|(1<<PRUSART0)))
+
 void Devices::begin() {
 	// "...[it] is therefore required to turn off the watchdog
 	// early during program startup..." (from avr/wdt.h)
@@ -14,6 +18,9 @@ void Devices::begin() {
 	// turn off ADC and analog comparator
 	ADCSRA &= ~bit(ADEN);
 	ACSR |= bit(ACD);
+
+
+	// power down all modules until they are needed
 	power_all_disable();
 
 	// turn off the brown-out detector
@@ -23,7 +30,13 @@ void Devices::begin() {
 		digitalWrite(i, LOW);
 
 	for (int i = 0; i < _n; i++)
-		_devices[i]->enable(_devices[i]->begin());
+	{
+		if (_devices[i]->begin())
+		{
+			_devices[i]->wake();
+			_devices[i]->enable(true);
+		}
+	}
 
 	sei();
 }

@@ -23,6 +23,7 @@ bool Watchdog::begin() {
 }
 
 void Watchdog::_enable(bool e) {
+	wdt_reset();		// Ensure that the timer will start from 0 again
 	cli();
 	uint8_t b = e? _BV(WDIE) | _scale: 0;
 	WDTCSR = _BV(WDCE) | _BV(WDE);
@@ -33,4 +34,3 @@ void Watchdog::_enable(bool e) {
 unsigned Watchdog::_sleepmode() {
 	return SLEEP_MODE_PWR_DOWN;
 }
-

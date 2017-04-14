@@ -19,6 +19,7 @@ void setup(void)
 void loop(void)
 {
 	timer.enable();
+
 	if (devices.select() == 1) {
 		digitalWrite(LED, !digitalRead(LED));
 		dt *= 2;

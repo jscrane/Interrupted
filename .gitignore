@@ -1,3 +1,6 @@
+.pioenvs
+.clang_complete
+.gcc-flags.json
 *.bin
 *.eep
 *.elf
@@ -12,3 +15,4 @@ libcore.a
 .clang_complete
 .gcc-flags.json
 .piolibdeps
+
