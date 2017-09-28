@@ -7,13 +7,15 @@ A new approach to building low-power, interrupt-driven, apps on Arduino:
 * State-machines are easily implemented: devices may be temporarily disabled 
   when not needed in the current state.
   
-Notes:
+Note
+----
 * The master branch of this library is not compatible with the Arduino IDE, it 
 requires [uC-Makefile](https://github.com/jscrane/uC-Makefile) to build 
 sketches.
 * Please check out the rev.2.1 branch to build with the Arduino IDE, it
 conforms to the format described [here](https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5:-Library-specification).
 * The ATtiny parts of this require a new version of [attiny](https://github.com/jscrane/attiny) which is based on damellis's [attiny branch](https://github.com/damellis/attiny/tree/ide-1.6.x) for Arduino 1.6.
+* This has been tested with Arduino 1.8.4 and Energia 1.6.10E18.
 
 See [blog articles](http://programmablehardware.blogspot.ie/search/label/interrupted).
 
