@@ -74,9 +74,6 @@ protected:
 	virtual void _enable(bool) = 0;
 	virtual unsigned _sleepmode();
 
-	void _no_ints();
-	void _ints();
-
 private:
 	int _id;
 	volatile bool _enabled;

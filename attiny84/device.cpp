@@ -31,14 +31,6 @@ void Devices::begin() {
 	sei();
 }
 
-void Device::_no_ints() {
-	cli();
-}
-
-void Device::_ints() {
-	sei();
-}
-
 unsigned Device::_sleepmode() {
 	return SLEEP_MODE_PWR_DOWN;
 }

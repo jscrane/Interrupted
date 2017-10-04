@@ -32,14 +32,6 @@ unsigned Device::_sleepmode() {
 	return SLEEP_MODE_PWR_DOWN;
 }
 
-void Device::_no_ints() {
-	cli();
-}
-
-void Device::_ints() {
-	sei();
-}
-
 // SLEEP_MODE_IDLE		0	(delay, serial, timer)
 // SLEEP_MODE_ADC		2	(analog)
 // SLEEP_MODE_PWR_DOWN		4	(external, pinchange, watchdog)
