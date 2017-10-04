@@ -2,6 +2,7 @@
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <avr/interrupt.h>
+#include <Arduino.h>
 
 #include "device.h"
 #include "timer.h"
