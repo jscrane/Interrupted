@@ -53,3 +53,11 @@ int Devices::select() {
 	idle(mode);
 	return -1;
 }
+
+void Device::_no_ints() {
+	noInterrupts();
+}
+
+void Device::_ints() {
+	interrupts();
+}

@@ -1,5 +1,5 @@
 PROCESSOR_FAMILY := msp430
-BOARD := lpmsp430g2553
+BOARD := MSP-EXP430G2553LP
 #SKETCH := serialout.ino
 #SKETCH := serialin.ino
 #SKETCH := temp.ino
