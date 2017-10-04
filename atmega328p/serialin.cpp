@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
+#include <Arduino.h>
 
 #include "device.h"
 #include "serial.h"

@@ -11,14 +11,14 @@ public:
 
 	// returns the next character available for input or -1
 	int read() {
-		_no_ints();
+		noInterrupts();
 		if (_n == 0)
 			return -1;
 		uint8_t b = _rx_buf[_head++];
 		_n--;
 		if (_head == sizeof(_rx_buf))
 			_head = 0;
-		_ints();
+		interrupts();
 		return b;
 	}
 
