@@ -9,6 +9,11 @@ MSP430
 ------
 - document watchdog class
 
+ARDUINO
+-------
+- platformio
+- sort out examples, maybe core subset
+
 Changes to [cherry-pick](https://coderwall.com/p/sgpksw/git-cherry-pick-from-another-repository):
 - ~~Fix examples [24f4da3](../../pull/1/commits/24f4da3da3708afffd84b18a1d0eae57e9efe090), [22a0c5e](../../pull/1/commits/22a0c5e7e95045155747080efe3635d3282b1631), [a00cdc6](../../pull/1/commits/a00cdc6fc1ee24cae271a7311230b0f440f8d6db)~~
 - ~~Break header dependencies on Arduino.h [8bc5132](../../pull/1/commits/8bc51324a0a8600c6d9ac1b4640dca0f62cff15f), [c9826eb](../../pull/1/commits/c9826ebaf46e34b78b040b64785bccfb3ba6918c)~~
