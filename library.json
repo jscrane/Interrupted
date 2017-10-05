@@ -19,10 +19,6 @@
   "examples": "*.ino",
   "frameworks": ["arduino", "energia"],
   "platforms": ["atmelavr", "timsp430"],
-  "export": 
-  {
-    "include": "src"
-  },
   "build":
   {
     "srcFilter": "+<src/>"
