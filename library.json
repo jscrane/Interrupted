@@ -9,15 +9,16 @@
     }
   ],
   "version": "1.1.1",
-  "description" : "Interrupt driven device framework",
-  "keywords": "avr, Arduino",
+  "description" : "Interrupt driven Arduino programming",
+  "keywords": "avr, Arduino, msp430, Energia, Low-Power, Interrupts, select",
   "repository":
   {
     "type": "git",
     "url": "https://github.com/jscrane/Interrupted.git"
   },
-  "frameworks": ["arduino"],
-  "platforms": ["atmelavr"],
+  "examples": "*.ino",
+  "frameworks": ["arduino", "energia"],
+  "platforms": ["atmelavr", "timsp430"],
   "export": 
   {
     "include": "src"
