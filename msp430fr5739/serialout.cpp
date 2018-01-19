@@ -14,8 +14,8 @@ bool SerialOut::begin() {
 }
 
 bool SerialOut::write(char const *ptr) {
+	Atomic block;
 	if (!_tx_ptr) {
-		Atomic block;
 		_tx_ptr = ptr;
 		UCA0IE |= UCTXIE;
 		enable();

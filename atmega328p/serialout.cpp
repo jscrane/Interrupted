@@ -18,8 +18,8 @@ bool SerialOut::begin() {
 }
 
 bool SerialOut::write(char const *ptr) { 
+	Atomic block;
 	if (!_tx_ptr) {
-		Atomic block;
 		_tx_ptr = ptr;
 		UCSR0B |= _BV(TXCIE0);
 		UDR0 = *_tx_ptr++;
