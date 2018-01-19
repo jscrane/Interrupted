@@ -4,6 +4,7 @@
 
 #include <Arduino.h>
 
+#include "atomic.h"
 #include "device.h"
 
 #define BODS 7		// BOD Sleep bit in MCUCR
@@ -12,7 +13,7 @@
 void Devices::begin() {
 	// "...[it] is therefore required to turn off the watchdog
 	// early during program startup..." (from avr/wdt.h)
-	wdt_disable();
+	Atomic block;
 
 	// turn off ADC and analog comparator
 	ADCSRA = 0;
@@ -27,8 +28,6 @@ void Devices::begin() {
 
 	for (int i = 0; i < _n; i++)
 		_devices[i]->enable(_devices[i]->begin());
-
-	sei();
 }
 
 unsigned Device::_sleepmode() {
@@ -45,19 +44,19 @@ void Devices::sleep(unsigned mode) {
 
 	// arduino 1.5.8 finally updated the avr toolchain
 	sleep_bod_disable();
-	sei();
+	interrupts();
 	sleep_cpu();
 	sleep_disable();
 }
 
 int Devices::select() {
 	// so we don't miss an interrupt while checking...
-	cli();
+	noInterrupts();
 	unsigned mode = SLEEP_MODE_PWR_DOWN;
 	for (int i = 0; i < _n; i++) {
 		Device *d = _devices[i];
 		if (d->is_ready()) {
-			sei();
+			interrupts();
 			return d->id();
 		}
 		if (d->is_enabled())

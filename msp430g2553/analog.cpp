@@ -1,5 +1,6 @@
 #include <Energia.h>
 
+#include "atomic.h"
 #include "device.h"
 #include "analog.h"
 
@@ -17,10 +18,9 @@ __interrupt void adc_isr(void)
 }
 
 unsigned Analog::read() {
-	noInterrupts();
+	Atomic block;
 	unsigned v = ADC10MEM;
 	disable();
-	interrupts();
 	return v;
 }
 

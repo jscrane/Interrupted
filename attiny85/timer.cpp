@@ -4,6 +4,7 @@
 #include <avr/interrupt.h>
 #include <Arduino.h>
 
+#include "atomic.h"
 #include "device.h"
 #include "timer.h"
 
@@ -32,14 +33,12 @@ bool Timer::begin() {
 }
 
 void Timer::_enable(bool e) {
-	uint8_t sreg = SREG;
-	cli();
+	Atomic block;
 	TCNT1 = 0;
 	if (e)
 		TIMSK |= _BV(OCIE1A);
 	else
 		TIMSK &= ~_BV(OCIE1A);
-	SREG = sreg;
 }
 
 unsigned Timer::_sleepmode() {

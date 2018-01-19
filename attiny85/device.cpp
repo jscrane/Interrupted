@@ -4,12 +4,13 @@
 
 #include <Arduino.h>
 
+#include "atomic.h"
 #include "device.h"
 
 void Devices::begin() {
 	// "...[it] is therefore required to turn off the watchdog
 	// early during program startup..." (from avr/wdt.h)
-	cli();
+	Atomic block;
 	wdt_disable();
 
 	// turn off ADC and analog comparator
@@ -25,8 +26,6 @@ void Devices::begin() {
 
 	for (int i = 0; i < _n; i++)
 		_devices[i]->enable(_devices[i]->begin());
-
-	sei();
 }
 
 unsigned Device::_sleepmode() {
@@ -42,19 +41,19 @@ void Devices::sleep(unsigned mode) {
 	sleep_enable();
 
 	sleep_bod_disable();
-	sei();
+	interrupts();
 	sleep_cpu();
 	sleep_disable();
 }
 
 int Devices::select() {
 	// so we don't miss an interrupt while checking...
-	cli();
+	noInterrupts();
 	unsigned mode = SLEEP_MODE_PWR_DOWN;
 	for (int i = 0; i < _n; i++) {
 		Device *d = _devices[i];
 		if (d->is_ready()) {
-			sei();
+			interrupts();
 			return d->id();
 		}
 		if (d->is_enabled())

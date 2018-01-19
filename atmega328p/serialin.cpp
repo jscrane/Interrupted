@@ -3,6 +3,7 @@
 #include <avr/interrupt.h>
 #include <Arduino.h>
 
+#include "atomic.h"
 #include "device.h"
 #include "serial.h"
 #include "serialin.h"

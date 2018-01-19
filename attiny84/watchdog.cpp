@@ -3,6 +3,7 @@
 #include <avr/wdt.h>
 #include <avr/sleep.h>
 
+#include "atomic.h"
 #include "device.h"
 #include "watchdog.h"
 
@@ -23,11 +24,10 @@ bool Watchdog::begin() {
 }
 
 void Watchdog::_enable(bool e) {
-	cli();
+	Atomic block;
 	uint8_t b = e? _BV(WDIE) | _scale: 0;
 	WDTCSR = _BV(WDCE) | _BV(WDE);
 	WDTCSR = b;
-	sei();
 }
 
 unsigned Watchdog::_sleepmode() {

@@ -3,6 +3,7 @@
 #include <avr/power.h>
 #include <Arduino.h>
 
+#include "atomic.h"
 #include "device.h"
 #include "analog.h"
 
@@ -19,12 +20,10 @@ ISR(ADC_vect) {
 }
 
 unsigned Analog::read() {
-	unsigned sreg = SREG;
-	cli();
+	Atomic block;
 	unsigned v = reading;
 	reading = 0xffff;
 	disable();
-	SREG = sreg;
 	return v;
 }
 
@@ -40,14 +39,12 @@ void Analog::_init() {
 }
 
 bool Analog::begin() {
+	Atomic block;
 	adc = this;
-	unsigned sreg = SREG;
-	cli();
 	power_adc_enable();
 	ADCSRA |= _BV(ADEN);
 	ACSR &= ~_BV(ACD);
 	_init();
-	SREG = sreg;
 	return false;
 }
 

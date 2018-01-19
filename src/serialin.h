@@ -11,20 +11,20 @@ public:
 
 	// returns the next character available for input or -1
 	int read() {
-		noInterrupts();
+		Atomic block;
 		if (_n == 0)
 			return -1;
 		uint8_t b = _rx_buf[_head++];
 		_n--;
 		if (_head == sizeof(_rx_buf))
 			_head = 0;
-		interrupts();
 		return b;
 	}
 
 	// whether data is available to read
 	bool available() { return _n > 0; }
 
+	// called from interrupt handler
 	void on_input(uint8_t b) {
 		if (_n < sizeof(_rx_buf)) {
 			uint8_t tail = (_head + _n) % sizeof(_rx_buf);

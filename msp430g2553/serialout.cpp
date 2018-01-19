@@ -18,11 +18,10 @@ bool SerialOut::begin() {
 
 bool SerialOut::write(char const *ptr) {
 	if (!_tx_ptr) {
-		noInterrupts();
+		Atomic block;
 		_tx_ptr = ptr;
 		UC0IE |= UCA0TXIE;
 		enable();
-		interrupts();
 		return true;
 	}
 	return false;

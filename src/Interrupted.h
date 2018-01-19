@@ -1,6 +1,7 @@
 #ifndef __INTERRUPTED_H__
 #define __INTERRUPTED_H__
 
+#include "atomic.h"
 #include "device.h"
 #include "pinchange.h"
 #include "external.h"

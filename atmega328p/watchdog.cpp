@@ -2,6 +2,8 @@
 #include <avr/wdt.h>
 #include <avr/sleep.h>
 
+#include <Arduino.h>
+#include "atomic.h"
 #include "device.h"
 #include "watchdog.h"
 
@@ -22,8 +24,7 @@ bool Watchdog::begin() {
 }
 
 void Watchdog::_enable(bool e) {
-	unsigned sreg = SREG;
-	cli();
+	Atomic block;
 	uint8_t b = 0;
 	if (e) {
 		wdt_reset();
@@ -31,7 +32,6 @@ void Watchdog::_enable(bool e) {
 	}
 	WDTCSR = _BV(WDCE) | _BV(WDE);
 	WDTCSR = b;
-	SREG = sreg;
 }
 
 unsigned Watchdog::_sleepmode() {

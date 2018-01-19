@@ -1,5 +1,6 @@
 #include <Energia.h>
 
+#include "atomic.h"
 #include "device.h"
 #include "serial.h"
 #include "serialout.h"
@@ -14,11 +15,10 @@ bool SerialOut::begin() {
 
 bool SerialOut::write(char const *ptr) {
 	if (!_tx_ptr) {
-		noInterrupts();
+		Atomic block;
 		_tx_ptr = ptr;
 		UCA0IE |= UCTXIE;
 		enable();
-		interrupts();
 	}
 }
 

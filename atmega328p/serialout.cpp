@@ -3,6 +3,7 @@
 #include <avr/interrupt.h>
 #include <Arduino.h>
 
+#include "atomic.h"
 #include "device.h"
 #include "serial.h"
 #include "serialout.h"
@@ -18,12 +19,10 @@ bool SerialOut::begin() {
 
 bool SerialOut::write(char const *ptr) { 
 	if (!_tx_ptr) {
-		uint8_t sreg = SREG;
-		cli();
+		Atomic block;
 		_tx_ptr = ptr;
 		UCSR0B |= _BV(TXCIE0);
 		UDR0 = *_tx_ptr++;
-		SREG = sreg;
 		enable();
 		return true;
 	}
