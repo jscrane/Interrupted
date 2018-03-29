@@ -13,6 +13,8 @@ unsigned Device::_sleepmode() {
 }
 
 unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
+	if (sys == SLEEP_MODE_NONE)
+		return dev;
 	switch (dev) {
 	case LPM0_bits:
 		return LPM0_bits;
@@ -35,12 +37,13 @@ unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
 }
 
 void Devices::sleep(unsigned mode) {
-	_BIS_SR(mode | GIE);
+	if (mode != SLEEP_MODE_NONE)
+		_BIS_SR(mode | GIE);
 }
 
 int Devices::select() {
 	noInterrupts();
-	unsigned mode = LPM4_bits;
+	unsigned mode = SLEEP_MODE_NONE;
 	for (int i = 0; i < _n; i++) {
 		Device *d = _devices[i];
 		if (d->is_ready()) {

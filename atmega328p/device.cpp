@@ -40,45 +40,53 @@ unsigned Device::_sleepmode() {
 // SLEEP_MODE_EXT_STANDBY	14
 
 unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
-	switch (dev) {
-	case SLEEP_MODE_IDLE:
-		return dev;
-	case SLEEP_MODE_ADC:
-		if (sys != SLEEP_MODE_IDLE)
-			return dev;
-		break;
-	case SLEEP_MODE_PWR_SAVE:
-		if (sys != SLEEP_MODE_IDLE && sys != SLEEP_MODE_ADC)
-			return dev;
-		break;
-	case SLEEP_MODE_EXT_STANDBY:
-		if (sys == SLEEP_MODE_PWR_DOWN || sys == SLEEP_MODE_STANDBY)
-			return dev;
-		break;
-	case SLEEP_MODE_STANDBY:
-		if (sys == SLEEP_MODE_PWR_DOWN)
-			return dev;
-		break;
+	switch (sys) {
+	case SLEEP_MODE_NONE:
 	case SLEEP_MODE_PWR_DOWN:
-		break;
+		return dev;
+
+	case SLEEP_MODE_IDLE:
+		return SLEEP_MODE_IDLE;
+
+	case SLEEP_MODE_ADC:
+		if (dev == SLEEP_MODE_IDLE)
+			return SLEEP_MODE_IDLE;
+		return SLEEP_MODE_ADC;
+
+	case SLEEP_MODE_PWR_SAVE:
+		if (dev == SLEEP_MODE_IDLE || dev == SLEEP_MODE_ADC)
+			return dev;
+		return SLEEP_MODE_PWR_SAVE;
+
+	case SLEEP_MODE_EXT_STANDBY:
+		if (dev == SLEEP_MODE_STANDBY || dev == SLEEP_MODE_PWR_DOWN)
+			return SLEEP_MODE_EXT_STANDBY;
+		return dev;
+
+	case SLEEP_MODE_STANDBY:
+		if (dev == SLEEP_MODE_PWR_DOWN)
+			return SLEEP_MODE_STANDBY;
+		return dev;
 	}
 	return sys;
 }
 
 void Devices::sleep(unsigned mode) {
-	set_sleep_mode(mode);
-	sleep_enable();
+	if (mode != SLEEP_MODE_NONE) {
+		set_sleep_mode(mode);
+		sleep_enable();
 
-	sleep_bod_disable();
-	interrupts();
-	sleep_cpu();
-	sleep_disable();
+		sleep_bod_disable();
+		interrupts();
+		sleep_cpu();
+		sleep_disable();
+	}
 }
 
 int Devices::select() {
 	// so we don't miss an interrupt while checking...
 	noInterrupts();
-	unsigned mode = SLEEP_MODE_PWR_DOWN;
+	unsigned mode = SLEEP_MODE_NONE;
 	for (int i = 0; i < _n; i++) {
 		Device *d = _devices[i];
 		if (d->is_ready()) {

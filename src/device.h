@@ -20,6 +20,8 @@ public:
 
 	int select();
 
+	static const unsigned SLEEP_MODE_NONE = 0xabcd;
+
 	static unsigned compare_modes(unsigned sys, unsigned dev);
 
 protected:

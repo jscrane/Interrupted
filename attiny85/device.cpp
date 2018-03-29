@@ -33,23 +33,27 @@ unsigned Device::_sleepmode() {
 }
 
 unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
+	if (sys == SLEEP_MODE_NONE)
+		return dev;
 	return dev < sys? dev: sys;
 }
 
 void Devices::sleep(unsigned mode) {
-	set_sleep_mode(mode);
-	sleep_enable();
+	if (mode != SLEEP_MODE_NONE) {
+		set_sleep_mode(mode);
+		sleep_enable();
 
-	sleep_bod_disable();
-	interrupts();
-	sleep_cpu();
-	sleep_disable();
+		sleep_bod_disable();
+		interrupts();
+		sleep_cpu();
+		sleep_disable();
+	}
 }
 
 int Devices::select() {
 	// so we don't miss an interrupt while checking...
 	noInterrupts();
-	unsigned mode = SLEEP_MODE_PWR_DOWN;
+	unsigned mode = SLEEP_MODE_NONE;
 	for (int i = 0; i < _n; i++) {
 		Device *d = _devices[i];
 		if (d->is_ready()) {
