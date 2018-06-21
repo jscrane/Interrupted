@@ -16,7 +16,8 @@ public:
 			_devices[_n++] = &device;
 	}
 
-	void begin();
+	// if powersave is set, turn off all devices at startup
+	void begin(bool powersave=true);
 
 	int select();
 

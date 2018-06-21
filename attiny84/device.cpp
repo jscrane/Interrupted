@@ -10,21 +10,23 @@
 #define BODS 7		// BOD Sleep bit in MCUCR
 #define BODSE 2		// BOD Sleep enable bit in MCUCR
 
-void Devices::begin() {
+void Devices::begin(bool powersave) {
 	// "...[it] is therefore required to turn off the watchdog
 	// early during program startup..." (from avr/wdt.h)
 	Atomic block;
 
-	// turn off ADC and analog comparator
-	ADCSRA = 0;
-	ACSR |= bit(ACD);
-	power_adc_disable();	// FIXME: power_all_disable()?
+	if (powersave) {
+		// turn off ADC and analog comparator
+		ADCSRA = 0;
+		ACSR |= bit(ACD);
+		power_adc_disable();	// FIXME: power_all_disable()?
 
-	// turn off the brown-out detector
-	MCUCR |= _BV(BODS) | _BV(BODSE);
+		// turn off the brown-out detector
+		MCUCR |= _BV(BODS) | _BV(BODSE);
 
-	for (int i = 0; i <= 10; i++)
-		digitalWrite(i, LOW);
+		for (int i = 0; i <= 10; i++)
+			digitalWrite(i, LOW);
+	}
 
 	for (int i = 0; i < _n; i++)
 		_devices[i]->enable(_devices[i]->begin());

@@ -3,7 +3,7 @@
 
 #include "device.h"
 
-void Devices::begin() {
+void Devices::begin(bool powersave) {
 	for (int i = 0; i < _n; i++)
 		_devices[i]->enable(_devices[i]->begin());
 }
