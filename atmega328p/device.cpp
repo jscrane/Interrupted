@@ -85,14 +85,12 @@ void Devices::sleep(unsigned mode) {
 
 int Devices::select() {
 	// so we don't miss an interrupt while checking...
-	noInterrupts();
+	Atomic block;
 	unsigned mode = SLEEP_MODE_NONE;
 	for (int i = 0; i < _n; i++) {
 		Device *d = _devices[i];
-		if (d->is_ready()) {
-			interrupts();
+		if (d->is_ready())
 			return d->id();
-		}
 		if (d->is_enabled())
 			mode = d->negotiate_mode(mode);
 	}
