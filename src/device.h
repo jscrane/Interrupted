@@ -7,6 +7,8 @@
 
 class Device;
 
+#define LOW_POWER	true
+
 class Devices {
 public:
 	Devices(): _n(0) {}
@@ -17,7 +19,7 @@ public:
 	}
 
 	// if powersave is set, turn off all devices at startup
-	void begin(bool powersave=true);
+	void begin(bool powersave = false);
 
 	int select();
 
