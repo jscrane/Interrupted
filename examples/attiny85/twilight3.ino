@@ -1,3 +1,11 @@
+/*
+ * A PIR- and darkness-triggered LED with manual override.
+ *
+ * An LED on pin 5 (PB0, D0),
+ * An LDR and 10k resistor between VCC and GND, connected to pin 7 (A1),
+ * A pushbutton between pin 3 (PB4, D4) and GND,
+ * A PIR on pin 6 (PB1, D1).
+ */
 #include <EEPROM.h>
 #include <Interrupted.h>
 

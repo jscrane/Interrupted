@@ -22,7 +22,7 @@ void setup(void)
 	devices.add(timer);
 	devices.add(led);
 	devices.add(button);
-	devices.begin();
+	devices.begin(LOW_POWER);
 
 	pinMode(BUTTON, INPUT_PULLUP);
 	pinMode(LED, OUTPUT);

@@ -1,5 +1,6 @@
 /*
- * Simple breathing LED using hardware PWM and a millisecond timer
+ * Simple breathing LED using hardware PWM and a millisecond timer.
+ * (see breathe.ino for setup)
  */
 #include <Interrupted.h>
 #include <avr/wdt.h>
@@ -18,7 +19,7 @@ void setup() {
 	pinMode(LED, OUTPUT);
 	devices.add(watchdog);
 	devices.add(msec);
-	devices.begin();
+	devices.begin(LOW_POWER);
 
 	// hardware PWM on PB0
 	power_timer0_enable();
