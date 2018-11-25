@@ -10,4 +10,4 @@ SKETCH := serialin.ino
 #SKETCH := timer.ino
 #SKETCH := watchdog.ino
 #SKETCH := delay.ino
-include arduino15.mk
+include arduino-avr.mk
