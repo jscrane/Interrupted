@@ -10,6 +10,9 @@
 static Device *adc;
 static volatile unsigned reading = 0xffff;
 
+// FIXME: copied from damellis core
+#define analogPinToChannel(p)   ( (p) < 6 ? (p) : (p) - 6 )
+
 ISR(ADC_vect) {
 	if (adc) {
 		uint8_t low = ADCL;
