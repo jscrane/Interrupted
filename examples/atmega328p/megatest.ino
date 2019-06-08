@@ -1,7 +1,6 @@
 #include <avr/wdt.h>
 #include <Interrupted.h>
 
-#define LED	13
 #define SER_IN	98
 #define SER_OUT	99
 #define EXT0	2
@@ -13,7 +12,7 @@ SerialOut output(SER_OUT);
 Watchdog timer(TIMER, WDTO_4S);
 External int0(EXT0), int1(EXT1, RISING);
 Port portb;
-Pin led(LED, portb);
+Pin led(LED_BUILTIN, portb);
 Analog adc(A0);
 Devices devices;
 
@@ -28,8 +27,8 @@ void setup(void)
 	devices.add(adc);
 	devices.begin();
 
-	pinMode(LED, OUTPUT);
-	digitalWrite(LED, HIGH);
+	pinMode(LED_BUILTIN, OUTPUT);
+	digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void loop(void)
@@ -53,7 +52,7 @@ void loop(void)
 		digitalWrite(13, LOW);
 		break;
 
-	case LED:
+	case LED_BUILTIN:
 		int0.enable(!led.is_on());
 		int1.enable(led.is_on());
 		timer.enable(led.is_on());
@@ -63,9 +62,9 @@ void loop(void)
 	case SER_IN:
 		c = input.read();
 		if (c == '1')
-			digitalWrite(LED, HIGH);
+			digitalWrite(LED_BUILTIN, HIGH);
 		else if (c == '0')
-			digitalWrite(LED, LOW);
+			digitalWrite(LED_BUILTIN, LOW);
 		break;
 
 	case SER_OUT:

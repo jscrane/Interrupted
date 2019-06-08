@@ -3,12 +3,12 @@
 *.elf
 *.o
 */*.o
-.lib
+.build
 .deps
-.*.d
-libcore.a
+*.d
 .*.swp
 .pioenvs
 .clang_complete
 .gcc-flags.json
 .piolibdeps
+platform.mk

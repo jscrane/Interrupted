@@ -1,11 +1,10 @@
 #include <Interrupted.h>
 
 /*
- * An LED on pin 19 (PB5, D13).
+ * Built-in LED on hardware pin 19 (PB5, D13).
  *
  * The LED flashes with a duty-cycle of 500ms.
  */
-#define LED	13
 #define TIMER	1
 Timer timer(TIMER, 500);
 Devices devices;
@@ -15,13 +14,13 @@ void setup(void)
 	devices.add(timer);
 	devices.begin();
 
-	pinMode(LED, OUTPUT);
-	digitalWrite(LED, HIGH);
+	pinMode(LED_BUILTIN, OUTPUT);
+	digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void loop(void)
 {
 	timer.enable();
 	if (devices.select() == TIMER)
-		digitalWrite(LED, !digitalRead(LED));
+		digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
 }

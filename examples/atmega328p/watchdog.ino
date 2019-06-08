@@ -1,20 +1,19 @@
 #include <Interrupted.h>
 
 /*
- * An LED on pin 19 (PB5, D13),
+ * Built-in LED_BUILTIN on hardware pin 19 (PB5, D13),
  * A pushbutton between pin 4 (PD2, D2, INT0) and ground.
  *
- * The LED comes on for 1 second after reset or when the
+ * The LED_BUILTIN comes on for 1 second after reset or when the
  * pushbutton is pressed.
  */
-#define LED	13
 #define TIMER	1
 #define BUTTON	2
 
 Watchdog timer(TIMER);
 External button(BUTTON, LOW);
 Port portb;
-Pin led(LED, portb); 
+Pin led(LED_BUILTIN, portb); 
 Devices devices;
 
 void setup(void)
@@ -24,8 +23,8 @@ void setup(void)
 	devices.add(button);
 	devices.begin();
 
-	pinMode(LED, OUTPUT);
-	digitalWrite(LED, HIGH);
+	pinMode(LED_BUILTIN, OUTPUT);
+	digitalWrite(LED_BUILTIN, HIGH);
 	digitalWrite(BUTTON, INPUT_PULLUP);
 }
 
@@ -33,12 +32,12 @@ void loop(void)
 {
 	switch (devices.select()) {
 	case BUTTON:
-		digitalWrite(LED, HIGH);
+		digitalWrite(LED_BUILTIN, HIGH);
 		break;
 	case TIMER:
-		digitalWrite(LED, LOW);
+		digitalWrite(LED_BUILTIN, LOW);
 		break;
-	case LED:
+	case LED_BUILTIN:
 		timer.enable(led.is_on());
 		break;
 	}
