@@ -1,5 +1,6 @@
 #include <Energia.h>
 
+#include "atomic.h"
 #include "device.h"
 #include "serial.h"
 #include "serialout.h"
