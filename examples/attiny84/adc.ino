@@ -1,27 +1,26 @@
-#include <TinyDebugSerial.h>
 #include <Interrupted.h>
 
 /*
  * An analog input on pin 10, ADC3 (e.g., LDR/resistor voltage divider).
- * The input is read and written to TinyDebugSerial output at 115200 baud.
+ * The input is read and written to Serial at 19200 baud.
  */
-TinyDebugSerial serial;
 Analog adc(A3, EXTERNAL);
 Devices devices;
 
 void setup(void)
 {
+	Serial.begin(TERMINAL_SPEED);
+	Serial.println("hello world");
+
 	devices.add(adc);
 	devices.begin();
-
-	serial.begin(115200);
-	serial.println("hello world");
+	adc.enable();
 }
 
 void loop(void)
 {
 	if (devices.select() == A3) {
-		serial.println(adc.read());
+		Serial.println(adc.read());
 		adc.enable();
 	}
 }
