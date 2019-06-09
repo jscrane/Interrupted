@@ -2,14 +2,13 @@
 #include <Interrupted.h>
 
 /*
- * An LED on pin 2 (PB0, D10), which turns on and off with the watchdog.
+ * A built-in LED on pin 5 (PB2, D8).
  */
-#define LED	10
 #define TIMER	1
 
 Port portb;
-Pin led(LED, portb); 
-Watchdog timer(TIMER, 1);
+Pin led(LED_BUILTIN, portb); 
+Watchdog timer(TIMER, 1000);
 Devices devices;
 
 void setup(void)
@@ -18,18 +17,18 @@ void setup(void)
 	devices.add(led);
 	devices.begin();
 
-	pinMode(LED, OUTPUT);
+	pinMode(LED_BUILTIN, OUTPUT);
 	timer.enable();
 }
 
 void loop(void)
 {
 	switch (devices.select()) {
-	case LED:
+	case LED_BUILTIN:
 		timer.enable();
 		break;
 	case TIMER:
-		digitalWrite(LED, !digitalRead(LED));
+		digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
 		break;
 	}
 }
