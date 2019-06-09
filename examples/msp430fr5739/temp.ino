@@ -4,6 +4,9 @@
  * Reads the NTC on A1
  * See: https://github.com/energia/Energia/tree/master/examples/06.Sensors/Thermometer_FRAUNCHPAD
  */
+#define SEROUT	99
+
+SerialOut output(SEROUT, TERMINAL_SPEED);
 Analog adc(A1);
 Devices devices;
 
@@ -13,12 +16,13 @@ Devices devices;
 void setup(void)
 {
 	devices.add(adc);
+	devices.add(output);
 	devices.begin();
 
-	Serial.begin(9600);
 	pinMode(A1, INPUT);
 	pinMode(NTC_ENABLE, OUTPUT);
 	digitalWrite(NTC_ENABLE, HIGH);
+	adc.enable();
 }
 
 static int32_t table[21][2] = {
@@ -47,9 +51,15 @@ static int32_t table[21][2] = {
 
 void loop(void)
 {
-	adc.enable();
-	if (devices.select() != A1)
+	switch(devices.select()) {
+	case SEROUT:
+		adc.enable();
 		return;
+	case A1:
+		break;
+	default:
+		return;
+	}
 
 	int64_t t = adc.read();
 	t = (vRef * t) / 1024;
@@ -62,5 +72,8 @@ void loop(void)
       			c /= 10;
       			break;
     		}
-	Serial.println(c);
+	char buf[8];
+	itoa(c, buf, 10);
+	strcat(buf, "\r\n");
+	output.write(buf);
 }
