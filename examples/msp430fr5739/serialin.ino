@@ -2,7 +2,7 @@
 
 #define SERIN	98
 
-SerialIn input(SERIN, 9600);
+SerialIn<2> input(SERIN, TERMINAL_SPEED);
 Devices devices;
 
 void setup(void) {

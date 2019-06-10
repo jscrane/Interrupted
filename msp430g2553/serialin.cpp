@@ -5,9 +5,9 @@
 #include "serial.h"
 #include "serialin.h"
 
-static SerialIn *device;
+static SerialIn_ *device;
 
-bool SerialIn::begin() {
+bool SerialIn_::begin() {
 	device = this;
 
 	P1SEL |= BIT1;
@@ -17,7 +17,7 @@ bool SerialIn::begin() {
 	return true;
 }
 
-void SerialIn::_enable(bool e) {
+void SerialIn_::_enable(bool e) {
 	if (e)
 		UC0IE |= UCA0RXIE;
 	else

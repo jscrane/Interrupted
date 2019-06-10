@@ -8,15 +8,15 @@
 #include "serial.h"
 #include "serialin.h"
 
-static SerialIn *device;
+static SerialIn_ *device;
 
-bool SerialIn::begin() {
+bool SerialIn_::begin() {
 	device = this;
 	init();
 	return true;
 }
 
-void SerialIn::_enable(bool e) {
+void SerialIn_::_enable(bool e) {
 	uint8_t m = _BV(RXCIE0) | _BV(RXEN0);
 	if (e)
 		UCSR0B |= m;

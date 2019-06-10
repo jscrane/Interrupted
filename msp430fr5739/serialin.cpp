@@ -5,15 +5,15 @@
 #include "serial.h"
 #include "serialin.h"
 
-static SerialIn *device;
+static SerialIn_ *device;
 
-bool SerialIn::begin() {
+bool SerialIn_::begin() {
 	device = this;
 	init();
 	return true;
 }
 
-void SerialIn::_enable(bool e) {
+void SerialIn_::_enable(bool e) {
 	if (e)
 		UCA0IE |= UCRXIE;
 	else

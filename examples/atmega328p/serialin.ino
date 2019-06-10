@@ -1,12 +1,13 @@
 #include <Interrupted.h>
 
 /*
- * Serial input running at 115200 baud. When a '1' is read and built-in LED
- * on  pin 13 is switched on. When anything else is read, it's switched off.
+ * Serial input running at TERMINAL_SPEED baud.
+ * When a '1' is read the built-in LED is switched on, when anything else
+ * is read, it's switched off.
  */
-#define INPUT	99
+#define SERIN	99
 
-SerialIn input(INPUT, 115200);
+SerialIn<2> input(SERIN, TERMINAL_SPEED);
 Port portb;
 Pin led(LED_BUILTIN, portb);
 Devices devices;
@@ -25,7 +26,7 @@ void loop() {
 	case LED_BUILTIN:
 		input.enable();
 		break;
-	case INPUT:
+	case SERIN:
 		char c = input.read();
 		input.disable();
 		digitalWrite(LED_BUILTIN, c == '1');

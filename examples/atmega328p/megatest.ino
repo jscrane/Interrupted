@@ -1,14 +1,14 @@
 #include <avr/wdt.h>
 #include <Interrupted.h>
 
-#define SER_IN	98
-#define SER_OUT	99
+#define SERIN	98
+#define SEROUT	99
 #define EXT0	2
 #define EXT1	3
 #define TIMER	1
 
-SerialIn input(SER_IN, 115200);
-SerialOut output(SER_OUT);
+SerialIn<2> input(SERIN, TERMINAL_SPEED);
+SerialOut output(SEROUT);
 Watchdog timer(TIMER, WDTO_4S);
 External int0(EXT0), int1(EXT1, RISING);
 Port portb;
@@ -33,7 +33,7 @@ void setup(void)
 
 void loop(void)
 {
-	char c, buf[8];
+	char buf[8];
 
 	switch (devices.select()) {
 	case A0:
@@ -59,15 +59,11 @@ void loop(void)
 		adc.enable(led.is_on());
 		break;
 
-	case SER_IN:
-		c = input.read();
-		if (c == '1')
-			digitalWrite(LED_BUILTIN, HIGH);
-		else if (c == '0')
-			digitalWrite(LED_BUILTIN, LOW);
+	case SERIN:
+		digitalWrite(LED_BUILTIN, input.read() == '1');
 		break;
 
-	case SER_OUT:
+	case SEROUT:
 		output.disable();	// serial transmission complete
 		break;
 	}
