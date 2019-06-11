@@ -6,7 +6,7 @@
  */
 #define SEROUT	99
 
-SerialOut output(SEROUT, TERMINAL_SPEED);
+SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Analog adc(A1);
 Devices devices;
 
@@ -72,8 +72,5 @@ void loop(void)
       			c /= 10;
       			break;
     		}
-	char buf[8];
-	itoa(c, buf, 10);
-	strcat(buf, "\r\n");
-	output.write(buf);
+	output.println(c);
 }

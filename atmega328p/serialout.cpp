@@ -8,41 +8,27 @@
 #include "serial.h"
 #include "serialout.h"
 
-static SerialOut *device;
+static SerialOut_ *device;
 
-bool SerialOut::begin() {
+bool SerialOut_::begin() {
 	device = this;
 	init();
 	UCSR0B |= _BV(TXEN0);
 	return false;
 }
 
-bool SerialOut::write(char const *ptr) { 
-	Atomic block;
-	if (!_tx_ptr) {
-		_tx_ptr = ptr;
+void SerialOut_::_enable(bool enable) {
+	if (enable)
 		UCSR0B |= _BV(TXCIE0);
-		UDR0 = *_tx_ptr++;
-		enable();
-		return true;
-	}
-	return false;
-}
-
-void SerialOut::do_output() {
-	byte b = *_tx_ptr;
-	if (b) {
-		_tx_ptr++;
-		UDR0 = b;
-	} else {
-		_tx_ptr = 0;
+	else
 		UCSR0B &= ~_BV(TXCIE0);
-		ready();
-	}
 }
 
 ISR(USART_TX_vect)
 {
-	if (device)
-		device->do_output();
+	if (device) {
+		uint8_t b;
+		if (device->next(b))
+			UDR0 = b;
+	}
 }

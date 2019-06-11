@@ -81,7 +81,7 @@ __interrupt void rtc_isr(void)
 #define RTC	1
 #define SEROUT	99
 
-SerialOut output(SEROUT, TERMINAL_SPEED);
+SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Clock clock(RTC);
 Port p4;
 Pin push1(PUSH1, p4);
@@ -141,5 +141,5 @@ void loop(void)
 	}
 	char c = colon? ':': ' ';
 	sprintf(buf, "%02d%c%02d%c%02d\r", h, c, m, c, s);
-	output.write(buf);
+	output.print(buf);
 }

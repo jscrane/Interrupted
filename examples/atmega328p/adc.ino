@@ -12,7 +12,7 @@
 #define SEROUT	99
 
 Analog adc(A0);
-SerialOut output(SEROUT, 115200);
+SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Watchdog timer(TIMER);
 Devices devices;
 
@@ -25,16 +25,12 @@ void setup() {
 }
 
 void loop() {
-	char buf[8];
-
 	switch (devices.select()) {
 	case TIMER:
 		adc.enable();
 		break;
 	case A0:
-		itoa(adc.read(), buf, 16);
-		strcat(buf, "\r\n");
-		output.write(buf);
+		output.println(adc.read());
 		break;
 	case SEROUT:
 		output.disable();

@@ -6,7 +6,7 @@
 #define SEROUT  99
 
 Analog adc(A4, INTERNAL2V5);
-SerialOut output(SEROUT, TERMINAL_SPEED);
+SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Devices devices;
 
 void setup(void)
@@ -19,13 +19,9 @@ void setup(void)
 
 void loop(void)
 {
-	char buf[8];
-
 	switch (devices.select()) {
 	case A4:
-		itoa(adc.read(), buf, 10);
-		strcat(buf, "\r\n");
-		output.write(buf);
+		output.println(adc.read());
 		break;
 	case SEROUT:
 		adc.enable();

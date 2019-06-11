@@ -5,9 +5,9 @@
 #include "serial.h"
 #include "serialout.h"
 
-static SerialOut *device;
+static SerialOut_ *device;
 
-bool SerialOut::begin() {
+bool SerialOut_::begin() {
 	device = this;
 
 	P1SEL |= BIT2;
@@ -17,33 +17,20 @@ bool SerialOut::begin() {
 	return false;
 }
 
-bool SerialOut::write(char const *ptr) {
-	Atomic block;
-	if (!_tx_ptr) {
-		_tx_ptr = ptr;
+void SerialOut_::_enable(bool enable) {
+	if (enable)
 		UC0IE |= UCA0TXIE;
-		enable();
-		return true;
-	}
-	return false;
-}
-
-void SerialOut::do_output() {
-	byte b = *_tx_ptr;
-	if (b) {
-		_tx_ptr++;
-		UCA0TXBUF = b;
-	} else {
-		_tx_ptr = 0;
+	else
 		UC0IE &= ~UCA0TXIE;
-		ready();
-	}
 }
 
 #pragma vector=USCIAB0TX_VECTOR
 __interrupt void serial_tx_isr(void)
 {
-	if (device && (UC0IFG & UCA0TXIFG))
-		device->do_output();
+	if (device && (UC0IFG & UCA0TXIFG)) {
+		uint8_t b;
+		if (device->next(b))
+			UCA0TXBUF = b;
+	}
 	__bic_SR_register_on_exit(LPM4_bits | GIE);
 }

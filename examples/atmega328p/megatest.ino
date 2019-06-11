@@ -8,7 +8,7 @@
 #define TIMER	1
 
 SerialIn<2> input(SERIN, TERMINAL_SPEED);
-SerialOut output(SEROUT);
+SerialOut<> output(SEROUT);
 Watchdog timer(TIMER, WDTO_4S);
 External int0(EXT0), int1(EXT1, RISING);
 Port portb;
@@ -33,23 +33,19 @@ void setup(void)
 
 void loop(void)
 {
-	char buf[8];
-
 	switch (devices.select()) {
 	case A0:
-		itoa(adc.read(), buf, 16);
-		strcat(buf, "\r\n");
-		output.write(buf);
+		output.println(adc.read());
 		adc.enable(led.is_on());
 		break;
 
 	case EXT0:
-		digitalWrite(13, HIGH);
+		digitalWrite(LED_BUILTIN, HIGH);
 		break;
 
 	case TIMER:
 	case EXT1:
-		digitalWrite(13, LOW);
+		digitalWrite(LED_BUILTIN, LOW);
 		break;
 
 	case LED_BUILTIN:

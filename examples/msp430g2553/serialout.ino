@@ -2,7 +2,7 @@
 
 #define SEROUT	99
 
-SerialOut output(SEROUT, 9600);
+SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Devices devices;
 
 void setup(void) {
@@ -11,6 +11,6 @@ void setup(void) {
 }
 
 void loop(void) {
-	output.write("hello world\r\n");
+	output.println("hello world");
 	while (devices.select() != SEROUT);
 }

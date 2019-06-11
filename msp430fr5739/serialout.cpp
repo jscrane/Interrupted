@@ -5,36 +5,26 @@
 #include "serial.h"
 #include "serialout.h"
 
-static SerialOut *device;
+static SerialOut_ *device;
 
-bool SerialOut::begin() {
+bool SerialOut_::begin() {
 	device = this;
 	init();
 	return false;
 }
 
-bool SerialOut::write(char const *ptr) {
+void SerialOut_::_enable(bool enable) {
 	Atomic block;
-	if (!_tx_ptr) {
-		_tx_ptr = ptr;
+	if (enable)
 		UCA0IE |= UCTXIE;
-		enable();
-	}
-}
-
-void SerialOut::do_output() {
-	byte b = *_tx_ptr;
-	if (b) {
-		_tx_ptr++;
-		UCA0TXBUF = b;
-	} else {
-		_tx_ptr = 0;
+	else
 		UCA0IE &= ~UCTXIE;
-		ready();
-	}
 }
 
 void on_a0_tx(void) {
-	if (device)
-		device->do_output();
+	if (device) {
+		uint8_t b;
+		if (device->next(b))
+			UCA0TXBUF = b;
+	}
 }

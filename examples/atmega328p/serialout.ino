@@ -9,7 +9,7 @@
 #define TIMER	1
 #define SEROUT	99
 
-SerialOut output(SEROUT, 115200);
+SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Watchdog timer(TIMER, WDTO_2S);
 Devices devices;
 
@@ -24,7 +24,7 @@ void loop() {
 	switch (devices.select()) {
 	case TIMER:
 		timer.disable();
-		output.write("hello world\r\n");
+		output.println("hello world");
 		break;
 	case SEROUT:
 		output.disable();
