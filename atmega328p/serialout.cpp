@@ -17,18 +17,22 @@ bool SerialOut_::begin() {
 	return false;
 }
 
+static void write_next() {
+	uint8_t b;
+	if (device->next(b))
+		UDR0 = b;
+}
+
 void SerialOut_::_enable(bool enable) {
-	if (enable)
+	if (enable) {
 		UCSR0B |= _BV(TXCIE0);
-	else
+		write_next();
+	} else
 		UCSR0B &= ~_BV(TXCIE0);
 }
 
 ISR(USART_TX_vect)
 {
-	if (device) {
-		uint8_t b;
-		if (device->next(b))
-			UDR0 = b;
-	}
+	if (device)
+		write_next();
 }
