@@ -33,7 +33,6 @@ void loop() {
 		output.println(adc.read());
 		break;
 	case SEROUT:
-		output.disable();
 		timer.enable();
 		break;
 	}

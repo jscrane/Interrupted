@@ -27,7 +27,6 @@ void loop() {
 		output.println("hello world");
 		break;
 	case SEROUT:
-		output.disable();
 		timer.enable();
 		break;
 	}
