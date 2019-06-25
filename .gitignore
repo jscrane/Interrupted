@@ -11,4 +11,4 @@
 .clang_complete
 .gcc-flags.json
 .piolibdeps
-platform.mk
+examples/*/*.txt.mk
