@@ -15,14 +15,15 @@ void setup(void)
 	devices.begin();
 
 	pinMode(LED_BUILTIN, OUTPUT);
-	digitalWrite(LED_BUILTIN, HIGH);
 	timer.enable();
 }
 
 void loop(void)
 {
+	static bool on;
 	if (devices.select() == TIMER) {
-		digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+		on = !on;
+		digitalWrite(LED_BUILTIN, on? HIGH: LOW);
 		timer.enable();
 	}
 }

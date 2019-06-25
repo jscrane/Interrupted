@@ -10,9 +10,9 @@ public:
 		Device(id), _delay(millis), _ticks(millis) {}
 
 	void ready() {
-		if (_ticks <= 1) {
-			Device::ready();
+		if (_ticks == 0) {
 			_ticks = _delay;
+			Device::ready();
 			disable();
 		} else
 			_ticks--;
