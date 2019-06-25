@@ -12,7 +12,7 @@ Devices devices;
 void setup(void)
 {
 	devices.add(timer);
-	devices.begin();
+	devices.begin(true);
 
 	pinMode(LED_BUILTIN, OUTPUT);
 	timer.enable();
