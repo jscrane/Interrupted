@@ -20,7 +20,6 @@ See [blog articles](http://programmablehardware.blogspot.ie/search/label/interru
 Example
 -------
 
-    #include <avr/wdt.h>
     #include <Interrupted.h>
 
     #define LED     13
@@ -30,7 +29,7 @@ Example
     #define TIMER   1
 
     SerialOut output(SER_OUT, 115200);
-    Watchdog timer(TIMER, WDTO_4S);
+    Watchdog timer(TIMER, 4);
     External int0(EXT0), int1(EXT1, RISING);
     Port port(PB);
     Pin led(LED, port);
@@ -79,7 +78,7 @@ pushbuttons:
   - when that on pin #3 is pressed and released, the LED is turned off,
   - if the timer elapses when the LED is on, it is turned off again.
 * Five devices: 
-  - a [watchdog timer](http://evothings.com/watchdog-timers-how-to-reduce-power-usage-in-your-arduino-projects/) with id 1, interrupting every 5s,
+  - a [watchdog timer](http://evothings.com/watchdog-timers-how-to-reduce-power-usage-in-your-arduino-projects/) with id 1, interrupting every 4s,
   - two [external interrupts](http://gonium.net/md/2006/12/20/handling-external-interrupts-with-arduino/) on ports 2 and 3,
   - a pin-change interrupt watching the LED on pin #13,
   - hardware serial output device running at 115200 baud.
