@@ -8,7 +8,7 @@
       "url": "https://github.com/jscrane"
     }
   ],
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description" : "Interrupt driven Arduino programming",
   "keywords": "avr, Arduino, msp430, Energia, Low-Power, Interrupts, select",
   "repository":
