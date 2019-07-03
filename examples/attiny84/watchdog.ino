@@ -8,7 +8,7 @@
 
 Port portb;
 Pin led(LED_BUILTIN, portb); 
-Watchdog timer(TIMER, 1000);
+Watchdog timer(TIMER, 3);
 Devices devices;
 
 void setup(void)

@@ -17,21 +17,40 @@ ISR(WDT_vect)
 
 bool Watchdog::begin() {
 	wdt = this;
-	if (_scale == -1)
-		_scale = WDTO_1S;
 	MCUSR &= ~_BV(WDRF);
 	return false;
 }
 
 void Watchdog::_enable(bool e) {
-	Atomic block;
-	uint8_t b = 0;
 	if (e) {
 		wdt_reset();
-		b = _BV(WDIE) | _scale;
+		_left = _update_prescaler(_secs);
+	} else {
+		Atomic block;
+		WDTCSR = _BV(WDCE) | _BV(WDE);
+		WDTCSR = 0;
 	}
+}
+
+unsigned Watchdog::_update_prescaler(unsigned t) {
+	uint8_t b = _BV(WDIE);
+	if (t >= 8) {
+		b |= _BV(WDP3) | _BV(WDP0);
+		t -= 8;
+	} else if (t >= 4) {
+		b |= _BV(WDP3);
+		t -= 4;
+	} else if (t >= 2) {
+		b |= _BV(WDP2) | _BV(WDP1) | _BV(WDP0);
+		t -= 2;
+	} else {
+		b |= _BV(WDP2) | _BV(WDP1);
+		t = 0;
+	}
+	Atomic block;
 	WDTCSR = _BV(WDCE) | _BV(WDE);
 	WDTCSR = b;
+	return t;
 }
 
 unsigned Watchdog::_sleepmode() {
