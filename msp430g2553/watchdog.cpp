@@ -2,6 +2,7 @@
 
 #include "device.h"
 #include "watchdog.h"
+#include "atomic.h"
 
 /*
  * Not _really_ a watchdog, because Energia uses the WDT to manage
@@ -24,24 +25,31 @@ bool Watchdog::begin() {
 }
 
 void Watchdog::_enable(bool e) {
-	if (!e) 
+	if (e)
+		_left = _update_prescaler(_secs);
+	else
 		TACCTL0 &= ~CCIE;
-	else if (!(TACCTL0 & CCIE)) {
-		TACCTL0 |= CCIE;
-		TACCR0 = 12000;
-		TACTL |= TASSEL_1 | MC_1 | TACLR;
-		switch (_scale) {
-		case 2:
-			TACTL |= ID_1;
-			break;
-		case 4:
-			TACTL |= ID_2;
-			break;
-		case 8:
-			TACTL |= ID_3;
-			break;
-		}
-	}
+}
+
+unsigned Watchdog::_update_prescaler(unsigned t) {
+	unsigned w = TASSEL_1 | MC_1 | TACLR;
+	if (t >= 8) {
+		w |= ID_3;
+		t -= 8;
+	} else if (t >= 4) {
+		w |= ID_2;
+		t -= 4;
+	} else if (t >= 2) {
+		w |= ID_1;
+		t -= 2;
+	} else
+		t = 0;
+
+	Atomic block;
+	TACCTL0 |= CCIE;
+	TACCR0 = 12000;
+	TACTL |= w;
+	return t;
 }
 
 unsigned Watchdog::_sleepmode() {
