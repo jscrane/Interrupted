@@ -2,7 +2,8 @@ Interrupted
 ===========
 
 A new approach to building low-power, interrupt-driven, apps on Arduino:
-* The processor mostly sleeps in a low-power mode.
+* The processor mostly sleeps in a low-power mode, as low as possible given
+ the currently-enabled devices.
 * Devices wake the processor using interrupts, it services them before returning to sleep.
 * State-machines are easily implemented: devices may be temporarily disabled 
   when not needed in the current state.
@@ -12,8 +13,8 @@ Note
 * The master branch of this library is mostly compatible with the Arduino IDE;
 however it currently requires 
 [uC-Makefile](https://github.com/jscrane/uC-Makefile) to build the examples.
-* The ATtiny parts of this require a new version of [attiny](https://github.com/jscrane/attiny) which is based on damellis's [attiny branch](https://github.com/damellis/attiny/tree/ide-1.6.x) for Arduino 1.6.
-* This has been tested with Arduino 1.8.4 and Energia 1.6.10E18.
+* The ATtiny parts of this require Spence Konde's excellent [ATTinyCore](https://github.com/SpenceKonde/ATTinyCore). Only t84 and t85 are supported for now.
+* This has been tested with Arduino 1.8.9 and Energia 1.8.7E21.
 
 See [blog articles](http://programmablehardware.blogspot.ie/search/label/interrupted).
 
