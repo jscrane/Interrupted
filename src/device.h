@@ -32,6 +32,8 @@ protected:
 		sleep(mode);
 	}
 
+	void enable();
+
 	static void sleep(unsigned mode);
 private:
 	int _n;

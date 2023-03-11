@@ -28,8 +28,7 @@ void Devices::begin(bool powersave) {
 			digitalWrite(i, LOW);
 	}
 
-	for (int i = 0; i < _n; i++)
-		_devices[i]->enable(_devices[i]->begin());
+	enable();
 }
 
 unsigned Device::_sleepmode() {
@@ -52,21 +51,4 @@ void Devices::sleep(unsigned mode) {
 		sleep_cpu();
 		sleep_disable();
 	}
-}
-
-int Devices::select() {
-	// so we don't miss an interrupt while checking...
-	noInterrupts();
-	unsigned mode = SLEEP_MODE_NONE;
-	for (int i = 0; i < _n; i++) {
-		Device *d = _devices[i];
-		if (d->is_ready()) {
-			interrupts();
-			return d->id();
-		}
-		if (d->is_enabled())
-			mode = d->negotiate_mode(mode);
-	}
-	idle(mode);
-	return -1;
 }

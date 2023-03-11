@@ -1,4 +1,4 @@
-#include <Energia.h>
+#include <Arduino.h>
 
 #include "device.h"
 #include "pinchange.h"
