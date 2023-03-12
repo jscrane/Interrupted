@@ -12,13 +12,10 @@ Delay timer(TIMER, 2500);
 Port p3, p4;
 Pin led(LED5, p3); 
 Pin push2(PUSH2, p4);
-Devices devices;
+Devices devices(timer, led, push2);
 
 void setup(void)
 {
-	devices.add(timer);
-	devices.add(led);
-	devices.add(push2);
 	devices.begin();
 
 	pinMode(PUSH2, INPUT_PULLUP);

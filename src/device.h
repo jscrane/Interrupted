@@ -11,11 +11,34 @@ class Device;
 
 class Devices {
 public:
-	Devices(): _n(0) {}
+	Devices(Device &a) {
+		_devices[_n++] = &a;
+	}
 
-	void add(Device &device) {
-		if (_n < MAX_DEVICES)
-			_devices[_n++] = &device;
+	Devices(Device &a, Device &b) {
+		_devices[_n++] = &a;
+		_devices[_n++] = &b;
+	}
+
+	Devices(Device &a, Device &b, Device &c) {
+		_devices[_n++] = &a;
+		_devices[_n++] = &b;
+		_devices[_n++] = &c;
+	}
+
+	Devices(Device &a, Device &b, Device &c, Device &d) {
+		_devices[_n++] = &a;
+		_devices[_n++] = &b;
+		_devices[_n++] = &c;
+		_devices[_n++] = &d;
+	}
+
+	Devices(Device &a, Device &b, Device &c, Device &d, Device &e) {
+		_devices[_n++] = &a;
+		_devices[_n++] = &b;
+		_devices[_n++] = &c;
+		_devices[_n++] = &d;
+		_devices[_n++] = &e;
 	}
 
 	// if powersave is set, turn off all devices at startup

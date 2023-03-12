@@ -4,7 +4,7 @@
  * ACC_X on A6
  */
 Analog adc(A6);
-Devices devices;
+Devices devices(adc);
 
 #define MIN	400
 #define MAX	620
@@ -20,7 +20,6 @@ void setup(void)
 		pinMode(leds[i], OUTPUT);
 		digitalWrite(leds[i], LOW);
 	}
-	devices.add(adc);
 	devices.begin();
 }
 
