@@ -14,17 +14,10 @@ External int0(EXT0), int1(EXT1, RISING);
 Port portb;
 Pin led(LED_BUILTIN, portb);
 Analog adc(A0);
-Devices devices;
+Devices devices(timer, int0, int1, led, output, input, adc);
 
 void setup(void)
 {
-	devices.add(timer);
-	devices.add(int0);
-	devices.add(int1);
-	devices.add(led);
-	devices.add(output);
-	devices.add(input);
-	devices.add(adc);
 	devices.begin();
 
 	pinMode(LED_BUILTIN, OUTPUT);

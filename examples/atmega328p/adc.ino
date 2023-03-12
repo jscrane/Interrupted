@@ -14,12 +14,9 @@
 Analog adc(A0);
 SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Watchdog timer(TIMER);
-Devices devices;
+Devices devices(adc, timer, output);
 
 void setup() {
-	devices.add(adc);
-	devices.add(timer);
-	devices.add(output);
 	devices.begin();
 	timer.enable();
 }

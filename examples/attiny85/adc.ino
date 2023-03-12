@@ -3,11 +3,10 @@
 
 TinyDebugSerial serial;
 Analog adc(A1);
-Devices devices;
+Devices devices(adc);
 
 void setup(void)
 {
-	devices.add(adc);
 	devices.begin();
 
 	serial.begin(115200);

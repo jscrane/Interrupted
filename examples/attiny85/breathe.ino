@@ -18,15 +18,12 @@
 #define TIMER	1
 #define BUTTON	2
 
-Devices devices;
 External button(BUTTON, LOW);
 Delay timer(TIMER, IDLE_MS);
 Busy busy;
+Devices devices(button, timer, busy);
 
 void setup() {
-	devices.add(button);
-	devices.add(timer);
-	devices.add(busy);
 	devices.begin();
 
 	pinMode(BUTTON, INPUT_PULLUP);

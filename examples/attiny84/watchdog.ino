@@ -9,12 +9,10 @@
 Port portb;
 Pin led(LED_BUILTIN, portb); 
 Watchdog timer(TIMER, 3);
-Devices devices;
+Devices devices(timer, led);
 
 void setup(void)
 {
-	devices.add(timer);
-	devices.add(led);
 	devices.begin();
 
 	pinMode(LED_BUILTIN, OUTPUT);

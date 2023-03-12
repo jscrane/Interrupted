@@ -5,14 +5,13 @@
  * The input is read and written to Serial at 19200 baud.
  */
 Analog adc(A3, EXTERNAL);
-Devices devices;
+Devices devices(adc);
 
 void setup(void)
 {
 	Serial.begin(TERMINAL_SPEED);
 	Serial.println("hello world");
 
-	devices.add(adc);
 	devices.begin();
 	adc.enable();
 }

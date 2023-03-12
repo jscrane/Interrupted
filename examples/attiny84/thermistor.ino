@@ -4,7 +4,7 @@
 
 TinyDebugSerial serial;
 Analog thermistor(A7, EXTERNAL);
-Devices devices;
+Devices devices(thermistor);
 
 // thermistor parameters
 const double r0 = 10000;
@@ -24,7 +24,6 @@ double celcius(int v)
 
 void setup(void)
 {
-	devices.add(thermistor);
 	devices.begin();
 
 	pinMode(0, OUTPUT);

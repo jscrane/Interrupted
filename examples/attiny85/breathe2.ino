@@ -13,12 +13,10 @@
 
 Timer msec(MILLIS, 10);
 Watchdog watchdog(SECONDS);
-Devices devices;
+Devices devices(watchdog, msec);
 
 void setup() {
 	pinMode(LED, OUTPUT);
-	devices.add(watchdog);
-	devices.add(msec);
 	devices.begin(LOW_POWER);
 
 	// hardware PWM on PB0

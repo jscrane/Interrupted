@@ -7,11 +7,10 @@
  */
 #define TIMER	1
 Delay timer(TIMER, 500);
-Devices devices;
+Devices devices(timer);
 
 void setup(void)
 {
-	devices.add(timer);
 	devices.begin(true);
 
 	pinMode(LED_BUILTIN, OUTPUT);

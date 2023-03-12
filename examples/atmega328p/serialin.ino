@@ -10,11 +10,9 @@
 SerialIn<2> input(SERIN, TERMINAL_SPEED);
 Port portb;
 Pin led(LED_BUILTIN, portb);
-Devices devices;
+Devices devices(led, input);
 
 void setup() {
-	devices.add(led);
-	devices.add(input);
 	devices.begin();
 
 	pinMode(LED_BUILTIN, OUTPUT);

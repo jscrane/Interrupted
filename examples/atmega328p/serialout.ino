@@ -11,11 +11,9 @@
 
 SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Watchdog timer(TIMER, WDTO_2S);
-Devices devices;
+Devices devices(timer, output);
 
 void setup() {
-	devices.add(timer);
-	devices.add(output);
 	devices.begin();
 	timer.enable();
 }

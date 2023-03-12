@@ -30,7 +30,7 @@ Pin button(BUTTON, portb, HIGH);
 Pin pir(PIR, portb);
 Watchdog timer(TIMER, 1);
 Delay fader(FADER, 20);
-Devices devices;
+Devices devices(pir, button, ldr, timer, fader);
 
 unsigned threshold = THRESHOLD, smoothed = threshold, ontime = 0;
 byte v = FADE_OFF;
@@ -53,11 +53,6 @@ void setup() {
 	pinMode(BUTTON, INPUT_PULLUP);
 	pinMode(LED, OUTPUT);
 
-	devices.add(pir);
-	devices.add(button);
-	devices.add(ldr);
-	devices.add(timer);
-	devices.add(fader);
 	devices.begin();
 
 	uint8_t t = EEPROM[0];
