@@ -3,7 +3,7 @@
 Port p1;
 Pin led(RED_LED, p1);
 Pin push2(PUSH2, p1);
-Devices devices;
+Devices devices(led, push2);
 
 void setup()
 {
@@ -13,8 +13,6 @@ void setup()
 	digitalWrite(RED_LED, LOW);
 	digitalWrite(GREEN_LED, HIGH);
 
-	devices.add(led);
-	devices.add(push2);
 	devices.begin();
 }
 

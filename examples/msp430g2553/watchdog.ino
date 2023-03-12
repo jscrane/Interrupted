@@ -10,18 +10,14 @@ Watchdog timer(TIMER, 1);
 Port p1;
 Pin led(RED_LED, p1); 
 Pin push2(PUSH2, p1);
-Devices devices;
+Devices devices(timer, led, push2);
 
 void setup(void)
 {
-	devices.add(timer);
-	devices.add(led);
-	devices.add(push2);
-	devices.begin();
-
 	pinMode(PUSH2, INPUT_PULLUP);
 	pinMode(RED_LED, OUTPUT);
 	digitalWrite(RED_LED, HIGH);
+	devices.begin();
 }
 
 void loop(void)

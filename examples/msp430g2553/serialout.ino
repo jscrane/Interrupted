@@ -3,10 +3,9 @@
 #define SEROUT	99
 
 SerialOut<> output(SEROUT, TERMINAL_SPEED);
-Devices devices;
+Devices devices(output);
 
 void setup(void) {
-	devices.add(output);
 	devices.begin();
 }
 
