@@ -12,7 +12,8 @@ Devices devices(timer);
 
 void setup(void)
 {
-	devices.begin(LOW_POWER);
+	devices.powersave();
+	devices.begin();
 	pinMode(LED, OUTPUT);
 	digitalWrite(LED, HIGH);
 	timer.enable();

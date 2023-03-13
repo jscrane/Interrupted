@@ -11,7 +11,8 @@ Devices devices(timer);
 
 void setup(void)
 {
-	devices.begin(true);
+	devices.powersave();
+	devices.begin();
 
 	pinMode(LED_BUILTIN, OUTPUT);
 	timer.enable();

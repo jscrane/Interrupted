@@ -3,10 +3,6 @@
 
 #include "device.h"
 
-void Devices::begin(bool powersave) {
-	enable();
-}
-
 unsigned Device::_sleepmode() {
 	return LPM4_bits;
 }

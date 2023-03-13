@@ -19,7 +19,8 @@ Devices devices(timer, led, button);
 
 void setup(void)
 {
-	devices.begin(LOW_POWER);
+	devices.powersave();
+	devices.begin();
 
 	pinMode(BUTTON, INPUT_PULLUP);
 	pinMode(LED, OUTPUT);
