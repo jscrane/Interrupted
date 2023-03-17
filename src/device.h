@@ -1,25 +1,48 @@
 #ifndef __DEVICE_H__
 #define __DEVICE_H__
 
-#ifndef MAX_DEVICES
-#define MAX_DEVICES 10
-#endif
-
 class Device;
-
-#define LOW_POWER	true
 
 class Devices {
 public:
-	Devices(): _n(0) {}
-
-	void add(Device &device) {
-		if (_n < MAX_DEVICES)
-			_devices[_n++] = &device;
+	Devices(Device &a) {
+		_devices[_n++] = &a;
 	}
 
-	// if powersave is set, turn off all devices at startup
-	void begin(bool powersave = false);
+	Devices(Device &a, Device &b) {
+		_devices[_n++] = &a; _devices[_n++] = &b;
+	}
+
+	Devices(Device &a, Device &b, Device &c) {
+		_devices[_n++] = &a; _devices[_n++] = &b;
+		_devices[_n++] = &c;
+	}
+
+	Devices(Device &a, Device &b, Device &c, Device &d) {
+		_devices[_n++] = &a; _devices[_n++] = &b;
+		_devices[_n++] = &c; _devices[_n++] = &d;
+	}
+
+	Devices(Device &a, Device &b, Device &c, Device &d, Device &e) {
+		_devices[_n++] = &a; _devices[_n++] = &b;
+		_devices[_n++] = &c; _devices[_n++] = &d;
+		_devices[_n++] = &e;
+	}
+
+	Devices(Device &a, Device &b, Device &c, Device &d, Device &e, Device &f) {
+		_devices[_n++] = &a; _devices[_n++] = &b;
+		_devices[_n++] = &c; _devices[_n++] = &d;
+		_devices[_n++] = &e; _devices[_n++] = &f;
+	}
+
+	Devices(Device &a, Device &b, Device &c, Device &d, Device &e, Device &f, Device &g) {
+		_devices[_n++] = &a; _devices[_n++] = &b;
+		_devices[_n++] = &c; _devices[_n++] = &d;
+		_devices[_n++] = &e; _devices[_n++] = &f;
+		_devices[_n++] = &g;
+	}
+
+	void begin();
 
 	int select();
 
@@ -27,15 +50,18 @@ public:
 
 	static unsigned compare_modes(unsigned sys, unsigned dev);
 
+	static void powersave();
+
 protected:
 	virtual void idle(unsigned mode) {
 		sleep(mode);
 	}
 
 	static void sleep(unsigned mode);
+
 private:
 	int _n;
-	Device *_devices[MAX_DEVICES];
+	Device *_devices[7];
 };
 
 class Device {

@@ -1,12 +1,7 @@
-#include <Energia.h>
+#include <Arduino.h>
 #include <stdarg.h>
 
 #include "device.h"
-
-void Devices::begin(bool powersave) {
-	for (int i = 0; i < _n; i++)
-		_devices[i]->enable(_devices[i]->begin());
-}
 
 unsigned Device::_sleepmode() {
 	return LPM4_bits;
@@ -39,20 +34,4 @@ unsigned Devices::compare_modes(unsigned sys, unsigned dev) {
 void Devices::sleep(unsigned mode) {
 	if (mode != SLEEP_MODE_NONE)
 		_BIS_SR(mode | GIE);
-}
-
-int Devices::select() {
-	noInterrupts();
-	unsigned mode = SLEEP_MODE_NONE;
-	for (int i = 0; i < _n; i++) {
-		Device *d = _devices[i];
-		if (d->is_ready()) {
-			interrupts();
-			return d->id();
-		}
-		if (d->is_enabled())
-			mode = d->negotiate_mode(mode);
-	}
-	idle(mode);
-	return -1;
 }

@@ -27,10 +27,9 @@ const double tzero = 25 + zeroC;
 #define TIMER 		0
 
 Analog thermistor(THERMISTOR);
-Port portb;
-Pin button(SWITCH, portb);
+Pin button(SWITCH);
 Timer timer(TIMER, DIGIT_MS);
-Devices devices;
+Devices devices(button, thermistor, timer);
 
 const uint8_t A = _BV(0);
 const uint8_t B = _BV(1);
@@ -107,9 +106,6 @@ uint8_t *reformat(int u, double t, uint8_t *buf)
 
 void setup(void)
 {
-	devices.add(button);
-	devices.add(thermistor);
-	devices.add(timer);
 	devices.begin();
 	
 	for (int i = 0; i < 7; i++)

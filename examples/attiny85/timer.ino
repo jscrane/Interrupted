@@ -8,12 +8,13 @@
 const int LED = 0;
 const int TIMER = 1;
 Timer timer(TIMER, 500);
-Devices devices;
+Devices devices(timer);
 
 void setup(void)
 {
-	devices.add(timer);
-	devices.begin(LOW_POWER);
+	devices.powersave();
+
+	devices.begin();
 	pinMode(LED, OUTPUT);
 	digitalWrite(LED, HIGH);
 	timer.enable();

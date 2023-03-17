@@ -83,10 +83,9 @@ __interrupt void rtc_isr(void)
 
 SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Clock clock(RTC);
-Port p4;
-Pin push1(PUSH1, p4);
-Pin push2(PUSH2, p4);
-Devices devices;
+Pin push1(PUSH1);
+Pin push2(PUSH2);
+Devices devices(output, clock, push1, push2);
 
 void setup(void)
 {
@@ -94,10 +93,6 @@ void setup(void)
 	pinMode(PUSH2, INPUT_PULLUP);
 	clock.set(12, 30, 00);
 
-	devices.add(push1);
-	devices.add(push2);
-	devices.add(clock);
-	devices.add(output);
 	devices.begin();
 }
 

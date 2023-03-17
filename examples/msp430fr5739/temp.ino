@@ -8,15 +8,13 @@
 
 SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Analog adc(A1);
-Devices devices;
+Devices devices(adc, output);
 
 #define vRef 3000
 #define rDiv 470000000
 
 void setup(void)
 {
-	devices.add(adc);
-	devices.add(output);
 	devices.begin();
 
 	pinMode(A1, INPUT);

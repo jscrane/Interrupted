@@ -3,89 +3,81 @@
 #include "device.h"
 #include "pinchange.h"
 
-static Port *d[3];
-
-// ugh (these are invisible in Arduino.h)
-#define PA 1
-#define PB 2
-#define PC 3
-#define PD 4
+static Pin *pins[3][8];
+static uint8_t enabled[3];
 
 // handler for PB
 ISR(PCINT0_vect) {
-	if (d[0])
-		d[0]->ready();
+	Ports::ready(0);
 }
 
 // handler for PC
 ISR(PCINT1_vect) {
-	if (d[1])
-		d[1]->ready();
+	Ports::ready(1);
 }
 
 // handler for PD
 ISR(PCINT2_vect) {
-	if (d[2])
-		d[2]->ready();
+	Ports::ready(2);
 }
 
-void Port::add_pin(int pin, Pin *p) {
-	if (!_port)
-		_port = digitalPinToPort(pin);
-	byte b = digitalPinToBitMask(pin);
-	_pins[bit_index(b)] = p;
-	if (_port == PB) {
+void Ports::register_pin(uint8_t pin, Pin *p) {
+	uint8_t b = digitalPinToBitMask(pin);
+	uint8_t port = digitalPinToPort(pin) - 2;
+	pins[port][bit_index(b)] = p;
+	if (port == 0)
 		PCMSK0 |= b;
-		d[0] = this;
-	} else if (_port == PC) {
+	else if (port == 1)
 		PCMSK1 |= b;
-		d[1] = this;
-	} else if (_port == PD) {
+	else if (port == 2)
 		PCMSK2 |= b;
-		d[2] = this;
-	}
 }
 
-void Port::enable_pin(int pin, bool enable) {
-	byte e = 0, f = 0;
-	switch (_port) {
-	case PA:
-		return;		// error
-	case PB:
+void Ports::enable_pin(uint8_t pin, bool enable) {
+	uint8_t e = 0, f = 0;
+	uint8_t port = digitalPinToPort(pin) - 2;
+	switch (port) {
+	case 0:
 		e = bit(PCIE0);
 		f = bit(PCIF0);
 		break;
-	case PC: 
+	case 1:
 		e = bit(PCIE1);
 		f = bit(PCIF1);
 		break;
-	case PD:
+	case 2:
 		e = bit(PCIE2);
 		f = bit(PCIF2);
 		break;
+	default:
+		return;
 	}
-	byte b = digitalPinToBitMask(pin);
-	byte prev = _enabled;
+
+	uint8_t b = digitalPinToBitMask(pin);
+	uint8_t &enabled = ::enabled[port];
 	if (enable) {
-		_enabled |= b;
-		if (!prev) {
+		if (!enabled) {
 			PCIFR |= f;
 			PCICR |= e;
 		}
+		enabled |= b;
 	} else {
-		_enabled &= ~b;
-		if (prev && !_enabled) {
+		uint8_t prev = enabled;
+		enabled &= ~b;
+		if (prev && !enabled) {
 			PCIFR &= ~f;
 			PCICR &= ~e;
 		}
 	}
 }
 
-void Port::ready() {
-	byte v = (*portInputRegister(_port));
+void Ports::ready(uint8_t port) {
+	uint8_t v = (*portInputRegister(port + 2));
+	Pin **pins = ::pins[port];
+	uint8_t enabled = ::enabled[port];
 	for (int i = 0; i < 8; i++) {
-		byte b = bit(i);
-		if (_pins[i] && (_enabled & b))
-			_pins[i]->set_state(v & b);
+		uint8_t b = bit(i);
+		if (pins[i] && (enabled & b))
+			pins[i]->set_state(v & b);
 	}
 }

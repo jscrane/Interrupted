@@ -7,12 +7,10 @@
 
 Analog adc(A4, INTERNAL2V5);
 SerialOut<> output(SEROUT, TERMINAL_SPEED);
-Devices devices;
+Devices devices(adc, output);
 
 void setup(void)
 {
-	devices.add(adc);
-	devices.add(output);
 	devices.begin();
 	adc.enable();
 }

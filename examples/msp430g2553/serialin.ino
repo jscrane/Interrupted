@@ -3,10 +3,9 @@
 #define SERIN	98
 
 SerialIn<2> input(SERIN, TERMINAL_SPEED);
-Devices devices;
+Devices devices(input);
 
 void setup(void) {
-	devices.add(input);
 	devices.begin();
 	pinMode(RED_LED, OUTPUT);
 	digitalWrite(RED_LED, LOW);

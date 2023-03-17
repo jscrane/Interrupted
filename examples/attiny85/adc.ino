@@ -1,24 +1,23 @@
-#include <TinyDebugSerial.h>
+/*
+ * An analog input on pin 7, A1 (e.g., LDR/resistor voltage divider).
+ * Input is read and written to Serial at TERMINAL_SPEED.
+ */
 #include <Interrupted.h>
 
-TinyDebugSerial serial;
 Analog adc(A1);
-Devices devices;
+Devices devices(adc);
 
 void setup(void)
 {
-	devices.add(adc);
-	devices.begin();
+	Serial.begin(TERMINAL_SPEED);
+	Serial.println("hello world");
 
-	serial.begin(115200);
-	serial.println("hello world");
-	adc.enable();
+	devices.begin();
 }
 
 void loop(void)
 {
-	if (devices.select() == A1) {
-		serial.println(adc.read());
-		adc.enable();
-	}
+	adc.enable();
+	if (devices.select() == A1)
+		Serial.println(adc.read());
 }

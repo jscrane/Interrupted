@@ -10,9 +10,6 @@
 static Device *adc;
 static volatile unsigned reading = 0xffff;
 
-// FIXME: copied from damellis core
-#define analogPinToChannel(p)   ( (p) < 6 ? (p) : (p) - 6 )
-
 ISR(ADC_vect) {
 	if (adc) {
 		uint8_t low = ADCL;
@@ -38,12 +35,12 @@ void Analog::_enable(bool e) {
 }
 
 void Analog::_init() {
-	ADMUX = (_ref << 6) | analogPinToChannel(_pin);
+	ADMUX = (_ref << 6) | _pin;
 }
 
 bool Analog::begin() {
-	adc = this;
 	Atomic block;
+	adc = this;
 	power_adc_enable();
 	ADCSRA |= _BV(ADEN);
 	ACSR &= ~_BV(ACD);

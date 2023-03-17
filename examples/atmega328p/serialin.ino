@@ -8,13 +8,10 @@
 #define SERIN	99
 
 SerialIn<2> input(SERIN, TERMINAL_SPEED);
-Port portb;
-Pin led(LED_BUILTIN, portb);
-Devices devices;
+Pin led(LED_BUILTIN);
+Devices devices(led, input);
 
 void setup() {
-	devices.add(led);
-	devices.add(input);
 	devices.begin();
 
 	pinMode(LED_BUILTIN, OUTPUT);
@@ -28,9 +25,7 @@ void loop() {
 		break;
 	case SERIN:
 		char c = input.read();
-		input.disable();
 		digitalWrite(LED_BUILTIN, c == '1');
-		led.enable();
 		break;
 	}
 }

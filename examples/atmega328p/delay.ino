@@ -7,12 +7,12 @@
  */
 #define TIMER	1
 Delay timer(TIMER, 500);
-Devices devices;
+Devices devices(timer);
 
 void setup(void)
 {
-	devices.add(timer);
-	devices.begin(true);
+	devices.powersave();
+	devices.begin();
 
 	pinMode(LED_BUILTIN, OUTPUT);
 	timer.enable();
@@ -20,10 +20,8 @@ void setup(void)
 
 void loop(void)
 {
-	static bool on;
 	if (devices.select() == TIMER) {
-		on = !on;
-		digitalWrite(LED_BUILTIN, on? HIGH: LOW);
+		digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
 		timer.enable();
 	}
 }

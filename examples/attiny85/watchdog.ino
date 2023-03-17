@@ -8,21 +8,19 @@
 const int LED = 0;
 const int TIMER = 1;
 Watchdog timer(TIMER);
-Devices devices;
+Devices devices(timer);
 
 void setup(void)
 {
-	devices.add(timer);
-	devices.begin(LOW_POWER);
+	devices.powersave();
+	devices.begin();
 	pinMode(LED, OUTPUT);
 	digitalWrite(LED, HIGH);
-	timer.enable();
 }
 
 void loop(void)
 {
-	if (devices.select() == TIMER) {
+	timer.enable();
+	if (devices.select() == TIMER)
 		digitalWrite(LED, !digitalRead(LED));
-		timer.enable();
-	}
 }

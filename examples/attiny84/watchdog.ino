@@ -1,4 +1,3 @@
-#include <avr/wdt.h>
 #include <Interrupted.h>
 
 /*
@@ -6,15 +5,12 @@
  */
 #define TIMER	1
 
-Port portb;
-Pin led(LED_BUILTIN, portb); 
+Pin led(LED_BUILTIN);
 Watchdog timer(TIMER, 3);
-Devices devices;
+Devices devices(timer, led);
 
 void setup(void)
 {
-	devices.add(timer);
-	devices.add(led);
 	devices.begin();
 
 	pinMode(LED_BUILTIN, OUTPUT);

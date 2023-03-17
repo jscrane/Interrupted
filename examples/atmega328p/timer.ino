@@ -7,15 +7,13 @@
  */
 #define TIMER	1
 Timer timer(TIMER, 500);
-Devices devices;
+Devices devices(timer);
 
 void setup(void)
 {
-	devices.add(timer);
-	devices.begin();
-
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, HIGH);
+	devices.begin();
 }
 
 void loop(void)

@@ -7,16 +7,12 @@
 #define TIMER	1
 
 Watchdog timer(TIMER, 1);
-Port p3, p4;
-Pin led(LED5, p3); 
-Pin push2(PUSH2, p4);
-Devices devices;
+Pin led(LED5);
+Pin push2(PUSH2);
+Devices devices(timer, led, push2);
 
 void setup(void)
 {
-	devices.add(timer);
-	devices.add(led);
-	devices.add(push2);
 	devices.begin();
 
 	pinMode(PUSH2, INPUT_PULLUP);

@@ -6,11 +6,10 @@
  */
 unsigned dt = 100;
 Timer timer(1, dt);
-Devices devices;
+Devices devices(timer);
 
 void setup(void)
 {
-	devices.add(timer);
 	devices.begin();
 	pinMode(LED_BUILTIN, OUTPUT);
 }

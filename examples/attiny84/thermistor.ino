@@ -1,10 +1,12 @@
+/*
+ * An analog input on pin 10, ADC3 (e.g., LDR/resistor voltage divider).
+ * The input is read and written to Serial at 19200 baud.
+ */
 #include <math.h>
-#include <TinyDebugSerial.h>
 #include <Interrupted.h>
 
-TinyDebugSerial serial;
-Analog thermistor(A7, EXTERNAL);
-Devices devices;
+Analog thermistor(A3, EXTERNAL);
+Devices devices(thermistor);
 
 // thermistor parameters
 const double r0 = 10000;
@@ -24,21 +26,15 @@ double celcius(int v)
 
 void setup(void)
 {
-	devices.add(thermistor);
+	Serial.begin(TERMINAL_SPEED);
+	Serial.println("hello world");
 	devices.begin();
-
-	pinMode(0, OUTPUT);
-	serial.begin(115200);
-	serial.println("hello world");
-
-	for (int i = 4; i < 11; i++)
-		pinMode(i, OUTPUT);
 }
 
 void loop(void)
 {
 	thermistor.enable();
-	if (devices.select() == A7)
-		serial.println(celcius(thermistor.read()));
+	if (devices.select() == A3)
+		Serial.println(celcius(thermistor.read()));
 	delay(1000);
 }

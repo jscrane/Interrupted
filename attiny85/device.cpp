@@ -7,27 +7,22 @@
 #include "atomic.h"
 #include "device.h"
 
-void Devices::begin(bool powersave) {
+void Devices::powersave() {
 	// "...[it] is therefore required to turn off the watchdog
 	// early during program startup..." (from avr/wdt.h)
 	Atomic block;
 	wdt_disable();
 
-	if (powersave) {
-		// turn off ADC and analog comparator
-		ADCSRA = 0;
-		ACSR |= bit(ACD);
-		power_all_disable();
+	// turn off ADC and analog comparator
+	ADCSRA = 0;
+	ACSR |= bit(ACD);
+	power_all_disable();
 
-		// turn off the brown-out detector
-		MCUCR |= _BV(BODS) | _BV(BODSE);
+	// turn off the brown-out detector
+	MCUCR |= _BV(BODS) | _BV(BODSE);
 
-		for (int i = 0; i <= 10; i++)
-			digitalWrite(i, LOW);
-	}
-
-	for (int i = 0; i < _n; i++)
-		_devices[i]->enable(_devices[i]->begin());
+	for (int i = 0; i <= 10; i++)
+		digitalWrite(i, LOW);
 }
 
 unsigned Device::_sleepmode() {
@@ -50,19 +45,4 @@ void Devices::sleep(unsigned mode) {
 		sleep_cpu();
 		sleep_disable();
 	}
-}
-
-int Devices::select() {
-	// so we don't miss an interrupt while checking...
-	Atomic block;
-	unsigned mode = SLEEP_MODE_NONE;
-	for (int i = 0; i < _n; i++) {
-		Device *d = _devices[i];
-		if (d->is_ready())
-			return d->id();
-		if (d->is_enabled())
-			mode = d->negotiate_mode(mode);
-	}
-	idle(mode);
-	return -1;
 }
