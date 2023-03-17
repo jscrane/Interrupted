@@ -12,16 +12,14 @@
 
 Watchdog timer(TIMER);
 External button(BUTTON, LOW);
-Port portb;
-Pin led(LED_BUILTIN, portb); 
+Pin led(LED_BUILTIN);
 Devices devices(timer, led, button);
 
 void setup(void)
 {
+	devices.begin();
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, HIGH);
-	digitalWrite(BUTTON, INPUT_PULLUP);
-	devices.begin();
 }
 
 void loop(void)

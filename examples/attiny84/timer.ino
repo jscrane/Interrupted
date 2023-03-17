@@ -10,8 +10,8 @@ Devices devices(timer);
 
 void setup(void)
 {
-	pinMode(LED_BUILTIN, OUTPUT);
 	devices.begin();
+	pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop(void)

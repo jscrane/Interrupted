@@ -16,13 +16,11 @@ void setup(void)
 	devices.begin();
 	pinMode(LED, OUTPUT);
 	digitalWrite(LED, HIGH);
-	timer.enable();
 }
 
 void loop(void)
 {
-	if (devices.select() == TIMER) {
+	timer.enable();
+	if (devices.select() == TIMER)
 		digitalWrite(LED, !digitalRead(LED));
-		timer.enable();
-	}
 }

@@ -13,13 +13,11 @@ void setup(void)
 	Serial.println("hello world");
 
 	devices.begin();
-	adc.enable();
 }
 
 void loop(void)
 {
-	if (devices.select() == A3) {
+	adc.enable();
+	if (devices.select() == A3)
 		Serial.println(adc.read());
-		adc.enable();
-	}
 }

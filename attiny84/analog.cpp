@@ -8,11 +8,11 @@
 #include "analog.h"
 
 static Device *adc;
-static volatile unsigned reading = 0xffff;
+static volatile uint16_t reading = 0xffff;
 
 ISR(ADC_vect) {
 	if (adc) {
-		byte low, high;
+		uint8_t low, high;
 		low = ADCL;
 		high = ADCH;
 		reading = (high << 8) | low;
@@ -22,7 +22,7 @@ ISR(ADC_vect) {
 
 unsigned Analog::read() {
 	Atomic block;
-	unsigned v = reading;
+	uint16_t v = reading;
 	reading = 0xffff;
 	disable();
 	return v;

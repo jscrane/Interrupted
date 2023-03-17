@@ -83,9 +83,8 @@ __interrupt void rtc_isr(void)
 
 SerialOut<> output(SEROUT, TERMINAL_SPEED);
 Clock clock(RTC);
-Port p4;
-Pin push1(PUSH1, p4);
-Pin push2(PUSH2, p4);
+Pin push1(PUSH1);
+Pin push2(PUSH2);
 Devices devices(output, clock, push1, push2);
 
 void setup(void)

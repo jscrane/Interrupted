@@ -3,71 +3,71 @@
 #include "device.h"
 #include "pinchange.h"
 
-static Port *d[4];
+static Pin *pins[4][8];
+static uint8_t enabled[4];
 
 #pragma vector=PORT1_VECTOR 
 __interrupt void port1(void)
 {
-	if (d[0])
-		d[0]->ready();
+	Ports::ready(0);
 	__bic_SR_register_on_exit(LPM4_bits | GIE);
 }
 
 #pragma vector=PORT2_VECTOR
 __interrupt void port2(void)
 {
-	if (d[1])
-		d[1]->ready();
+	Ports::ready(1);
 	__bic_SR_register_on_exit(LPM4_bits | GIE);
 }
 
 #pragma vector=PORT3_VECTOR
 __interrupt void port3(void)
 {
-	if (d[2])
-		d[2]->ready();
+	Ports::ready(2);
 	__bic_SR_register_on_exit(LPM4_bits | GIE);
 }
 
 #pragma vector=PORT4_VECTOR
 __interrupt void port4(void)
 {
-	if (d[3])
-		d[3]->ready();
+	Ports::ready(3);
 	__bic_SR_register_on_exit(LPM4_bits | GIE);
 }
 
-void Port::ready() {
-	volatile byte *ifg, *ies;
-	byte v = 0;
-	if (_port == P1) {
+void Ports::ready(uint8_t port) {
+	volatile uint8_t *ifg, *ies;
+	uint8_t v = 0;
+	if (port == 0) {
 		ifg = &P1IFG;
 		ies = &P1IES;
 		v = P1IN;
-	} else if (_port == P2) {
+	} else if (port == 1) {
 		ifg = &P2IFG;
 		ies = &P2IES;
 		v = P2IN;
-	} else if (_port == P3) {
+	} else if (port == 2) {
 		ifg = &P3IFG;
 		ies = &P3IES;
 		v = P3IN;
-	} else if (_port == P4) {
+	} else if (port == 3) {
 		ifg = &P4IFG;
 		ies = &P4IES;
 		v = P4IN;
 	} else
 		return;
+
+	Pin **pins = ::pins[port];
+	uint8_t enabled = ::enabled[port];
 	for (int i = 0; i < 8; i++) {
-		byte b = bit(i);
+		uint8_t b = bit(i);
 		// deal with the interrupt here whether the device
 		// is enabled or not: ensure the next edge trigger
 		// remains consistent with its current state
 		// (i.e., don't just toggle it as in the examples).
 		if (*ifg & b) {
-			if (_enabled & b)
-				_pins[i]->set_state((v & b) != 0);
-			if (_pins[i]->is_high())
+			if (enabled & b)
+				pins[i]->set_state((v & b) != 0);
+			if (pins[i]->is_high())
 				*ies |= b;	// next trigger on hi->lo
 			else
 				*ies &= ~b;	// next trigger on lo->hi
@@ -76,58 +76,52 @@ void Port::ready() {
 	}
 }
 
-void Port::add_pin(int pin, Pin *p) {
-	byte b = digitalPinToBitMask(pin);
-	_pins[bit_index(b)] = p;
-	if (!_port)
-		_port = digitalPinToPort(pin);
-	if (_port == P1)
-		d[0] = this;
-	else if (_port == P2)
-		d[1] = this;
-	else if (_port == P3)
-		d[2] = this;
-	else if (_port == P4)
-		d[3] = this;
+void Ports::register_pin(uint8_t pin, Pin *p) {
+	uint8_t b = digitalPinToBitMask(pin);
+	uint8_t port = digitalPinToPort(pin);
+	pins[port-1][bit_index(b)] = p;
 }
 
-void Port::enable_pin(int pin, bool enable) {
-	byte b = digitalPinToBitMask(pin);
-	byte v = 0;
-	volatile byte *ie, *ifg, *ies;
-	if (_port == P1) {
+void Ports::enable_pin(uint8_t pin, bool enable) {
+	uint8_t b = digitalPinToBitMask(pin);
+	uint8_t port = digitalPinToPort(pin)-1;
+	uint8_t v = 0;
+	volatile uint8_t *ie, *ifg, *ies;
+	if (port == 0) {
 		ie = &P1IE;
 		ifg = &P1IFG;
 		ies = &P1IES;
 		v = P1IN;
-	} else if (_port == P2) {
+	} else if (port == 1) {
 		ie = &P2IE;
 		ifg = &P2IFG;
 		ies = &P2IES;
 		v = P2IN;
-	} else if (_port == P3) {
+	} else if (port == 2) {
 		ie = &P3IE;
 		ifg = &P3IFG;
 		ies = &P3IES;
 		v = P3IN;
-	} else if (_port == P4) {
+	} else if (port == 3) {
 		ie = &P4IE;
 		ifg = &P4IFG;
 		ies = &P4IES;
 		v = P4IN;
 	} else
 		return;
+
+	uint8_t &enabled = ::enabled[port];
 	if (enable) {
-		_enabled |= b;
+		enabled |= b;
 		*ie |= b;
 		bool on = (v & b) != 0;
 		if (on)
 			*ies |= b;
 		else
 			*ies &= ~b;
-		_pins[bit_index(b)]->set_state(on);
+		pins[port][bit_index(b)]->set_state(on);
 	} else {
-		_enabled &= ~b;
+		enabled &= ~b;
 		*ie &= ~b;
 	}
 	*ifg &= ~b;

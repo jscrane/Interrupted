@@ -1,8 +1,7 @@
 #include <Interrupted.h>
 
-Port p1;
-Pin led(RED_LED, p1);
-Pin push2(PUSH2, p1);
+Pin led(RED_LED);
+Pin push2(PUSH2);
 Devices devices(led, push2);
 
 void setup()

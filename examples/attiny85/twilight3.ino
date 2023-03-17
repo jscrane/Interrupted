@@ -25,9 +25,8 @@
 #define FADE_OFF	255
 
 Analog ldr(LDR);
-Port portb;
-Pin button(BUTTON, portb, HIGH);
-Pin pir(PIR, portb);
+Pin button(BUTTON, HIGH);
+Pin pir(PIR);
 Watchdog timer(TIMER, 1);
 Delay fader(FADER, 20);
 Devices devices(pir, button, ldr, timer, fader);

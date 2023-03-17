@@ -20,10 +20,8 @@ void setup(void)
 
 void loop(void)
 {
-	static bool on;
 	if (devices.select() == TIMER) {
-		on = !on;
-		digitalWrite(LED_BUILTIN, on? HIGH: LOW);
+		digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
 		timer.enable();
 	}
 }

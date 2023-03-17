@@ -3,49 +3,50 @@
 #include "device.h"
 #include "pinchange.h"
 
-static Port *d[2];
+static Pin *pins[2][8];
+static uint8_t enabled[2];
 
 // handler for PA
 ISR(PCINT0_vect) {
-	if (d[0])
-		d[0]->ready();
+	Ports::ready(0);
 }
 
 // handler for PB
 ISR(PCINT1_vect) {
-	if (d[1])
-		d[1]->ready();
+	Ports::ready(1);
 }
 
-void Port::add_pin(int pin, Pin *p) {
-	if (!_port)
-		_port = digitalPinToPort(pin);
-	byte b = digitalPinToBitMask(pin);
-	_pins[bit_index(b)] = p;
+void Ports::register_pin(uint8_t pin, Pin *p) {
+	uint8_t b = digitalPinToBitMask(pin);
+	uint8_t port = digitalPinToPort(pin)-1;
+	pins[port][bit_index(b)] = p;
 	*(digitalPinToPCMSK(pin)) |= b;
-	d[_port - 1] = this;
 }
 
-void Port::enable_pin(int pin, bool enable) {
-	byte e = bit(digitalPinToPCICRbit(pin));
-	byte b = digitalPinToBitMask(pin);
-	byte prev = _enabled;
+void Ports::enable_pin(uint8_t pin, bool enable) {
+	uint8_t e = bit(digitalPinToPCICRbit(pin));
+	uint8_t b = digitalPinToBitMask(pin);
+	uint8_t port = digitalPinToPort(pin)-1;
+	uint8_t &enabled = ::enabled[port];
+	uint8_t prev = enabled;
 	if (enable) {
-		_enabled |= b;
+		enabled |= b;
 		if (!prev)
 			GIMSK |= e;
 	} else {
-		_enabled &= ~b;
-		if (prev && !_enabled)
+		enabled &= ~b;
+		if (prev && !enabled)
 			GIMSK &= ~e;
 	}
 }
 
-void Port::ready() {
-	uint8_t v = (*portInputRegister(_port));
+void Ports::ready(uint8_t port) {
+	uint8_t v = (*portInputRegister(port+1));
+	Pin **pins = ::pins[port];
+	uint8_t enabled = ::enabled[port];
 	for (int i = 0; i < 8; i++) {
-		byte b = bit(i);
-		if (_pins[i] && (_enabled & b))
-			_pins[i]->set_state(v & b);
+		uint8_t b = bit(i);
+		if (pins[i] && (enabled & b))
+			pins[i]->set_state(v & b);
 	}
 }

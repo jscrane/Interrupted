@@ -3,37 +3,35 @@
 #include "device.h"
 #include "pinchange.h"
 
-static Port *d;
+static Pin *pins[8];
+static uint8_t enabled;
 
 // handler for PB
 ISR(PCINT0_vect) {
-	if (d)
-		d->ready();
+	Ports::ready(0);
 }
 
-void Port::add_pin(int pin, Pin *p) {
-	if (!d)
-		d = this;
-	_pins[pin] = p;
+void Ports::register_pin(uint8_t pin, Pin *p) {
+	pins[pin] = p;
 	PCMSK |= bit(pin);
 }
 
-void Port::enable_pin(int pin, bool enable) {
-	byte b = bit(pin);
-	byte prev = _enabled;
+void Ports::enable_pin(uint8_t pin, bool enable) {
+	uint8_t b = bit(pin);
+	uint8_t prev = enabled;
 	if (enable) {
-		_enabled |= b;
+		enabled |= b;
 		if (!prev)
 			GIMSK |= bit(PCIE);
 	} else {
-		_enabled &= ~b;
-		if (prev && !_enabled)
+		enabled &= ~b;
+		if (prev && !enabled)
 			GIMSK &= ~bit(PCIE);
 	}
 }
 
-void Port::ready() {
+void Ports::ready(uint8_t) {
 	for (int i = 0; i < 8; i++)
-		if (_pins[i] && (_enabled & bit(i)))
-			_pins[i]->set_state(digitalRead(i));
+		if (pins[i] && (enabled & bit(i)))
+			pins[i]->set_state(digitalRead(i));
 }

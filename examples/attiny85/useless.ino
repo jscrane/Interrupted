@@ -13,8 +13,7 @@
 
 Watchdog timer(TIMER);
 External button(BUTTON, LOW);
-Port portb;
-Pin led(LED, portb); 
+Pin led(LED);
 Devices devices(timer, led, button);
 
 void setup(void)

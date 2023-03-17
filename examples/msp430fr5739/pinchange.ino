@@ -1,11 +1,10 @@
 #include <Interrupted.h>
 
-Port p3, p4;
-Pin led5(LED5, p3);
-Pin led6(LED6, p3);
-Pin led7(LED7, p3);
-Pin led8(LED8, p3);
-Pin push2(PUSH2, p4);
+Pin led5(LED5);
+Pin led6(LED6);
+Pin led7(LED7);
+Pin led8(LED8);
+Pin push2(PUSH2);
 Devices devices(led5, led6, led7, led8, push2);
 
 void setup()
